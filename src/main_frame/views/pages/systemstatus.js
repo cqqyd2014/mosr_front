@@ -1,17 +1,18 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-import back_server from '../../func/back_server';
+import Table from 'react-bootstrap/Table'
 import axios from 'axios';
+import back_server from '../../../func/back_server';
 
-
-
-
-class Copyright extends Component {
+import {NavDropdown,Nav,Navbar,FormControl,InputGroup,ButtonToolbar,Form,Row,Col,Button,FormGroup,Label,Input,Container} from 'reactstrap';
+class SystemStatus extends Component {
     constructor(props) {
       super(props);
       this.state={
-          'version':'',
+        free_space:0,
+        system_default_dir:'',
+        free_mem:0
           
         };
   
@@ -54,12 +55,13 @@ class Copyright extends Component {
     }
     */
     componentDidMount=()=>{
-     
-      axios.get(back_server.restful_api_base_url()+'SystemPar/?par_code=version')
+
+      axios.get(back_server.restful_api_base_url()+'systemstatus/')
     .then((response)=> {
       //let data=database.baseparameter(response);
-
-      this.setState({'version':response.data.par_value});
+      //console.log(response);
+      this.setState({system_default_dir:response.data.system_default_dir});
+      this.setState({free_space:response.data.free_space});
   
     })
     .catch(function (error) {
@@ -70,24 +72,46 @@ class Copyright extends Component {
     
     render() {
       return (
-        
-  <div className="copyright bg-white">
-    <p>
-      &copy; <span id="copy-year">2019</span> 版权所有 重庆市审计局金融处 联系人 
-      <a
-        className="text-primary"
-        href="mailto:wangli2000_cn@126.com"
-        target="_blank"
-        >王利</a
-      >.版本号{this.state.version}
-    </p>
-    <script>
-      var d = new Date();
-      var year = d.getFullYear();
-      document.getElementById("copy-year").innerHTML = year;
-  </script>
-  </div>
 
+            <div className="content-wrapper">
+              <div className="content">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="card card-default">
+                      <div className="card-header  justify-content-between">
+                        <h2>分析服务器可用资源 </h2>
+                      </div>
+                      <div className="card-body">
+                        <blockquote className="blockquote">
+                          <p className="mb-0">系统运行时将在分析服务器上生成分析数据，需关注服务器可用资源状况。</p>
+                        </blockquote>
+                        <Table responsive>
+  <thead>
+    <tr>
+      <th>项目</th>
+      <th>详情</th>
+      
+      
+      
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td>数据存储目录</td>
+      <td>{this.state.system_default_dir}</td>
+  </tr>
+  <tr>
+      <td>可用磁盘空间（单位MB）</td>
+      <td>{this.state.free_space}</td>
+  </tr>
+  </tbody>
+</Table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
 
         
 
@@ -97,7 +121,7 @@ class Copyright extends Component {
     
   
   }
-  Copyright.propTypes = {
+  SystemStatus.propTypes = {
     //onComUSCCChange:PropTypes.func.isRequired,
     //onComNameChange:PropTypes.func.isRequired,
     }
@@ -114,4 +138,4 @@ class Copyright extends Component {
       onComNameChange:Actions.comNameChangeAction 
      */
   };
-  export default connect(mapStateToProps, mapDispatchToProps)(Copyright);
+  export default connect(mapStateToProps, mapDispatchToProps)(SystemStatus);

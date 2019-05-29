@@ -3,21 +3,38 @@ import {connect} from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import Aside from './aside'
 import PageWrapper from './page-wrapper'
+import SystemData from './pages/systemdata'
+import {NodeData} from '../../componet/node_data'
+import {ManageNode} from '../../componet/manage_node'
+import {Edgedata} from '../../componet/edge_data'
+import {ManageEdge} from '../../componet/manage_edge'
+import {Analysis} from '../../componet/analysis'
+import {MyTemplate} from '../../componet/my_template'
+import {System} from '../../componet/system'
+import {Method} from '../../componet/method'
+
+
+
+import SystemStatus from './pages/systemstatus'
+
+import Head from '../../componet/head/views/head'
+import Copyright from './copyright'
+import $ from 'jquery'
+
+import {Redirect, BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {NavDropdown,Nav,Navbar,FormControl,InputGroup,ButtonToolbar,Form,Row,Col,Button,FormGroup,Label,Input,Container} from 'reactstrap';
 class MainFrame extends Component {
     constructor(props) {
       super(props);
       this.state={
-          title:'',
+        
+        
           
         };
   
     }
+
     /*
-    handelSubmit=(event)=>{
-      event.preventDefault();
-  
-    }
     handleComUSCCChange=(event)=>{
       //console.log(event.target.value);
       this.props.onComUSCCChange(event.target.value);
@@ -97,14 +114,40 @@ class MainFrame extends Component {
     }
     
     render() {
+      
+      
       return (
         <div>
           
         <div className="mobile-sticky-body-overlay"></div>
 
         <div className="wrapper">
-        <Aside/>
-        <PageWrapper/>
+          <System/>
+        <Router>
+          <Aside/>
+          <div className="page-wrapper"  style={{display:'flex',flexDirection:'column'}}>
+            <Head style={{alignItems:'stretch',flex:'1 1 auto'}}/>
+            <Route exact path="/" component={PageWrapper} />
+            <Route path="/systemdata" component={SystemData} />
+            <Route path="/systestatus" component={SystemStatus} />
+            <Route path="/node_data" component={NodeData} />
+            <Route path="/manage_node" component={ManageNode} />
+            <Route path="/edge_data" component={Edgedata} />
+            <Route path="/manage_edge" component={ManageEdge} />
+            <Route path="/analysis" component={Analysis} />
+            <Route path="/my_template" component={MyTemplate} />
+            <Route path="/method" component={Method} />
+
+
+
+            
+            {this.props.full == true ? '' : (<footer className="footer mt-auto" style={{alignItems:'stretch',flex:'1 1 auto'}}><Copyright/></footer>)}
+            
+          </div>
+          
+          
+        
+        </Router>
         </div>
           
         </div>
@@ -123,7 +166,7 @@ class MainFrame extends Component {
   
   const mapStateToProps = (state) => {
     return {
-      //todos: selectVisibleTodos(state.todos, state.filter)
+      full:  state.neo4jGraphReducer.full
     };
   }
   

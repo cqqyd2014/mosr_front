@@ -1,16 +1,30 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
+import {Redirect, BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {MdBuild,MdAccountBalance,MdLiveHelp,MdFilter,MdBubbleChart,MdLibraryBooks, MdDashboard } from "react-icons/md";
+import { IconContext } from "react-icons";
 
-import {MdHelp,MdFilter,MdBubbleChart,MdFolder, MdDashboard } from "react-icons/md";
+
 import {NavDropdown,Nav,Navbar,FormControl,InputGroup,ButtonToolbar,Form,Row,Col,Button,FormGroup,Label,Input,Container} from 'reactstrap';
 class Aside extends Component {
     constructor(props) {
       super(props);
       this.state={
-          title:'',
+        navSystemDataFlag:false,
           
         };
+  
+    }
+
+
+    clearAllFlag(){
+      this.setState({navSystemDataFlag:false});
+    }
+    
+    handleNavSystemData=(event)=>{
+      this.clearAllFlag();
+      this.setState({navSystemDataFlag:true});
   
     }
     /*
@@ -71,23 +85,29 @@ class Aside extends Component {
     }
     
     render() {
+      {/* 
+      if (this.state.navSystemDataFlag){
+        return <Redirect to ={{pathname:"/systemdata"}}/>;
+      }*/}
       return (
         
         
         <aside className="left-sidebar bg-sidebar">
+          <IconContext.Provider  value={{ color: "gray", size: "2em" }}>
             <div id="sidebar" className="sidebar sidebar-with-footer">
               {/*<!-- Aplication Brand -->*/}
               <div className="app-brand">
-                <a href="/index.html">
+                
+                <Link to="/">
                   <svg className="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="30" height="33"
                     viewBox="0 0 30 33">
-                    <g fill="none" fill-rule="evenodd">
+                    <g fill="none" fillRule="evenodd">
                       <path className="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z" />
                       <path className="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
                     </g>
                   </svg>
                   <span className="brand-name">社群知识发现系统</span>
-                </a>
+                  </Link>
               </div>
               {/*<!-- begin sidebar scrollbar -->*/}
               <div className="sidebar-scrollbar">
@@ -98,109 +118,71 @@ class Aside extends Component {
 
                   
                   <li  className="has-sub" >
+                    <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#navi"
+                      aria-expanded="false" aria-controls="dashboard">
+                      <MdAccountBalance/>
+                      <span className="nav-text">导航</span> <b className="caret"></b>
+                    </a>
+                    <ul  className="collapse"  id="navi"
+                      data-parent="#sidebar-menu">
+                      <div className="sub-menu">
+
+                        <li >
+                          <a className="sidenav-item-link" href="/" >
+                            <span className="nav-text">首页</span>
+                          </a>
+                        </li>
+                        
+                        
+
+                        
+                      </div>
+                    </ul>
+                  </li>
+                  <li  className="has-sub" >
                     <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#dashboard"
                       aria-expanded="false" aria-controls="dashboard">
-                      <i className="mdi mdi-view-dashboard-outline"></i>
-                      <span className="nav-text">系统概览</span> <b className="caret"></b>
+                      <MdDashboard/>
+                      <span className="nav-text">数据管理</span> <b className="caret"></b>
                     </a>
                     <ul  className="collapse"  id="dashboard"
                       data-parent="#sidebar-menu">
                       <div className="sub-menu">
-                        
-                        
-                        
+
                         <li >
-                          <a className="sidenav-item-link" href="index.html">
-                            <span className="nav-text">现有数据</span>
-                            
+                          <a className="sidenav-item-link" href="/systemdata" >
+                            <span className="nav-text">基础数据</span>
                           </a>
                         </li>
-                        
-                        
-
-                        
-                        
-                        
                         <li >
-                          <a className="sidenav-item-link" href="analytics.html">
-                            <span className="nav-text">服务器状态</span>
-
-                            
+                          <a className="sidenav-item-link" href="/node_data">
+                            <span className="nav-text">自定义节点数据</span>
                           </a>
                         </li>
-                        
+                        <li >
+                          <a className="sidenav-item-link" href="/manage_node">
+                            <span className="nav-text">管理现有节点</span>
+                          </a>
+                        </li>
+                        <li >
+                          <a className="sidenav-item-link" href="/edge_data">
+                            <span className="nav-text">自定义关系数据</span>
+                          </a>
+                        </li>
+                        <li >
+                          <a className="sidenav-item-link" href="/manage_edge">
+                            <span className="nav-text">管理现有关系</span>
+                          </a>
+                        </li>
                         
 
                         
                       </div>
                     </ul>
                   </li>
-                  
 
                   
-
-                  
-                  <li  className="has-sub" >
-                    <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#ui-elements"
-                      aria-expanded="false" aria-controls="ui-elements">
-                      <i class="mdi mdi-chart-pie"></i>
-                      <span className="nav-text">定义社群</span> <b className="caret"></b>
-                    </a>
-                    <ul  className="collapse"  id="ui-elements"
-                      data-parent="#sidebar-menu">
-                      <div className="sub-menu">
                         
-                        
-                        <li  className="has-sub" >
-                          <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#components"
-                            aria-expanded="false" aria-controls="components">
-                            <span className="nav-text">创建新社群</span> <b className="caret"></b>
-                          </a>
-                          <ul  className="collapse"  id="components">
-                            <div className="sub-menu">
-                              
-                              <li >
-                                <a href="alert.html">创建新社群</a>
-                              </li>
-                              
-
-                              
-                              
-                            </div>
-                          </ul>
-                        </li>
-                        
-
-                        
-                        
-                        <li  className="has-sub" >
-                          <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#icons"
-                            aria-expanded="false" aria-controls="icons">
-                            <span className="nav-text">我的社群模板</span> <b className="caret"></b>
-                          </a>
-                          <ul  className="collapse"  id="icons">
-                            <div className="sub-menu">
-                              
-                              <li >
-                                <a href="material-icon.html">模板1</a>
-                              </li>
-                              
-                              <li >
-                                <a href="flag-icon.html">模板2</a>
-                              </li>
-                              
-                            </div>
-                          </ul>
-                        </li>
-                        
-
-
-                        
-
-                        
-                      </div>
-                    </ul>
-                  </li>
                   
 
                   
@@ -209,7 +191,7 @@ class Aside extends Component {
                   <li  className="has-sub" >
                     <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#charts"
                       aria-expanded="false" aria-controls="charts">
-                      <i class="mdi mdi-image-filter-none"></i>
+                      <MdBubbleChart/>
                       <span className="nav-text">社群知识发现</span> <b className="caret"></b>
                     </a>
                     <ul  className="collapse"  id="charts"
@@ -219,75 +201,29 @@ class Aside extends Component {
                         
                         
                         <li >
-                          <a className="sidenav-item-link" href="chartjs.html">
-                            <span className="nav-text">ChartJS</span>
+                          <a className="sidenav-item-link" href="/analysis">
+                            <span className="nav-text">分析模型设计器</span>
                             
                           </a>
                         </li>
-                        
-                        
-
-                        
-                      </div>
-                    </ul>
-                  </li>
-                  
-
-                  
-
-                  
-                  <li  className="has-sub" >
-                    <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#pages"
-                      aria-expanded="false" aria-controls="pages">
-                      <i class="mdi mdi-book-open-page-variant"></i>
-                      <span className="nav-text">我的分析模板</span> <b className="caret"></b>
-                    </a>
-                    <ul  className="collapse"  id="pages"
-                      data-parent="#sidebar-menu">
-                      <div className="sub-menu">
-                        
-                        
-                        
                         <li >
-                          <a className="sidenav-item-link" href="user-profile.html">
+                          <a className="sidenav-item-link" href="/my_template">
                             <span className="nav-text">我的模板</span>
                             
                           </a>
                         </li>
                         
-                        
-
-                        
-                        
-                        <li  className="has-sub" >
-                          <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#authentication"
-                            aria-expanded="false" aria-controls="authentication">
-                            <span className="nav-text">模板管理</span> <b className="caret"></b>
-                          </a>
-                          <ul  className="collapse"  id="authentication">
-                            <div className="sub-menu">
-                              
-                              <li >
-                                <a href="sign-in.html">导入模板</a>
-                              </li>
-                              
-                              <li >
-                                <a href="sign-up.html">模板导出</a>
-                              </li>
-                              
-                            </div>
-                          </ul>
-                        </li>
-                        
-
-                        
-
-                        
 
                         
                       </div>
                     </ul>
                   </li>
+                  
+
+                  
+
+                  
+                  
                   
 
                   
@@ -296,7 +232,7 @@ class Aside extends Component {
                   <li  className="has-sub active expand" >
                     <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#documentation"
                       aria-expanded="false" aria-controls="documentation">
-                      <i class="mdi mdi-magnify"></i>
+                      <MdLiveHelp/>
                       <span className="nav-text">帮助主题</span> <b className="caret"></b>
                     </a>
                     <ul  className="collapse show"  id="documentation"
@@ -315,7 +251,7 @@ class Aside extends Component {
                         
                         
                         <li >
-                          <a className="sidenav-item-link" href="introduction.html">
+                          <a className="sidenav-item-link" href="/method">
                             <span className="nav-text">设计理念</span>
                             
                           </a>
@@ -327,7 +263,7 @@ class Aside extends Component {
                         
                         
                         <li >
-                          <a className="sidenav-item-link" href="setup.html">
+                          <a className="sidenav-item-link" href="/example">
                             <span className="nav-text">案例入门</span>
                             
                           </a>
@@ -339,102 +275,27 @@ class Aside extends Component {
                         
                         
                         <li >
-                          <a className="sidenav-item-link" href="customization.html">
+                          <a className="sidenav-item-link" href="/specs">
                             <span className="nav-text">相关技术规范</span>
                             
                           </a>
                         </li>
-                        
-                        
-
-                        
-                        
-                        
                         <li className="section-title">
                           关于我们
                         </li>
-                        
-                        
-
-                        
-                        
-                        <li  className="has-sub" >
-                          <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#headers"
-                            aria-expanded="false" aria-controls="headers">
-                            <span className="nav-text">重庆市审计局金融处</span> <b className="caret"></b>
-                          </a>
-                          <ul  className="collapse"  id="headers">
-                            <div className="sub-menu">
-                              
-                              <li >
-                                <a href="header-fixed.html">Header Fixed</a>
-                              </li>
-                              
-                              <li >
-                                <a href="header-static.html">Header Static</a>
-                              </li>
-                              
-                              <li >
-                                <a href="header-light.html">Header Light</a>
-                              </li>
-                              
-                              <li >
-                                <a href="header-dark.html">Header Dark</a>
-                              </li>
-                              
-                            </div>
-                          </ul>
-                        </li>
-                        
-
-                        
-                        
-                        <li  className="has-sub active expand" >
-                          <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#sidebar-navs"
-                            aria-expanded="false" aria-controls="sidebar-navs">
-                            <span className="nav-text">layout Sidebars</span> <b className="caret"></b>
-                          </a>
-                          <ul  className="collapse show"  id="sidebar-navs">
-                            <div className="sub-menu">
-                              
-                              <li >
-                                <a href="sidebar-open.html">Sidebar Open</a>
-                              </li>
-                              
-                              <li >
-                                <a href="sidebar-minimized.html">Sidebar Minimized</a>
-                              </li>
-                              
-                              <li >
-                                <a href="sidebar-offcanvas.html">Sidebar Offcanvas</a>
-                              </li>
-                              
-                              <li >
-                                <a href="sidebar-with-footer.html">Sidebar With Footer</a>
-                              </li>
-                              
-                              <li  className="active" >
-                                <a href="sidebar-without-footer.html">Sidebar Without Footer</a>
-                              </li>
-                              
-                              <li >
-                                <a href="right-sidebar.html">Right Sidebar</a>
-                              </li>
-                              
-                            </div>
-                          </ul>
-                        </li>
-                        
-
-                        
-                        
-                        
                         <li >
-                          <a className="sidenav-item-link" href="rtl.html">
-                            <span className="nav-text">RTL Direction</span>
+                          <a className="sidenav-item-link" href="/about">
+                            <span className="nav-text">关于我们</span>
                             
                           </a>
                         </li>
+                        
+
+                        
+
+                        
+                        
+                        
                         
                         
 
@@ -449,6 +310,7 @@ class Aside extends Component {
 
               </div>
             </div>
+            </IconContext.Provider>
           </aside>
 
        
