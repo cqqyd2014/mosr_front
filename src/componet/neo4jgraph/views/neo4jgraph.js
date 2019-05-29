@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ReactCytoscape } from 'react-cytoscape';
-import { Modal,Row, Col, Button, ButtonToolbar, FormGroup, FormControl } from "react-bootstrap";
+import { Modal,Row, Col,Image, Button, ButtonToolbar, FormGroup, Form } from "react-bootstrap";
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -8,10 +8,11 @@ import * as Actions from '../redux/actions';
 import * as HeadActions from '../../head/redux/actions'
 import './neo4jgraph.css';
 import $ from 'jquery';
-import { MdLaunch } from "react-icons/md";
+import { MdLaunch,MdFileDownload,MdImage } from "react-icons/md";
 import { IconContext } from "react-icons";
 import {processDetail} from '../../../func/common';
 import coseBilkent from 'cytoscape-cose-bilkent';
+import XLSX from 'xlsx';
 //ReactCytoscape.use( coseBilkent );
 
 let neo4JGraphHandle='init';
@@ -22,7 +23,9 @@ class Neo4JGraph extends Component {
 		this.state={
 			neo4jdata:[],
 			node_colors:[],
-			message:''
+			message:'',
+			download_show:false,
+
 			
 			};
 			
@@ -35,9 +38,16 @@ class Neo4JGraph extends Component {
 		this.props.onFullChange();
 		
 		
-
+		 
 
 		
+	}
+	exportExcel=(data, fileName = '导出关系.xlsx')=>{
+		const ws = XLSX.utils.aoa_to_sheet(data);
+		const wb = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+		/* generate XLSX file and send to client */
+		XLSX.writeFile(wb,fileName)
 	}
 	handleUnFullChange=(event)=>{
     //console.log(event.target.value);
@@ -123,6 +133,17 @@ class Neo4JGraph extends Component {
 
 	}
 
+	handleDowloadClose=()=>{
+		this.setState({'download_show':false});
+	}
+
+	handelImageClick=()=>{
+		this.setState({'download_show':true});
+		var png64 = this.cy.png();
+		this.setState({'download_image':png64})
+
+	}
+
     componentDidMount=()=>{
 			//console.log($('#cy').css('background-color','red'));
 		//console.log($('#cy').parent().css('background-color','green'));
@@ -173,7 +194,32 @@ class Neo4JGraph extends Component {
 	*/}
 	  }
 
+		handleDownloadChange=()=>{
+			let edgs=this.state.neo4jdata.edges;
+			let nodes=this.state.neo4jdata.nodes;
 
+			let datas=[];
+			datas.push(['关系起点','关系类型','关系终点']);
+			for(let edge of edgs){
+				let data=edge.data;
+				let source=data.source;
+				let source_name='';
+				let target=data.target;
+				let target_name='';
+				let type=data.label;
+				for (let node of nodes){
+					if (node.data.id==source){
+						source_name=node.data.name;
+					}
+					if (node.data.id==target){
+						target_name=node.data.name;
+					}
+				}
+				let row=[source_name,type,target_name];
+				datas.push(row);
+			}
+			this.exportExcel(datas);
+		}
 
     
 
@@ -182,7 +228,7 @@ class Neo4JGraph extends Component {
 			name: 'random',
 		
 			fit: true, // whether to fit to viewport
-			padding: 30, // fit padding
+			padding: 10, // fit padding
 			boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
 			animate: true, // whether to transition the node positions
 			animationDuration: 500, // duration of animation in ms if enabled
@@ -195,17 +241,53 @@ class Neo4JGraph extends Component {
 
 		return (
 			<div style={{display:'flex',flexDirection:'column'}}>
+				
+				
 				<IconContext.Provider  value={{ color: "#6699CC", size: "2em" }}>
 			
 				<ButtonToolbar style={{display:'flex',flexDirection:'row-reverse'}} >
-					
+
+				
 					<MdLaunch onClick={this.handleFullChange}/>
 					<MdLaunch onClick={this.handleUnFullChange} style={{transform:'rotate(180deg)'}}/>
+					<MdImage onClick={this.handelImageClick}/>
+					<MdFileDownload onClick={this.handleDownloadChange}/>
 
 
 
 </ButtonToolbar>
+<Modal show={this.state.download_show} onHide={this.handleDowloadClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>图片下载</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <Form.Group >
+                    <Form.Label>单击右键保存图片到本地</Form.Label>
+                    
+										<Image src={this.state.download_image} fluid />
+										
+										
+
+                  </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+
+                  <Button variant="primary" onClick={this.handleDowloadClose}>
+                    关闭
+            </Button>
+                </Modal.Footer>
+
+
+
+              </Modal>
 			{/*}
+
+			var png64 = cy.png();
+
+// put the png data in an img tag
+document.querySelector('#png-eg').setAttribute('src', png64);
+
+
 						<ReactCytoscape containerID="cy"
 							elements={this.getElements}
 							cyRef={(cy) => { this.cyRef(cy) }}

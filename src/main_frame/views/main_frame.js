@@ -12,9 +12,9 @@ import {Analysis} from '../../componet/analysis'
 import {MyTemplate} from '../../componet/my_template'
 import {System} from '../../componet/system'
 import {Method} from '../../componet/method'
+import {Example} from '../../componet/example'
 
-
-
+import {About} from '../../componet/about'
 import SystemStatus from './pages/systemstatus'
 
 import Head from '../../componet/head/views/head'
@@ -137,8 +137,10 @@ class MainFrame extends Component {
             <Route path="/analysis" component={Analysis} />
             <Route path="/my_template" component={MyTemplate} />
             <Route path="/method" component={Method} />
-
-
+            <Route path="/example" component={Example} />
+            <Route path="/about" component={About} />
+            
+            
 
             
             {this.props.full == true ? '' : (<footer className="footer mt-auto" style={{alignItems:'stretch',flex:'1 1 auto'}}><Copyright/></footer>)}

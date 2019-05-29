@@ -149,11 +149,7 @@ class Aside extends Component {
                       data-parent="#sidebar-menu">
                       <div className="sub-menu">
 
-                        <li >
-                          <a className="sidenav-item-link" href="/systemdata" >
-                            <span className="nav-text">基础数据</span>
-                          </a>
-                        </li>
+                        
                         <li >
                           <a className="sidenav-item-link" href="/node_data">
                             <span className="nav-text">自定义节点数据</span>
@@ -274,12 +270,7 @@ class Aside extends Component {
                         
                         
                         
-                        <li >
-                          <a className="sidenav-item-link" href="/specs">
-                            <span className="nav-text">相关技术规范</span>
-                            
-                          </a>
-                        </li>
+                        
                         <li className="section-title">
                           关于我们
                         </li>

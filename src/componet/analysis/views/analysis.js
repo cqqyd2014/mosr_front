@@ -310,13 +310,16 @@ class Analysis extends Component {
     }
     cypher_string='match p='+cypher_string+_where+' return p limit '+this.state.limit_count;
     this.setState({'cyphter_sql':cypher_string});
+    return cypher_string;
   }
 
   handleRunClick=(event)=>{
     
     //console.log(cypher_string);
-    this.getCypherSQL();
-    let cypher_string=this.state.cyphter_sql;
+    let cypher_string=this.getCypherSQL();
+    //let cypher_string=this.state.cyphter_sql;
+    console.log("start query");
+    console.log(cypher_string)
     this.child.refeshdata(cypher_string);
 
   }

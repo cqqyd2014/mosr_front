@@ -102,9 +102,29 @@ class MyTempalte extends Component {
 handelQueryClick=(index,event)=>{
   let cypher_sql=this.state.my_templates[index].qt_cypher
   cypher_sql = cypher_sql.substr(1, cypher_sql.length-2); 
-  console.log(cypher_sql);
+  
   this.child.refeshdata(cypher_sql);
 }
+
+handelDeleteClick=(index,event)=>{
+  let my_templates=this.state.my_templates
+  let item=my_templates[index];
+  fetch(back_server.restful_api_base_url() + 'my_templates/'+item.qt_uuid, {
+    method: 'DELETE',
+    
+  }).then(response => {
+    
+  });
+
+
+
+
+  
+  my_templates.splice(index,1)
+  
+  this.setState({'my_templates':my_templates});
+}
+
   render() {
 
 
@@ -129,7 +149,7 @@ handelQueryClick=(index,event)=>{
                   <th>保存时间</th>
                   <th>查询名称</th>
                   <th>查询描述</th>
-                  <th>运行查询</th>
+                  <th>操作</th>
 
                 </tr>
               </thead>
@@ -140,7 +160,7 @@ handelQueryClick=(index,event)=>{
                       <td>{row.qt_datetime}</td>
                       <td>{row.qt_title}</td>
                       <td>{row.qt_desc}</td>
-                      <td><Button variant="secondary" onClick={this.handelQueryClick.bind(this, index)}>运行查询</Button></td>
+                      <td><Button variant="secondary" onClick={this.handelQueryClick.bind(this, index)}>运行查询</Button><Button variant="secondary" onClick={this.handelDeleteClick.bind(this, index)}>删除</Button></td>
                     </tr>
                     )
                   })
