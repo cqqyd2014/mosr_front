@@ -13,8 +13,8 @@ import Alert from 'react-bootstrap/Alert'
 import * as XLSX from 'xlsx';
 import $ from 'jquery';
 import InputGroup from 'react-bootstrap/InputGroup'
-import { Neo4JGraph } from '../../neo4jgraph';
-import * as NeoGraphActions from '../../neo4jgraph/redux/actions'
+import { Cytoscapejs } from '../../cytoscapejs';
+
 import * as HeadActions from '../../head/redux/actions'
 import {processDetail} from '../../../func/common';
 
@@ -126,7 +126,7 @@ class ManageNode extends Component {
               </div>
             </div>
             )}
-            <Neo4JGraph style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
+            <Cytoscapejs style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
 
 
 
@@ -154,12 +154,12 @@ ManageNode.propTypes = {
 const mapStateToProps = (state) => {
   return {
     node_lables_data: state.SystemReducer.node_lables_data,
-    full: state.neo4jGraphReducer.full
+    full: state.CytoscapejsReducer.full
   };
 }
 
 const mapDispatchToProps = {
-  neo4jgraphChange: NeoGraphActions.neo4jCypherChangeAction,
+  //neo4jgraphChange: NeoGraphActions.neo4jCypherChangeAction,
   onNodeMessageChange:HeadActions.headMessageChangeAction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ManageNode);

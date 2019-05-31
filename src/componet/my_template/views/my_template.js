@@ -13,10 +13,9 @@ import Alert from 'react-bootstrap/Alert'
 import * as XLSX from 'xlsx';
 import $ from 'jquery';
 import InputGroup from 'react-bootstrap/InputGroup'
-import { Neo4JGraph } from '../../neo4jgraph';
-import * as NeoGraphActions from '../../neo4jgraph/redux/actions'
+import { Cytoscapejs } from '../../cytoscapejs';
 import * as HeadActions from '../../head/redux/actions'
-import {processDetail} from '../../../func/common';
+import {processDetail,exportExcel} from '../../../func/common';
 
 class MyTempalte extends Component {
   constructor(props) {
@@ -24,48 +23,14 @@ class MyTempalte extends Component {
     this.fileInput = React.createRef();
     this.state = {
       my_templates:[],
+      import_show:false,
+      xls_datas:[],
+
       
 
     };
 
   }
-  /*
-  handelSubmit=(event)=>{
-    event.preventDefault();
- 
-  }
-  handleComUSCCChange=(event)=>{
-    //console.log(event.target.value);
-    this.props.onComUSCCChange(event.target.value);
-  }
-  handleComNameChange=(event)=>{
-    this.props.onComNameChange(event.target.value);
-  }
-  handleTextChange=(event)=>{
-    let o=event.target;
-    let target_value={[o.name]:o.value}
-    //let target_value={[o.name]:'f'}
-    let old=this.state.form_value;
-    let new_value=Object.assign({},old,target_value)
-    console.log(new_value);
-    this.setState({form_value:new_value});
-  }
-  getTextState=(id)=>{
-    let form_value=this.state.form_value;
-    let value=form_value[id];
-    return value;
- 
-  }
-  handleInvestAmountChange=(event)=>{
-    let amount=event.target.value;
-    this.setState({
-      invest_amount:amount,
-      invest_amount_big:math.rmbToBig(amount),
-      invest_amount_thousand:math.moneyToThousand(amount)
-    });
-    
-  }
-  */
 
 
   componentDidMount = () => {
@@ -124,6 +89,74 @@ handelDeleteClick=(index,event)=>{
   
   this.setState({'my_templates':my_templates});
 }
+handelExportClick=(index,event)=>{
+  let my_templates=this.state.my_templates
+  let item=my_templates[index];
+  let data=[[item.qt_uuid,item.qt_datetime,item.qt_object,item.qt_cypher,item.qt_title,item.qt_desc]];
+  exportExcel(data,'导出模板.XLSX');
+
+}
+handelImportClick=()=>{
+  this.setState({'import_show':true});
+
+}
+handleImportClose=()=>{
+
+  this.setState({'import_show':false});
+}
+onSubmit = () => {
+  const data = new FormData();
+  data.append('file', this.fileInput.current.files[0]);  //相当于 input:file 中的name属性
+  data.append('column_items', JSON.stringify(this.state.column_items));
+  data.append('edge_type', this.state.edge_type);
+  fetch(back_server.restful_api_base_url() + 'edges_upload/', {
+    method: 'POST',
+    body: data
+  }).then(response => {
+    console.log(response)
+    this.setState({ 'check_message': '数据导入成功' });
+    this.setState({ 'check_type': 'success' });
+  })
+}
+onImportExcel = file => {
+  // 获取上传的文件对象
+  const { files } = file.target;
+  // 通过FileReader对象读取文件
+  const fileReader = new FileReader();
+  fileReader.onload = event => {
+    try {
+      const { result } = event.target;
+      // 以二进制流方式读取得到整份excel表格对象
+      const workbook = XLSX.read(result, { type: 'binary' });
+      let data = []; // 存储获取到的数据
+      // 遍历每张工作表进行读取（这里默认只读取第一张表）
+      
+      for (const sheet in workbook.Sheets) {
+        if (workbook.Sheets.hasOwnProperty(sheet)) {
+          // 利用 sheet_to_json 方法将 excel 转成 json 数据
+          let sheet_data=workbook.Sheets[sheet];
+
+          data = data.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet], { range: 'A1:F1' }));
+          // break; // 如果只取第一张表，就取消注释这行
+          console.log(data);
+        }
+      }
+     
+        
+        this.setState({ 'xls_datas': data });
+
+      
+
+      //console.log(length(data));
+    } catch (e) {
+      // 这里可以抛出文件类型错误不正确的相关提示
+      console.log('文件类型不正确');
+      return;
+    }
+  };
+  // 以二进制方式打开文件
+  fileReader.readAsBinaryString(files[0]);
+}
 
   render() {
 
@@ -160,17 +193,64 @@ handelDeleteClick=(index,event)=>{
                       <td>{row.qt_datetime}</td>
                       <td>{row.qt_title}</td>
                       <td>{row.qt_desc}</td>
-                      <td><Button variant="secondary" onClick={this.handelQueryClick.bind(this, index)}>运行查询</Button><Button variant="secondary" onClick={this.handelDeleteClick.bind(this, index)}>删除</Button></td>
+                      <td><Button variant="secondary" onClick={this.handelQueryClick.bind(this, index)}>运行查询</Button>
+                      <Button variant="secondary" onClick={this.handelDeleteClick.bind(this, index)}>删除</Button>
+                      <Button variant="secondary" onClick={this.handelExportClick.bind(this, index)}>导出</Button></td>
                     </tr>
                     )
                   })
                 }
               </tbody>
             </Table>
+            <Button variant="primary" onClick={this.handelImportClick}>导入模板</Button>
+            <Modal show={this.state.import_show} onHide={this.handleImportClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>导入模板</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <Form.Group >
+                    <Form.Label>选择m模板文件</Form.Label>
+                    <input name='xls_file' type='file' accept='.xlsx, .xls' onChange={this.onImportExcel} ref={this.fileInput} />
+                  </Form.Group>
+                  
+                  <Table responsive>
+                      <thead>
+                        <tr>
+                         <td>UUID</td><td>时间</td><td>系统对象</td><td>cypher</td><td>名称</td><td>描述</td>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          this.state.xls_datas.map((row, r_index) => {
+                            return (<tr key={r_index}>
+                              {
+                                this.state.xls_heads.map((head, h_index) => {
+                                  return (
+                                    <td key={h_index}>{row[h_index]}</td>
+
+                                  )
+                                })
+                              }
+
+                            </tr>
+                            )
+                          })
+                        }
+                      </tbody>
+                    </Table>
+                </Modal.Body>
+                <Modal.Footer>
+
+                  <Button variant="primary" onClick={this.handleNodeClose}>
+                    关闭
+            </Button>
+                </Modal.Footer>
+              </Modal>
               </div>
             </div>
             )}
-            <Neo4JGraph style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
+            <Cytoscapejs style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
 
 
 
@@ -198,12 +278,12 @@ MyTempalte.propTypes = {
 const mapStateToProps = (state) => {
   return {
     node_lables_data: state.SystemReducer.node_lables_data,
-    full: state.neo4jGraphReducer.full
+    full: state.CytoscapejsReducer.full
   };
 }
 
 const mapDispatchToProps = {
-  neo4jgraphChange: NeoGraphActions.neo4jCypherChangeAction,
+  //neo4jgraphChange: NeoGraphActions.neo4jCypherChangeAction,
   onNodeMessageChange:HeadActions.headMessageChangeAction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MyTempalte);

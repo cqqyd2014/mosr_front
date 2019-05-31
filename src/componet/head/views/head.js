@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
 import Alert from 'react-bootstrap/Alert'
-import { MdPeople, MdCompareArrows, MdViewComfy, MdTimer, MdCached, MdLibraryBooks, MdDashboard } from "react-icons/md";
+import { MdPeople, MdCompareArrows, MdViewComfy, MdTimer, MdCached, MdAssignment, MdTimeline } from "react-icons/md";
 class Head extends Component {
   constructor(props) {
     super(props);
@@ -145,7 +145,13 @@ class Head extends Component {
                   </li>
                   <li>
                     <a href="#">
-                      <MdCompareArrows /> 关系类型更新情况
+                      <MdTimeline /> 关系类型更新情况
+                          <span className=" font-size-12 d-inline-block float-right"><MdTimer />{this.props.update_labels_types}</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <MdAssignment /> 属性更新情况
                           <span className=" font-size-12 d-inline-block float-right"><MdTimer />{this.props.update_labels_types}</span>
                     </a>
                   </li>

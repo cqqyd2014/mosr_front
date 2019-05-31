@@ -4,9 +4,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { ReactCytoscape } from 'react-cytoscape';
 import back_server from '../../func/back_server';
 import axios from 'axios';
-import { Neo4JGraph } from '../../componet/neo4jgraph';
+
+import { Cytoscapejs } from '../../componet/cytoscapejs';
 import * as Actions from '../redux/actions';
-import * as NeoGraphActions from '../../componet/neo4jgraph/redux/actions'
+
 
 
 import { NavDropdown, Nav, Navbar, FormControl, InputGroup, ButtonToolbar, Form, Row, Col, Button, FormGroup, Label, Input, Container } from 'reactstrap';
@@ -31,10 +32,7 @@ class PageWrapper extends Component {
     this.props.onComUSCCChange(event.target.value);
   }
   */
-  initChange = (event) => {
-    this.props.neo4jgraphChange("match p=((n)-[]-())  return p limit 20");
 
-  }
   /*
   handleTextChange=(event)=>{
     let o=event.target;
@@ -112,7 +110,7 @@ class PageWrapper extends Component {
                 </div>
               </div>
               )}
-              <Neo4JGraph style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
+              <Cytoscapejs style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
 
 
 
@@ -138,13 +136,13 @@ PageWrapper.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    full: state.neo4jGraphReducer.full
+    full: state.CytoscapejsReducer.full
   };
 }
 
 const mapDispatchToProps = {
 
-  neo4jgraphChange: NeoGraphActions.neo4jCypherChangeAction
+  //neo4jgraphChange: NeoGraphActions.neo4jCypherChangeAction
 
 
 };
