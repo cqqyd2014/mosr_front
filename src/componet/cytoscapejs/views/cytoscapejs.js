@@ -331,6 +331,7 @@ class Cytoscapejs extends Component {
 			{
 				container: document.getElementById('cy'),
 
+				wheelSensitivity: 0.1,
 				boxSelectionEnabled: false,
 				autounselectify: true,
 
@@ -360,7 +361,7 @@ class Cytoscapejs extends Component {
 					edges: this.state.neo4jdata.edges,
 				},
 
-				layout: cose_options
+				layout: { name: 'cose-bilkent', defaultOptions }
 			});
 		let neo4j = this;
 		this.cy.on("click", "node", function (evt) {

@@ -407,7 +407,6 @@ class Analysis extends Component {
                     <option>100</option>
                     <option>200</option>
                     <option>500</option>
-
                   </Form.Control></div>
                   <div>定义模型</div>
                   <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
