@@ -21,10 +21,10 @@ import SystemStatus from './pages/systemstatus'
 
 import Head from '../../componet/head/views/head'
 import Copyright from './copyright'
-import $ from 'jquery'
 
-import {Redirect, BrowserRouter as Router, Route, Link } from "react-router-dom";
-import {NavDropdown,Nav,Navbar,FormControl,InputGroup,ButtonToolbar,Form,Row,Col,Button,FormGroup,Label,Input,Container} from 'reactstrap';
+
+import {BrowserRouter as Router, Route} from "react-router-dom";
+
 class MainFrame extends Component {
     constructor(props) {
       super(props);

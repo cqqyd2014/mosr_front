@@ -3,15 +3,15 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
-import * as Actions from '../redux/actions';
-import Modal from 'react-bootstrap/Modal'
+
+
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Alert from 'react-bootstrap/Alert'
 import * as XLSX from 'xlsx';
-import $ from 'jquery';
+
 import InputGroup from 'react-bootstrap/InputGroup'
 
 class NodeData extends Component {
@@ -79,7 +79,7 @@ class NodeData extends Component {
 
   onItemsCheck = () => {
     //是否有column_items，如果没有，表没有读取出来
-    if (this.state.column_items.length == 0) {
+    if (this.state.column_items.length === 0) {
       this.setState({ 'check_message': '数据表未选择或未能解析，请清理数据表' });
       this.setState({ 'check_type': 'danger' });
       this.setState({ 'items_check_ok': false });
@@ -87,7 +87,7 @@ class NodeData extends Component {
 
     }
     //至少一个标签label_items
-    if (this.state.label_items.length == 0) {
+    if (this.state.label_items.length === 0) {
       this.setState({ 'check_message': '必须定义至少一个标签数据' });
       this.setState({ 'check_type': 'danger' });
       this.setState({ 'items_check_ok': false });
@@ -98,12 +98,12 @@ class NodeData extends Component {
     let key_flag = 0;
     for (let key in items) {
       let item = items[key];
-      if (item.type == '编码') {
+      if (item.type === '编码') {
         key_flag++;
       }
 
     }
-    if (key_flag != 1) {
+    if (key_flag !== 1) {
       this.setState({ 'check_message': '必须定义一个编码列' });
       this.setState({ 'check_type': 'danger' });
       this.setState({ 'items_check_ok': false });
@@ -114,12 +114,12 @@ class NodeData extends Component {
     let display_flag = 0;
     for (let key in items) {
       let item = items[key];
-      if (item.type == '显示名称') {
+      if (item.type === '显示名称') {
         display_flag++;
       }
 
     }
-    if (display_flag != 1) {
+    if (display_flag !== 1) {
       this.setState({ 'check_message': '必须定义一个显示名称列' });
       this.setState({ 'check_type': 'danger' });
       this.setState({ 'items_check_ok': false });
@@ -285,7 +285,7 @@ class NodeData extends Component {
     this.setState({ 'new_label_value': target.value })
   }
   handelNewLabelAdd = (event) => {
-    if (this.state.new_label_value == '') {
+    if (this.state.new_label_value === '') {
       return;
     }
     let label_items = this.state.label_items;
@@ -434,7 +434,7 @@ class NodeData extends Component {
                     <Card.Text>
                       确定以上信息，开始导入。
     </Card.Text>
-                    {this.state.check_message != '' ? <Alert variant={this.state.check_type}>
+                    {this.state.check_message !== '' ? <Alert variant={this.state.check_type}>
                       {this.state.check_message}
                     </Alert> : ''}
 

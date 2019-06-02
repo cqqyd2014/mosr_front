@@ -4,17 +4,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 import * as Actions from '../redux/actions';
-import Modal from 'react-bootstrap/Modal'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Table from 'react-bootstrap/Table'
-import Alert from 'react-bootstrap/Alert'
-import * as XLSX from 'xlsx';
-import $ from 'jquery';
-import InputGroup from 'react-bootstrap/InputGroup'
-import * as HeadActions from '../../head/redux/actions'
-import { processDetail } from '../../../func/common';
+
+
 
 class System extends Component {
   constructor(props) {
@@ -65,41 +56,28 @@ class System extends Component {
   }
   */
 
-
-  componentDidMount = () => {
-    this.updateLablesTypes();
+  saveNeo4jCatalog=(nc_type,data)=>{
+    var config = { headers: {  
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'}
+  }
+  for (let index in data) {
+    axios.post( back_server.restful_api_base_url()+'neo4j_catlog/',{ nc_type : nc_type , nc_value : data[index] }, config
+    )
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+  }
+  
 
   }
-  updateLablesTypes = () => {
-    this.props.noNodeLablesUpdateStart();
 
-    axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match (n) return distinct labels(n)')
-      .then((response) => {
-        //this.props.onNodeMessageChange("成功获取数据","success");
 
-        //console.log(response.data)
-        let labels = []
-        for (let index in response.data) {
-          let item = response.data[index]
-          for (var key in item) {
-            //console.log(item[key]);
-            for (let index2 in item[key]) {
-              let item2 = item[key][index2]
-              //console.log(item2);
-              if (labels.indexOf(item2) == -1) {
-                //console.log(labels)
-                labels.push(item2);
-              }
-            }
-          }
-          //console.log(item[0]);
-
-        }
-        //console.log(labels)
-        //this.setState({ 'labels_items': labels });
-
-        //更新edge的type
-        axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match ()-[r]-() return distinct type(r)')
+  getNeo4jEdgeTypes=()=>{
+    axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match ()-[r]-() return distinct type(r)')
           .then((response) => {
 
             //console.log(response.data)
@@ -115,36 +93,9 @@ class System extends Component {
             }
             //console.log(labels)
             //this.setState({'types_items':type_items});
-            axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match (n) return distinct keys(n)')
-              .then((response) => {
-
-                //console.log(response.data)
-                let properties = []
-                for (let index in response.data) {
-                  let item = response.data[index]
-                  for (var key in item) {
-                    //console.log(item[key]);
-                    for (let index2 in item[key]) {
-                      let item2 = item[key][index2]
-                      //console.log(item2);
-                      if (properties.indexOf(item2) == -1) {
-                        //console.log(labels)
-                        properties.push(item2);
-                      }
-                    }
-                  }
-                  //console.log(item[0]);
-
-                }
-
-                //this.setState({'types_items':type_items});
-                this.props.onNodeLablesUpdateEnd(labels, type_items, properties);
-
-              })
-              .catch(function (error) {
-                console.log(error);
-                //this.props.onNodeMessageChange("出错"+error,"danger");
-              });
+            this.saveNeo4jCatalog('edge_types',type_items);
+            this.props.onEdgeTypesUpdateEnd(type_items);
+            
 
 
           })
@@ -153,6 +104,37 @@ class System extends Component {
             //this.props.onNodeMessageChange("出错"+error,"danger");
           });
 
+  }
+
+  getNeo4jNodeLabels=()=>{
+    axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match (n) return distinct labels(n)')
+      .then((response) => {
+        //this.props.onNodeMessageChange("成功获取数据","success");
+
+        //console.log(response.data)
+        let labels = []
+        for (let index in response.data) {
+          let item = response.data[index]
+          for (var key in item) {
+            //console.log(item[key]);
+            for (let index2 in item[key]) {
+              let item2 = item[key][index2]
+              //console.log(item2);
+              if (labels.indexOf(item2) === -1) {
+                //console.log(labels)
+                labels.push(item2);
+              }
+            }
+          }
+          //console.log(item[0]);
+
+        }
+        //console.log(labels)
+        //this.setState({ 'labels_items': labels });
+        this.saveNeo4jCatalog('node_labels',labels);
+        this.props.onNodeLablesUpdateEnd(labels);
+
+        
 
 
 
@@ -164,14 +146,159 @@ class System extends Component {
 
   }
 
+  getNeo4jProperties=()=>{
+
+    axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match (n) return distinct keys(n)')
+              .then((response) => {
+
+                //console.log(response.data)
+                let properties = []
+                for (let index in response.data) {
+                  let item = response.data[index]
+                  for (var key in item) {
+                    //console.log(item[key]);
+                    for (let index2 in item[key]) {
+                      let item2 = item[key][index2]
+                      //console.log(item2);
+                      if (properties.indexOf(item2) === -1) {
+                        //console.log(labels)
+                        properties.push(item2);
+                      }
+                    }
+                  }
+                  //console.log(item[0]);
+
+                }
+                this.saveNeo4jCatalog('properties',properties);
+                this.props.onPropertiesUpdateEnd(properties);
+                //this.setState({'types_items':type_items});
+                //this.props.onNodeLablesUpdateEnd(labels, type_items, properties);
+
+              })
+              .catch(function (error) {
+                console.log(error);
+                //this.props.onNodeMessageChange("出错"+error,"danger");
+              });
+
+  }
+
+  rowsToArray=(rows)=>{
+    let arr=[];
+    for (let index in rows) {
+      arr.push(rows[index].nc_value)
+    }
+    return arr;
+  }
+
+
+  componentDidMount = () => {
+    this.getLabelsTypesProperties();
+
+  }
+  getLabelsTypesProperties = () => {
+
+    //从数据库中获取已经存在的数据，如果数据为空，自动更新
+    //node_labels
+    this.props.onNodeLablesUpdateStart();
+
+    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog/?nc_type=node_labels')
+    .then((response) => {
+
+
+      if (response.data.length===0){
+        //需要从neo4j中更新
+        
+        this.getNeo4jNodeLabels();
+      }
+      else{
+        let labels=this.rowsToArray(response.data);
+        
+          this.props.onNodeLablesUpdateEnd(labels);
+
+
+      }
+
+
+     
+    })
+    .catch(function (error) {
+      console.log(error);
+      //this.props.onNodeMessageChange("出错"+error,"danger");
+    });
+
+    //edge_types
+
+    this.props.onEdgeTypesUpdateStart();
+
+    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog/?nc_type=edge_types')
+    .then((response) => {
+
+      //console.log(response.data)
+      if (response.data.length===0){
+        //需要从neo4j中更新
+        this.getNeo4jEdgeTypes();
+      }
+      else{
+          let types=this.rowsToArray(response.data);
+          this.props.onEdgeTypesUpdateEnd(types);
+
+
+
+      }
+
+
+      //this.setState({'types_items':type_items});
+      
+
+    })
+    .catch(function (error) {
+      console.log(error);
+      //this.props.onNodeMessageChange("出错"+error,"danger");
+    });
+
+    //properties
+
+    this.props.onPropertiesUpdateStart();
+
+    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog/?nc_type=properties')
+    .then((response) => {
+
+      //console.log(response.data)
+      if (response.data.length===0){
+        //需要从neo4j中更新
+        this.getNeo4jProperties();
+      }
+      else{
+          let properties=this.rowsToArray(response.data);
+          this.props.onPropertiesUpdateEnd(properties);
+
+
+
+      }
+
+
+    
+
+    })
+    .catch(function (error) {
+      console.log(error);
+      //this.props.onNodeMessageChange("出错"+error,"danger");
+    });
+
+
+
+
+
+
+
+
+  }
+
   render() {
 
 
-    return (''
-
-
-
-
+    return (
+''
 
     );
   }
@@ -191,7 +318,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   onNodeLablesUpdateEnd: Actions.nodeLablesUpdateEndAction,
-  noNodeLablesUpdateStart: Actions.nodeLablesUpdateStartAction
+  onNodeLablesUpdateStart: Actions.nodeLablesUpdateStartAction,
+  onEdgeTypesUpdateEnd: Actions.edgeTypesUpdateEndAction,
+  onEdgeTypesUpdateStart: Actions.edgeTypesUpdateStartAction,
+  onPropertiesUpdateEnd: Actions.propertiesUpdateEndAction,
+  onPropertiesUpdateStart: Actions.propertiesUpdateStartAction,
 
 };
 export default connect(mapStateToProps, mapDispatchToProps)(System);

@@ -1,12 +1,12 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-import {Redirect, BrowserRouter as Router, Route, Link } from "react-router-dom";
-import {MdBuild,MdAccountBalance,MdLiveHelp,MdFilter,MdBubbleChart,MdLibraryBooks, MdDashboard } from "react-icons/md";
+import {   Link } from "react-router-dom";
+import {MdAccountBalance,MdLiveHelp,MdBubbleChart, MdDashboard } from "react-icons/md";
 import { IconContext } from "react-icons";
 
 
-import {NavDropdown,Nav,Navbar,FormControl,InputGroup,ButtonToolbar,Form,Row,Col,Button,FormGroup,Label,Input,Container} from 'reactstrap';
+
 class Aside extends Component {
     constructor(props) {
       super(props);
@@ -85,10 +85,7 @@ class Aside extends Component {
     }
     
     render() {
-      {/* 
-      if (this.state.navSystemDataFlag){
-        return <Redirect to ={{pathname:"/systemdata"}}/>;
-      }*/}
+
       return (
         
         

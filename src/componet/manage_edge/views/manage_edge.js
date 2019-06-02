@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-import back_server from '../../../func/back_server';
-import axios from 'axios';
-import * as Actions from '../redux/actions';
-import Modal from 'react-bootstrap/Modal'
-import Form from 'react-bootstrap/Form'
+
+
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import Table from 'react-bootstrap/Table'
-import Alert from 'react-bootstrap/Alert'
-import * as XLSX from 'xlsx';
-import $ from 'jquery';
-import InputGroup from 'react-bootstrap/InputGroup'
-import { Neo4JGraph } from '../../neo4jgraph';
+import { Cytoscapejs } from '../../cytoscapejs';
+
+
+
 import * as NeoGraphActions from '../../neo4jgraph/redux/actions'
 import * as HeadActions from '../../head/redux/actions'
-import {processDetail} from '../../../func/common';
+
 
 class ManageEdge extends Component {
   constructor(props) {
@@ -98,7 +93,7 @@ class ManageEdge extends Component {
         <div className="row" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
           <div className="col-lg-12" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
 
-            {this.props.full == true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
+            {this.props.full === true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
               <div className="card-header  justify-content-between">
                 <h2>当前系统中现有关系预览 </h2>
               </div>
@@ -127,7 +122,7 @@ class ManageEdge extends Component {
               </div>
             </div>
             )}
-            <Neo4JGraph style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
+            <Cytoscapejs style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
 
 
 
@@ -155,7 +150,7 @@ ManageEdge.propTypes = {
 const mapStateToProps = (state) => {
   return {
     edge_types_data: state.SystemReducer.edge_types_data,
-    full: state.neo4jGraphReducer.full
+    full: state.CytoscapejsReducer.full
   };
 }
 

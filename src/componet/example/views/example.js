@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-import back_server from '../../../func/back_server';
-import axios from 'axios';
-import * as Actions from '../redux/actions';
-import Modal from 'react-bootstrap/Modal'
+
+
 import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+
 import Card from 'react-bootstrap/Card'
-import Table from 'react-bootstrap/Table'
-import Alert from 'react-bootstrap/Alert'
-import * as XLSX from 'xlsx';
-import $ from 'jquery';
+
 import imga01 from './images/a01.png'
 import imga02 from './images/a02.png'
 import imga03 from './images/a03.png'
@@ -19,11 +14,11 @@ import imga04 from './images/a04.png'
 import imga05 from './images/a05.png'
 import imga06 from './images/a06.png'
 import imga07 from './images/a07.png'
-import imga08 from './images/a08.png'
+
 import imga09 from './images/a09.png'
 import imga10 from './images/a10.png'
 import imga11 from './images/a11.png'
-import InputGroup from 'react-bootstrap/InputGroup'
+
 
 class Example extends Component {
   constructor(props) {

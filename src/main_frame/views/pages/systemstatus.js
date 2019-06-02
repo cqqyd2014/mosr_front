@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table'
 import axios from 'axios';
 import back_server from '../../../func/back_server';
 
-import {NavDropdown,Nav,Navbar,FormControl,InputGroup,ButtonToolbar,Form,Row,Col,Button,FormGroup,Label,Input,Container} from 'reactstrap';
+
 class SystemStatus extends Component {
     constructor(props) {
       super(props);

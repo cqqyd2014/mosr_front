@@ -3,19 +3,19 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
-import * as Actions from '../redux/actions';
+
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
+
 import Table from 'react-bootstrap/Table'
-import Alert from 'react-bootstrap/Alert'
+
 import * as XLSX from 'xlsx';
-import $ from 'jquery';
-import InputGroup from 'react-bootstrap/InputGroup'
+
+
 import { Cytoscapejs } from '../../cytoscapejs';
 import * as HeadActions from '../../head/redux/actions'
-import {processDetail,exportExcel} from '../../../func/common';
+import {exportExcel} from '../../../func/common';
 
 class MyTempalte extends Component {
   constructor(props) {
@@ -134,7 +134,7 @@ onImportExcel = file => {
       for (const sheet in workbook.Sheets) {
         if (workbook.Sheets.hasOwnProperty(sheet)) {
           // 利用 sheet_to_json 方法将 excel 转成 json 数据
-          let sheet_data=workbook.Sheets[sheet];
+          //let sheet_data=workbook.Sheets[sheet];
 
           data = data.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet], { range: 'A1:F1' }));
           // break; // 如果只取第一张表，就取消注释这行
@@ -168,7 +168,7 @@ onImportExcel = file => {
         <div className="row" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
           <div className="col-lg-12" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
 
-            {this.props.full == true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
+            {this.props.full === true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
               <div className="card-header  justify-content-between">
                 <h2>我的查询模板</h2>
               </div>

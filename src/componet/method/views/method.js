@@ -3,20 +3,15 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
-import * as Actions from '../redux/actions';
+
 import ListGroup from 'react-bootstrap/ListGroup'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+
 import Card from 'react-bootstrap/Card'
-import Table from 'react-bootstrap/Table'
-import Alert from 'react-bootstrap/Alert'
-import * as XLSX from 'xlsx';
-import $ from 'jquery';
-import InputGroup from 'react-bootstrap/InputGroup'
-import { Neo4JGraph } from '../../neo4jgraph';
+
+
 import * as NeoGraphActions from '../../neo4jgraph/redux/actions'
 import * as HeadActions from '../../head/redux/actions'
-import {processDetail} from '../../../func/common';
+
 
 class MyTempalte extends Component {
   constructor(props) {

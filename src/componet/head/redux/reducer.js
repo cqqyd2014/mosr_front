@@ -2,7 +2,6 @@ import * as ActionTypes from './actionTypes.js';
 export default (state = {}, action) => {
     switch(action.type) {
       case ActionTypes.HEAD_MESSAGE_CHANGE: {
-        let old_values=state.message;
         let new_value=action.payload.message
         let alter_type_value=action.payload.alter_type
         //console.log(new_value);

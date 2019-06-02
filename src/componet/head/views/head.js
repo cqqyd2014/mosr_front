@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
-import * as Actions from '../redux/actions';
+
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
 import Alert from 'react-bootstrap/Alert'
-import { MdPeople, MdCompareArrows, MdViewComfy, MdTimer, MdCached, MdAssignment, MdTimeline } from "react-icons/md";
+import { MdPeople, MdViewComfy, MdTimer, MdAssignment, MdTimeline } from "react-icons/md";
 class Head extends Component {
   constructor(props) {
     super(props);
@@ -140,19 +140,19 @@ class Head extends Component {
                   <li>
                     <a href="#">
                       <MdPeople /> 节点标签更新情况
-                          <span className=" font-size-12 d-inline-block float-right"><MdTimer />{this.props.update_labels_types}</span>
+                          <span className=" font-size-12 d-inline-block float-right"><MdTimer />{this.props.update_labels}</span>
                     </a>
                   </li>
                   <li>
                     <a href="#">
                       <MdTimeline /> 关系类型更新情况
-                          <span className=" font-size-12 d-inline-block float-right"><MdTimer />{this.props.update_labels_types}</span>
+                          <span className=" font-size-12 d-inline-block float-right"><MdTimer />{this.props.update_types}</span>
                     </a>
                   </li>
                   <li>
                     <a href="#">
                       <MdAssignment /> 属性更新情况
-                          <span className=" font-size-12 d-inline-block float-right"><MdTimer />{this.props.update_labels_types}</span>
+                          <span className=" font-size-12 d-inline-block float-right"><MdTimer />{this.props.update_properties}</span>
                     </a>
                   </li>
 
@@ -221,7 +221,13 @@ Head.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    update_labels_types: state.SystemReducer.update_labels_types,
+    update_labels: state.SystemReducer.update_labels,
+    update_types: state.SystemReducer.update_types,
+    update_properties: state.SystemReducer.update_properties,
+
+
+
+
     message:state.HeadReducer.message,
     alter_type:state.HeadReducer.alter_type,
     

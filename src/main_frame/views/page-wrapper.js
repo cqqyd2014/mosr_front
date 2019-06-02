@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-import { ReactCytoscape } from 'react-cytoscape';
-import back_server from '../../func/back_server';
-import axios from 'axios';
 
-import { Cytoscapejs } from '../../componet/cytoscapejs';
-import * as Actions from '../redux/actions';
 
 
 
-import { NavDropdown, Nav, Navbar, FormControl, InputGroup, ButtonToolbar, Form, Row, Col, Button, FormGroup, Label, Input, Container } from 'reactstrap';
+import { Cytoscapejs } from '../../componet/cytoscapejs';
+
+
+
+
 
 
 class PageWrapper extends Component {
@@ -98,7 +97,7 @@ class PageWrapper extends Component {
           <div className="row" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
             <div className="col-lg-12" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
 
-              {this.props.full == true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
+              {this.props.full === true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
                 <div className="card-header  justify-content-between">
                   <h2>欢迎使用社群知识发现系统 </h2>
                 </div>

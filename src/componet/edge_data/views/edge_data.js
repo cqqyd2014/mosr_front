@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
-import * as Actions from '../redux/actions';
-import Modal from 'react-bootstrap/Modal'
+
+
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Alert from 'react-bootstrap/Alert'
 import * as XLSX from 'xlsx';
-import $ from 'jquery';
-import InputGroup from 'react-bootstrap/InputGroup'
+
+
 
 class EdgeData extends Component {
   constructor(props) {
@@ -79,7 +79,7 @@ class EdgeData extends Component {
 
   onItemsCheck = () => {
     //是否有column_items，如果没有，表没有读取出来
-    if (this.state.column_items.length == 0) {
+    if (this.state.column_items.length === 0) {
       this.setState({ 'check_message': '数据表未选择或未能解析，请清理数据表' });
       this.setState({ 'check_type': 'danger' });
       this.setState({ 'items_check_ok': false });
@@ -87,7 +87,7 @@ class EdgeData extends Component {
 
     }
     //至少一个标签label_items
-    if (this.state.edge_type == '') {
+    if (this.state.edge_type === '') {
       this.setState({ 'check_message': '必须定义关系类型数据' });
       this.setState({ 'check_type': 'danger' });
       this.setState({ 'items_check_ok': false });
@@ -98,12 +98,12 @@ class EdgeData extends Component {
     let key_flag = 0;
     for (let key in items) {
       let item = items[key];
-      if (item.type == '起点') {
+      if (item.type === '起点') {
         key_flag++;
       }
 
     }
-    if (key_flag != 1) {
+    if (key_flag !== 1) {
       this.setState({ 'check_message': '必须定义一个起点列' });
       this.setState({ 'check_type': 'danger' });
       this.setState({ 'items_check_ok': false });
@@ -114,12 +114,12 @@ class EdgeData extends Component {
     let display_flag = 0;
     for (let key in items) {
       let item = items[key];
-      if (item.type == '终点') {
+      if (item.type === '终点') {
         display_flag++;
       }
 
     }
-    if (display_flag != 1) {
+    if (display_flag !== 1) {
       this.setState({ 'check_message': '必须定义一个终点列' });
       this.setState({ 'check_type': 'danger' });
       this.setState({ 'items_check_ok': false });
@@ -284,7 +284,7 @@ class EdgeData extends Component {
     this.setState({ 'edge_type': target.value })
   }
   handelNewLabelAdd = (event) => {
-    if (this.state.new_label_value == '') {
+    if (this.state.new_label_value === '') {
       return;
     }
     let label_items = this.state.label_items;
@@ -401,7 +401,7 @@ class EdgeData extends Component {
                     <Card.Text>
                       确定以上信息，开始导入。
     </Card.Text>
-                    {this.state.check_message != '' ? <Alert variant={this.state.check_type}>
+                    {this.state.check_message !== '' ? <Alert variant={this.state.check_type}>
                       {this.state.check_message}
                     </Alert> : ''}
 

@@ -1,28 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-import back_server from '../../../func/back_server';
-import axios from 'axios';
-import * as Actions from '../redux/actions';
-import Modal from 'react-bootstrap/Modal'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Table from 'react-bootstrap/Table'
-import Alert from 'react-bootstrap/Alert'
-import ListGroup from 'react-bootstrap/ListGroup'
-import ButtonGroup from 'react-bootstrap/ButtonGroup'
 
-import * as XLSX from 'xlsx';
-import $ from 'jquery';
-import InputGroup from 'react-bootstrap/InputGroup'
-import { Neo4JGraph } from '../../neo4jgraph';
+
+
+
+
 import * as NeoGraphActions from '../../neo4jgraph/redux/actions'
 import * as HeadActions from '../../head/redux/actions'
-import { processDetail } from '../../../func/common';
-import { MdPeople, MdCompareArrows, MdTrendingFlat, MdTimeline, MdBubbleChart, MdLibraryBooks,   } from "react-icons/md";
+
+
 import { IconContext } from "react-icons";
 
 
@@ -99,7 +86,7 @@ class About extends Component {
 
   render() {
 
-    let item_count = this.state.item_list.length;
+
     return (
 
       <div className="content-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
@@ -107,7 +94,7 @@ class About extends Component {
           <div className="row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
             <div className="col-lg-12" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
 
-              {this.props.full == true ? '' : (<div className="card card-default" style={{ flex: '1 1 auto' }}>
+              {this.props.full === true ? '' : (<div className="card card-default" style={{ flex: '1 1 auto' }}>
                 <div className="card-header  justify-content-between">
                   <h2>重庆市审计局金融处</h2>
                 </div>
