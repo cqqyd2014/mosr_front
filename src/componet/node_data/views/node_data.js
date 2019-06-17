@@ -3,13 +3,18 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
+import { SelectPreviewTable } from '../../../common_componet/select_preview_table'
+import { DefinitionDatabaseConnection } from '../../../common_componet/definition_database_connection'
 
-
+import ImportNode from './import_node'
+import ImportEdge from './import_edge'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Alert from 'react-bootstrap/Alert'
+import Accordion from 'react-bootstrap/Accordion'
+import { MdApps ,MdPeople} from "react-icons/md";
 import * as XLSX from 'xlsx';
 
 import InputGroup from 'react-bootstrap/InputGroup'
@@ -27,12 +32,24 @@ class NodeData extends Component {
       xls_heads: [],
       check_message: '',
       check_type: 'success',
-      node_type: '自然人',
+      edge_type:'',
       column_items: [],
       items_check_ok: false,
       label_items: [],
       new_label_value: '',
-      
+      db_connected: false,
+      db_type: '',
+      db_address: '',
+      db_port: '',
+      db_name: '',
+      db_username: '',
+      db_password: '',
+      select_table: '',
+      node_edge: 'node',
+
+      //select_tabel_cols:[],
+
+
 
     };
 
@@ -76,162 +93,115 @@ class NodeData extends Component {
   */
 
 
-
-  onItemsCheck = () => {
-    //是否有column_items，如果没有，表没有读取出来
-    if (this.state.column_items.length === 0) {
-      this.setState({ 'check_message': '数据表未选择或未能解析，请清理数据表' });
-      this.setState({ 'check_type': 'danger' });
-      this.setState({ 'items_check_ok': false });
-      return;
-
+  reInitCols=()=>{
+    let column_items=this.state.column_items
+    let table_cols=[]
+    let table_cols_types=[]
+    for (let index in column_items){
+      table_cols.push(column_items[index][0])
+      table_cols_types.push(column_items[index][1])
     }
-    //至少一个标签label_items
-    if (this.state.label_items.length === 0) {
-      this.setState({ 'check_message': '必须定义至少一个标签数据' });
-      this.setState({ 'check_type': 'danger' });
-      this.setState({ 'items_check_ok': false });
-      return;
-    }
-    //有且只能有一个编码列
-    let items = this.state.column_items;
-    let key_flag = 0;
-    for (let key in items) {
-      let item = items[key];
-      if (item.type === '编码') {
-        key_flag++;
-      }
-
-    }
-    if (key_flag !== 1) {
-      this.setState({ 'check_message': '必须定义一个编码列' });
-      this.setState({ 'check_type': 'danger' });
-      this.setState({ 'items_check_ok': false });
-      return;
-    }
-    //有且只能有一个显示名称
-
-    let display_flag = 0;
-    for (let key in items) {
-      let item = items[key];
-      if (item.type === '显示名称') {
-        display_flag++;
-      }
-
-    }
-    if (display_flag !== 1) {
-      this.setState({ 'check_message': '必须定义一个显示名称列' });
-      this.setState({ 'check_type': 'danger' });
-      this.setState({ 'items_check_ok': false });
-      return;
-    }
-    this.setState({ 'check_message': '校验通过，可以开始导入数据' });
-    this.setState({ 'check_type': 'success' });
-    this.setState({ 'items_check_ok': true });
+    this.onGetCols(table_cols,table_cols_types)
 
   }
+  onGetCols = (table_cols, table_cols_types) => {
+
+
+    let select_tabel_cols = []
+    for (let item in table_cols) {
+      let import_type
+      switch (table_cols_types[item]) {
+        case 'string':
+          import_type = '文本属性'
+          break;
+        case 'float':
+          import_type = '浮点数属性'
+          break;
+        default:
+          import_type = '整数属性'
+      }
+      let cols = [table_cols[item], table_cols_types[item], import_type]
+      select_tabel_cols.push(cols)
+    }
+
+
+
+    this.setState({ 'column_items': select_tabel_cols });
+
+    //this.setState({ 'select_tabel_cols_types': table_cols_types });
+
+  }
+
+  onSelectTable = (select_table) => {
+
+    this.setState({ 'select_table': select_table })
+    this.setState({'items_check_ok':false})
+  }
+
+
+
   onSubmit = () => {
     const data = new FormData();
-    data.append('file', this.fileInput.current.files[0]);  //相当于 input:file 中的name属性
-    data.append('column_items', JSON.stringify(this.state.column_items));
-    data.append('label_items', JSON.stringify(this.state.label_items));
-    data.append('node_type', this.state.node_type);
-    fetch(back_server.restful_api_base_url() + 'nodes_upload/', {
+    //data.append('file', this.fileInput.current.files[0]);  //相当于 input:file 中的name属性
+    /*
+    db_type: '',
+      db_address: '',
+      db_port: '',
+      db_name: '',
+      db_username: '',
+      db_password: '',
+      select_table: '',
+      */
+     data.append('db_type', this.state.db_type);
+     data.append('db_address', this.state.db_address);
+     data.append('db_port', this.state.db_port);
+     data.append('db_name', this.state.db_name);
+     data.append('db_username', this.state.db_username);
+     data.append('db_password', this.state.db_password);
+     data.append('select_table', this.state.select_table);
+
+    data.append('column_items', this.state.column_items);
+    data.append('label_items', this.state.label_items);
+    console.log(this.state.node_edge)
+    data.append('node_edge', this.state.node_edge);
+    data.append('edge_type', this.state.edge_type);
+    fetch(back_server.restful_api_base_url() + 'import_queue_upload/', {
       method: 'POST',
       body: data
     }).then(response => {
       console.log(response)
-      this.setState({ 'check_message': '数据导入成功' });
-      this.setState({ 'check_type': 'success' });
+      this.setState({ 'import_message': '加入队列成功，请关注数据采集情况' });
+      this.setState({ 'import_type': 'success' });
     })
   };
 
-  onDeleteLable = (index, event) => {
-    let label_items = this.state.label_items;
-    label_items.splice(index, 1)
-    console.log(label_items)
-    this.setState({ 'label_items': label_items })
+
+  onDbConnected = (flag, db_type, db_address, db_port, db_name, db_username, db_password) => {
+    this.setState({ 'db_connected': flag })
+    this.setState({ 'db_type': db_type })
+    this.setState({ 'db_address': db_address })
+    this.setState({ 'db_port': db_port })
+    this.setState({ 'db_name': db_name })
+    this.setState({ 'db_username': db_username })
+    this.setState({ 'db_password': db_password })
+    if (flag) {
+      this.preView.getTables()
+    }
+    this.setState({'items_check_ok':false})
 
   }
 
-  onItemsChange = (index, event) => {
+  onItemsChange = (column_items) => {
 
-    let target = event.target;
 
-    let column_items = this.state.column_items;
-    let item = column_items[index];
-    item = { 'column': item['column'], "type": target.value };
-    column_items[index] = item;
     this.setState({ 'column_items': column_items });
 
   }
-
-  onImportExcel = file => {
-    // 获取上传的文件对象
-    const { files } = file.target;
-    // 通过FileReader对象读取文件
-    const fileReader = new FileReader();
-    fileReader.onload = event => {
-      try {
-        const { result } = event.target;
-        // 以二进制流方式读取得到整份excel表格对象
-        const workbook = XLSX.read(result, { type: 'binary' });
-        let data = []; // 存储获取到的数据
-        // 遍历每张工作表进行读取（这里默认只读取第一张表）
-        for (const sheet in workbook.Sheets) {
-          if (workbook.Sheets.hasOwnProperty(sheet)) {
-            // 利用 sheet_to_json 方法将 excel 转成 json 数据
-            data = data.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet], { range: 'A1:Z5' }));
-            // break; // 如果只取第一张表，就取消注释这行
-          }
-        }
-        //console.log(data);
-        let rows = [];
-        let heads = [];
-
-        let column_items = [];
-        if (data.length > 2) {
-          //得到head
-          let item_head = data[0];
-
-          for (let key in item_head) {
-
-            heads.push(key);
-            //通过heads生成column_items
-            column_items.push({ 'column': key, "type": '其他属性' })
-
-          }
-          this.setState({ 'column_items': column_items });
-
-
-
-          for (let item in data) {
-            let row = []
-            let data_item = (data[item]);
-
-
-            for (let head in heads) {
-              row.push(data_item[heads[head]]);
-            }
-            rows.push(row);
-
-
-          }
-          this.setState({ 'xls_heads': heads });
-          this.setState({ 'xls_datas': rows });
-
-        }
-
-        //console.log(length(data));
-      } catch (e) {
-        // 这里可以抛出文件类型错误不正确的相关提示
-        console.log('文件类型不正确');
-        return;
-      }
-    };
-    // 以二进制方式打开文件
-    fileReader.readAsBinaryString(files[0]);
+  onCheck=(flag)=>{
+    this.setState({'items_check_ok':flag})
   }
+
+
 
   handleRefeshProcessDetail = (event) => {
 
@@ -274,24 +244,24 @@ class NodeData extends Component {
   });
 */
   }
-  onNodeTypeChange=(event)=>{
-    let target = event.target
 
-    this.setState({ 'node_type': target.value })
-  }
-  handleNewLabelChange = (event) => {
-    let target = event.target
+  onLabelChange = (label_items) => {
+    
 
-    this.setState({ 'new_label_value': target.value })
-  }
-  handelNewLabelAdd = (event) => {
-    if (this.state.new_label_value === '') {
-      return;
-    }
-    let label_items = this.state.label_items;
-    label_items.push(this.state.new_label_value);
-    this.setState({ 'new_label_value': '' })
     this.setState({ 'label_items': label_items })
+  }
+ 
+
+  onPreView = (ref) => {
+    this.preView = ref
+  }
+  node_edge_change = (value, event) => {
+    this.setState({ 'node_edge': value })
+    this.setState({'items_check_ok':false})
+    this.reInitCols()
+  }
+  onEdgeTypeChange=(type)=>{
+    this.setState({'edge_type':type})
   }
 
   render() {
@@ -305,146 +275,63 @@ class NodeData extends Component {
             <div className="col-lg-12" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
               <Form onSubmit={this.onSubmit} id="node_form">
 
-                <Card style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
-                  <Card.Header as="h5">自定义节点数据</Card.Header>
-                  <Card.Body>
-                    <Card.Title>1、选取电子表格</Card.Title>
-                    <Card.Text>
-                      节点数据一般为自然人或者法人机构。自然人最少字段应该包括身份证号码和姓名，法人最少应包含统一社会信用代码和单位名称。注意，本系统默认只读取一个Sheet
-    </Card.Text>
+                
+                    <h3>
+                      节点数据一般为自然人或者法人机构。自然人最少字段应该包括身份证号码和姓名，法人最少应包含统一社会信用代码和单位名称。
+    </h3>
+                    <DefinitionDatabaseConnection onDbConnected={this.onDbConnected} />
+                    {this.state.db_connected ? <div>
+                      <SelectPreviewTable onGetCols={this.onGetCols} onSelectTable={this.onSelectTable} onRef={this.onPreView} db_type={this.state.db_type} db_address={this.state.db_address} db_port={this.state.db_port} db_name={this.state.db_name} db_username={this.state.db_username} db_password={this.state.db_password} />
+                      <Card bg="light" style={{ flex: '1 1 auto' }}>
+        <Card.Header><MdApps />选择并预览表格</Card.Header>
+        <Card.Body>
+          <Card.Title>选择表格之后，系统将预览前5条记录</Card.Title>
+                      <Accordion defaultActiveKey={this.state.node_edge}>
+                      <Card>
+                        <Accordion.Toggle as={Button} variant="link" eventKey="node" onClick={this.node_edge_change.bind(this, 'node')}>
+                          节点
+                                                    </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="node">
+                        <Card.Body>
+                          <ImportNode onCheck={this.onCheck} label_items={Array.of(...this.state.label_items)} onLabelChange={this.onLabelChange} column_items={Array.of(...this.state.column_items)} onItemsChange={this.onItemsChange} />
+                          </Card.Body>
+                        </Accordion.Collapse>
 
-                    <div>
-                      <input name='xls_file' type='file' accept='.xlsx, .xls' onChange={this.onImportExcel} ref={this.fileInput} />
-                    </div>
+                        </Card>
+                                            <Card>
+                        <Accordion.Toggle as={Button} variant="link" eventKey="edge" onClick={this.node_edge_change.bind(this, 'edge')}>
+                          关系
+    </Accordion.Toggle>
+    
+                        <Accordion.Collapse eventKey="edge">
+                        <Card.Body> 
+                          
+                          
+                        <ImportEdge onCheck={this.onCheck} onEdgeTypeChange={this.onEdgeTypeChange} edge_type={this.state.edge_type} column_items={Array.of(...this.state.column_items)} onItemsChange={this.onItemsChange} />
+                         </Card.Body>
 
-                    <Card.Title>2、预览前5行数据</Card.Title>
-                    <Card.Text>
-                      A至Z列，第一行为标题列，无合并单元格
-    </Card.Text>
+                        </Accordion.Collapse>
+                        </Card>
+                      </Accordion>
 
-                    <Table responsive>
-                      <thead>
-                        <tr>
-                          {
-                            this.state.xls_heads.map((row, index) => {
-                              return (
-                                <td key={index}>{row}</td>
+                      </Card.Body>
+      </Card>
 
-                              )
-                            })
-                          }
-
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          this.state.xls_datas.map((row, r_index) => {
-                            return (<tr key={r_index}>
-                              {
-                                this.state.xls_heads.map((head, h_index) => {
-                                  return (
-                                    <td key={h_index}>{row[h_index]}</td>
-
-                                  )
-                                })
-                              }
-
-                            </tr>
-                            )
-                          })
-                        }
-                      </tbody>
-                    </Table>
-                    <Card.Title>3、基本类型、标签、编码、显示名称、其他属性</Card.Title>
-                    <Card.Text>
-                      自然人编码为身份证号、公司编码为统一社会信用代码，基本类型为“自然人”或者“法人”，其他属性可选。
-    </Card.Text>
-                    <div><Form.Label>基本类型</Form.Label>
-                      <Form.Control as="select"  value={this.state.node_type} onChange={this.onNodeTypeChange}>
-                        <option>自然人</option>
-                        <option>法人</option>
-                      </Form.Control></div>
-                    <div>
 
                     </div>
-                    <div>
-                      <Form.Label>定义标签</Form.Label>
+                      : ''}
 
-                      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                    
 
-                        {
-                          this.state.label_items.map((row, index) => {
+                   
+                  
 
-                            return (<Card key={index} style={{ width: '18rem' }}>
+                    {this.state.items_check_ok ? <Button variant="primary" onClick={this.onSubmit}>加入数据采集队列</Button> : <Button variant="primary" disabled>加入数据采集队列</Button>}
 
-                              <Card.Body>
-                                <Card.Title>{row}</Card.Title>
-
-                                <Button variant="primary" onClick={this.onDeleteLable.bind(this, index)}>删除标签</Button>
-                              </Card.Body>
-                            </Card>
-
-
-                            )
-                          })
-                        }
-
-
-
-                      </div>
-
-                      <InputGroup ><Form.Control type="text" placeholder="输入新标签" value={this.state.new_label_value} onChange={this.handleNewLabelChange} /> <InputGroup.Append>
-                        <Button variant="outline-secondary" onClick={this.handelNewLabelAdd}>新标签</Button>
-                      </InputGroup.Append></InputGroup>
-                    </div>
-                    <div>定义属性</div>
-                    <Table responsive>
-
-                      <thead>
-                        <tr>
-                          <td>属性</td>
-                          <td>定义</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                        {
-                          this.state.column_items.map((row, index) => {
-
-                            return (<tr key={index}>
-                              <td >{row.column}</td>
-                              <td>
-                                <Form.Control as="select" value={this.state.column_items[index].type}  onChange={this.onItemsChange.bind(this, index)}>
-                                  <option>编码</option>
-                                  <option>显示名称</option>
-                                  <option>其他属性</option>
-                                  <option>不导入</option>
-
-                                </Form.Control></td>
-                            </tr>
-
-
-                            )
-                          })
-                        }
-
-                      </tbody>
-                    </Table>
-                    <Card.Title>3、开始导入</Card.Title>
-                    <Card.Text>
-                      确定以上信息，开始导入。
-    </Card.Text>
-                    {this.state.check_message !== '' ? <Alert variant={this.state.check_type}>
-                      {this.state.check_message}
-                    </Alert> : ''}
-
-                    <Button variant="primary" onClick={this.onItemsCheck}>第一步校验</Button>
-
-                    {this.state.items_check_ok ? <Button variant="primary" onClick={this.onSubmit}>第二步开始导入</Button> : <Button variant="primary" disabled>第二步开始导入</Button>}
-
-
-                  </Card.Body>
-                </Card>
+{this.state.import_message !== '' ? <Alert variant={this.state.import_type}>
+{this.state.import_message}
+</Alert> : ''}
+               
 
 
 

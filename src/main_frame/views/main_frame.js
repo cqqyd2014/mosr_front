@@ -14,7 +14,8 @@ import {System} from '../../componet/system'
 import {Method} from '../../componet/method'
 import {Example} from '../../componet/example'
 import {Cytoscapejs} from '../../componet/cytoscapejs'
-
+import {ClusterAnalysis} from '../../componet/cluster_analysis'
+import {BackImport} from '../../componet/back_import'
 
 import {About} from '../../componet/about'
 import SystemStatus from './pages/systemstatus'
@@ -142,6 +143,11 @@ class MainFrame extends Component {
             <Route path="/example" component={Example} />
             <Route path="/about" component={About} />
             <Route path="/cy" component={Cytoscapejs} />
+            <Route path="/cluster_analysis" component={ClusterAnalysis} />
+            <Route path="/back_import" component={BackImport} />
+
+
+            
             
             
             

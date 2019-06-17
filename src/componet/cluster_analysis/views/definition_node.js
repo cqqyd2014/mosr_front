@@ -9,13 +9,13 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col';
-import Accordion from 'react-bootstrap/Accordion';
-import {SingleNodeSelector,ReferNodeSelector} from '../../../common_componet/node_selector';
-import {DefinitionProperties} from '../../../common_componet/definition_properties';
+import Col from 'react-bootstrap/Col'
+import Accordion from 'react-bootstrap/Accordion'
+
+import DefinitionProperties from './definition_properties';
 
 
-import {LabelsTypesSelector} from '../../../common_componet/labels_types_selector';
+import LabelsTypesSelect from './labels_types_select';
 
 
 import $ from 'jquery';
@@ -52,7 +52,7 @@ class DefinitionNode extends Component {
     }
 
 
-    handelLabelsTypesBack = (select_labels_types) => {
+    handelLabelsTypessBack = (select_labels_types) => {
         let clickItem = this.props.item
 
         clickItem.select_labels_types = select_labels_types;
@@ -67,7 +67,16 @@ class DefinitionNode extends Component {
         this.props.handelNodeDataBack(clickItem);
 
     }
+    handelRefNodeChange=(event)=>{
+        let target = event.target
+        let ref_node = target.value;
 
+        let clickItem = this.props.item
+       
+        clickItem.ref_node = ref_node;
+        this.props.handelNodeDataBack(clickItem);
+
+    }
 
     handlePropertiesChange = (event) => {
         this.setState({ 'properties_value': event.target.value });
@@ -156,10 +165,8 @@ class DefinitionNode extends Component {
                                                     </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="单一节点">
                                                     <Card.Body>
-
-
-                                                        <SingleNodeSelector handelNodeDataBack={this.props.handelNodeDataBack} handelLabelsTypesBack={this.handelLabelsTypesBack} item={{ ...this.props.item }} node_lables_data={this.props.node_lables_data} handelPropertiesBack={this.handelPropertiesBack}  properties_data={this.props.properties_data}/>
-                                                    
+                                                    <LabelsTypesSelect handelLabelsTypessBack={this.handelLabelsTypessBack} item={{ ...this.props.item }} labels_types={this.props.node_lables_data} />
+                                        <DefinitionProperties handelPropertiesBack={this.handelPropertiesBack} item={{ ...this.props.item }} properties_data={this.props.properties_data} />
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>
@@ -170,7 +177,24 @@ class DefinitionNode extends Component {
                                                 <Accordion.Collapse eventKey="关联节点">
                                                     <Card.Body>
                                                         
-                                                    <ReferNodeSelector handelNodeDataBack={this.props.handelNodeDataBack} item={{ ...this.props.item }} item_list={this.props.item_list}/>
+                                                    <Form.Group >
+    <Form.Label>选择指向的节点</Form.Label>
+    <Form.Control as="select" value={this.props.item.ref_node} onChange={this.handelRefNodeChange}>
+    {
+                      typeof (this.props.item.name) != 'undefined'?(this.props.item_list.map((row, index) => {
+
+
+                        return (row.type==='node'&&row.name!==this.props.item.name?<option key={index}>{row.name}</option>:''
+
+
+                        )
+                      })):''
+                    }
+
+
+    
+    </Form.Control>
+  </Form.Group>
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>

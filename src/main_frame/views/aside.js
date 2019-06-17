@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import {   Link } from "react-router-dom";
-import {MdAccountBalance,MdLiveHelp,MdBubbleChart, MdDashboard } from "react-icons/md";
+import {MdAccountBalance,MdLiveHelp,MdBubbleChart, MdDashboard,MdTimeline } from "react-icons/md";
 import { IconContext } from "react-icons";
 
 
@@ -149,7 +149,12 @@ class Aside extends Component {
                         
                         <li >
                           <a className="sidenav-item-link" href="/node_data">
-                            <span className="nav-text">自定义节点数据</span>
+                            <span className="nav-text">从数据库下载数据</span>
+                          </a>
+                        </li>
+                        <li >
+                          <a className="sidenav-item-link" href="/back_import">
+                            <span className="nav-text">重建分析库</span>
                           </a>
                         </li>
                         <li >
@@ -157,16 +162,13 @@ class Aside extends Component {
                             <span className="nav-text">管理现有节点</span>
                           </a>
                         </li>
-                        <li >
-                          <a className="sidenav-item-link" href="/edge_data">
-                            <span className="nav-text">自定义关系数据</span>
-                          </a>
-                        </li>
+                        
                         <li >
                           <a className="sidenav-item-link" href="/manage_edge">
                             <span className="nav-text">管理现有关系</span>
                           </a>
                         </li>
+                        
                         
 
                         
@@ -184,8 +186,8 @@ class Aside extends Component {
                   <li  className="has-sub" >
                     <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#charts"
                       aria-expanded="false" aria-controls="charts">
-                      <MdBubbleChart/>
-                      <span className="nav-text">社群知识发现</span> <b className="caret"></b>
+                      <MdTimeline/>
+                      <span className="nav-text">社群关系发现</span> <b className="caret"></b>
                     </a>
                     <ul  className="collapse"  id="charts"
                       data-parent="#sidebar-menu">
@@ -195,13 +197,44 @@ class Aside extends Component {
                         
                         <li >
                           <a className="sidenav-item-link" href="/analysis">
-                            <span className="nav-text">分析模型设计器</span>
+                            <span className="nav-text">关系模型设计器</span>
                             
                           </a>
                         </li>
                         <li >
                           <a className="sidenav-item-link" href="/my_template">
-                            <span className="nav-text">我的模板</span>
+                            <span className="nav-text">我的关系模板</span>
+                            
+                          </a>
+                        </li>
+                        
+
+                        
+                      </div>
+                    </ul>
+                  </li>
+                  
+                  <li  className="has-sub" >
+                    <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#charts"
+                      aria-expanded="false" aria-controls="charts">
+                      <MdBubbleChart/>
+                      <span className="nav-text">社群聚类发现</span> <b className="caret"></b>
+                    </a>
+                    <ul  className="collapse"  id="charts"
+                      data-parent="#sidebar-menu">
+                      <div className="sub-menu">
+                        
+                        
+                        
+                        <li >
+                          <a className="sidenav-item-link" href="/cluster_analysis">
+                            <span className="nav-text">聚类模型设计器</span>
+                            
+                          </a>
+                        </li>
+                        <li >
+                          <a className="sidenav-item-link" href="/my_cluster_template">
+                            <span className="nav-text">我的聚类模板</span>
                             
                           </a>
                         </li>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Base64 } from 'js-base64';
 import { Modal, Image, Button, ButtonToolbar, Form } from "react-bootstrap";
 import back_server from '../../../func/back_server';
 import axios from 'axios';
@@ -10,12 +10,12 @@ import * as HeadActions from '../../head/redux/actions'
 import $ from 'jquery';
 import { MdLaunch, MdFileDownload, MdImage } from "react-icons/md";
 import { IconContext } from "react-icons";
-import { processDetail, exportExcel } from '../../../func/common';
+import { processDetail, exportExcel,uribase64encode} from '../../../func/common';
 import coseBilkent from 'cytoscape-cose-bilkent';
 
 import cytoscape from 'cytoscape';
-
-
+import cxtmenu from 'cytoscape-cxtmenu';
+cytoscape.use( cxtmenu );
 cytoscape.use(coseBilkent);
 //ReactCytoscape.use( coseBilkent );
 
@@ -89,8 +89,15 @@ class Cytoscapejs extends Component {
 	refeshdata = (neo4jgraph_cypher) => {
 		processDetail("systest", neo4jgraph_cypher)
 		this.props.onNodeMessageChange("开始获取数据", "warning");
+		console.log(neo4jgraph_cypher);
+		/*
+		window.btoa(window.encodeURIComponent('嘻嘻哈哈哈哈啦啦啦啦'));
+window.decodeURIComponent(window.atob('JUU1JTk4JUJCJUU1JTk4JUJCJUU1JTkzJTg4JUU1JTkzJTg4JUU1JTkzJTg4JUU1JTkzJTg4JUU1JTk1JUE2JUU1JTk1JUE2JUU1JTk1JUE2JUU1JTk1JUE2'));
+*/
+		let enbase_cypher=uribase64encode(neo4jgraph_cypher)
 
-		axios.get(back_server.restful_api_base_url() + 'neo4jdata/?neo4jgraph_cypher=' + neo4jgraph_cypher)
+
+		axios.get(back_server.restful_api_base_url() + 'neo4jdata/?neo4jgraph_cypher=' + enbase_cypher)
 			.then((response) => {
 				this.props.onNodeMessageChange("成功获取数据", "success");
 				//let data=database.baseparameter(response);
@@ -276,6 +283,7 @@ class Cytoscapejs extends Component {
 
 				layout: { name: 'cose-bilkent', defaultOptions }
 			});
+			
 		let neo4j = this;
 		this.cy.on("click", "node", function (evt) {
 			var node = evt.target;

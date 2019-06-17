@@ -8,8 +8,12 @@
     "bootstrap": "^4.3.1",
     "bootstrap-fileinput": "^5.0.3",
     "cytoscape": "^3.6.2",
+    "cytoscape-automove": "^1.10.1",
     "cytoscape-cose-bilkent": "^4.0.0",
+    "cytoscape-cxtmenu": "^3.1.0",
+    "express": "^4.17.1",
     "jquery": "^3.4.1",
+    "js-base64": "^2.5.1",
     "livereload": "^0.7.0",
     "material-ui": "^0.20.2",
     "react": "^16.8.6",
@@ -25,6 +29,7 @@
     "react-scripts": "3.0.0",
     "reactstrap": "^8.0.0",
     "redux": "^4.0.1",
+    "socket.io": "^2.2.0",
     "xlsx": "^0.14.3"
   },
   "scripts": {

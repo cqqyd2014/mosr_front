@@ -38,10 +38,10 @@ class MyTempalte extends Component {
     
     
 
-    axios.get(back_server.restful_api_base_url() + 'my_templates/')
+    axios.get(back_server.restful_api_base_url() + 'my_templates/?qt_type=edge')
       .then((response) => {
         //let data=database.baseparameter(response);
-        console.log(response.data);
+        //console.log(response.data);
         this.setState({ 'my_templates': response.data })
         
 
@@ -66,7 +66,7 @@ class MyTempalte extends Component {
 }
 handelQueryClick=(index,event)=>{
   let cypher_sql=this.state.my_templates[index].qt_cypher
-  cypher_sql = cypher_sql.substr(1, cypher_sql.length-2); 
+  //cypher_sql = cypher_sql.substr(1, cypher_sql.length-2); 
   
   this.child.refeshdata(cypher_sql);
 }

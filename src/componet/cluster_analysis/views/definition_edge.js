@@ -12,10 +12,10 @@ import Card from 'react-bootstrap/Card'
 
 import Accordion from 'react-bootstrap/Accordion'
 
-import { DefinitionProperties } from '../../../common_componet/definition_properties';
+import DefinitionProperties from './definition_properties';
 
 
-import { LabelsTypesSelector } from '../../../common_componet/labels_types_selector';
+import LabelsTypesSelect from './labels_types_select';
 
 
 import $ from 'jquery';
@@ -23,7 +23,7 @@ import $ from 'jquery';
 
 import { IconContext } from "react-icons";
 
-import { MdClass, } from "react-icons/md";
+import { MdClass,} from "react-icons/md";
 
 
 
@@ -43,19 +43,19 @@ class DefinitionEdge extends Component {
     };
 
   }
-
+  
   handleMax = (event) => {
     let target = event.target
     let _max_value = target.value;
     //let item_list = this.state.item_list;
-    let clickItem = this.props.item;
+    let clickItem =this.props.item;
 
     clickItem._max = _max_value;
     this.props.handelEdgeDataBack(clickItem);
   }
-  handelPropertiesBack = (item_properties) => {
+  handelPropertiesBack=(item_properties)=>{
     let clickItem = this.props.item
-
+    
     clickItem.properties = item_properties;
     this.props.handelEdgeDataBack(clickItem);
 
@@ -74,9 +74,9 @@ class DefinitionEdge extends Component {
     this.props.handelEdgeDataBack(clickItem);
 
   }
-  handelLabelsTypesBack = (select_labels_types) => {
+  handelLabelsTypessBack=(select_labels_types)=>{
     let clickItem = this.props.item
-
+    
     clickItem.select_labels_types = select_labels_types;
     this.props.handelEdgeDataBack(clickItem);
   }
@@ -86,7 +86,7 @@ class DefinitionEdge extends Component {
     let target = event.target
     let select_value = target.value;
 
-
+   
     let clickItem = this.props.item;
     let select_types = clickItem.select_types;
     if ($.inArray(select_value, select_types) === -1) {
@@ -114,7 +114,7 @@ class DefinitionEdge extends Component {
   handleEdgeClose = () => {
     this.props.handleEdgeClose();
   }
-
+  
 
 
   render() {
@@ -125,42 +125,42 @@ class DefinitionEdge extends Component {
 
     return (
 
-      <Modal show={this.props.edge_show} onHide={this.handleEdgeClose} size="lg">
-        <IconContext.Provider value={{ color: "gray", size: "2em" }}>
-          <Modal.Header closeButton>
-            <Modal.Title>定义关系</Modal.Title>
-          </Modal.Header>
-          <Modal.Body >
-            <p>关系的类型有两种，一种为单层关系，可以指定关系类型，一种为多层关系，层数不确定，需指定最大最小层数。</p>
+        <Modal show={this.props.edge_show} onHide={this.handleEdgeClose} size="lg">
+          <IconContext.Provider value={{ color: "gray", size: "2em" }}>
+                <Modal.Header closeButton>
+                  <Modal.Title>定义关系</Modal.Title>
+                </Modal.Header>
+                <Modal.Body >
+                <p>关系的类型有两种，一种为单层关系，可以指定关系类型，一种为多层关系，层数不确定，需指定最大最小层数。</p>
 
 
 
-            <Accordion defaultActiveKey={this.props.item.edgeRadioValue}>
-              <Card>
-                <Accordion.Toggle as={Button} variant="link" eventKey="单层关系" onClick={this.edgeRadioChange.bind(this, '单层关系')}>
-                  单层关系
+<Accordion defaultActiveKey={this.props.item.edgeRadioValue}>
+    <Card>
+        <Accordion.Toggle as={Button} variant="link" eventKey="单层关系" onClick={this.edgeRadioChange.bind(this, '单层关系')}>
+        单层关系
             </Accordion.Toggle>
-                <Accordion.Collapse eventKey="单层关系">
-                  <Card.Body>
-                    <LabelsTypesSelector handelLabelsTypesBack={this.handelLabelsTypesBack} item={{ ...this.props.item }} types_data={this.props.edge_types_data} />
-
-                    <DefinitionProperties handelPropertiesBack={this.handelPropertiesBack} item={{ ...this.props.item }} properties_data={this.props.properties_data} />
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-              <Card>
-                <Accordion.Toggle as={Button} variant="link" eventKey="多层关系" onClick={this.edgeRadioChange.bind(this, '多层关系')}>
-                  多层关系
+        <Accordion.Collapse eventKey="单层关系">
+            <Card.Body>
+            <LabelsTypesSelect handelLabelsTypessBack={ this.handelLabelsTypessBack} item={{...this.props.item}} labels_types={this.props.edge_types_data}/>
+                        
+                        <DefinitionProperties handelPropertiesBack={this.handelPropertiesBack} item={{...this.props.item}} properties_data={this.props.properties_data}/>
+            </Card.Body>
+        </Accordion.Collapse>
+    </Card>
+    <Card>
+        <Accordion.Toggle as={Button} variant="link" eventKey="多层关系" onClick={this.edgeRadioChange.bind(this, '多层关系')}>
+        多层关系
 </Accordion.Toggle>
-                <Accordion.Collapse eventKey="多层关系">
-                  <Card.Body><Row>
-                    <Col><Form.Label>最小</Form.Label>
-                      <Form.Control type="text" value={this.props.item._min} onChange={this.handleMin} /></Col><Col><Form.Label>最大</Form.Label>
-                      <Form.Control type="text" value={this.props.item._max} onChange={this.handleMax} /></Col>
-                  </Row></Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            </Accordion>
+        <Accordion.Collapse eventKey="多层关系">
+            <Card.Body><Row>
+                          <Col><Form.Label>最小</Form.Label>
+                            <Form.Control type="text" value={this.props.item._min} onChange={this.handleMin} /></Col><Col><Form.Label>最大</Form.Label>
+                            <Form.Control type="text" value={this.props.item._max} onChange={this.handleMax} /></Col>
+                        </Row></Card.Body>
+        </Accordion.Collapse>
+    </Card>
+</Accordion>
 
 
 
@@ -169,30 +169,30 @@ class DefinitionEdge extends Component {
 
 
 
-          </Modal.Body>
+</Modal.Body>
+
+                 
 
 
 
 
+                 
+                      
 
 
 
 
+                
+                <Modal.Footer>
 
-
-
-
-
-          <Modal.Footer>
-
-            <Button variant="primary" onClick={this.handleEdgeClose}>
-              关闭
+                  <Button variant="primary" onClick={this.handleEdgeClose}>
+                    关闭
             </Button>
-          </Modal.Footer>
+                </Modal.Footer>
 
 
-        </IconContext.Provider>
-      </Modal>
+                </IconContext.Provider>
+              </Modal>
 
 
 
