@@ -36,7 +36,7 @@ class DefinitionProperties extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        properties_value: 'name',
+        properties_value:'',
         properties_text_value: '',
         properties_operation: '等于',
 
@@ -47,11 +47,25 @@ class DefinitionProperties extends Component {
 
 
   componentDidMount = () => {
+    for (let index in this.props.properties_data){
+      let item=this.props.properties_data[index]
+      if (item.u_type==this.props.u_type){
+        this.setState({ 'properties_value': item.u_column_name+'['+item.u_column_type+']'});
+        break;
+      }
+    }
+
+    
+    
+    
+
+    
 
 
   }
   handlePropertiesChange = (event) => {
-    this.setState({ 'properties_value': event.target.value });
+
+    this.setState({ 'properties_value':event.target.value});
 
   }
   handlePropertiesOperChange = (event) => {
@@ -75,9 +89,18 @@ class DefinitionProperties extends Component {
   }
 
   handleAddProperty = (event) => {
+
+
+    let _value=this.state.properties_value
+    let a=_value.indexOf("[")
+    let _name=_value.substring(0,a)
+    let _type=_value.substring(a+1,(_value.length-1))
+
+
+
     let item_properties = this.props.item.properties
     
-    item_properties.push({ 'name': this.state.properties_value, 'operation': this.state.properties_operation, 'value': this.state.properties_text_value });
+    item_properties.push({ 'name': _name,'type':_type, 'operation': this.state.properties_operation, 'value': this.state.properties_text_value });
     
     this.props.handelPropertiesBack(item_properties);
 
@@ -102,6 +125,7 @@ class DefinitionProperties extends Component {
                     <thead>
                       <tr>
                         <th>属性</th>
+                        <th>类型</th>
                         <th>操作</th>
                         <th>值</th>
                         <th>管理</th>
@@ -113,7 +137,7 @@ class DefinitionProperties extends Component {
                       this.props.item.properties.map((row, index) => {
 
 
-                        return (<tr key={index}><td>{row.name}</td><td>{row.operation}</td><td>{row.value}</td><td><Button variant="secondary" onClick={this.handleDeleteProperty.bind(this, index)}>删除</Button></td></tr>
+                        return (<tr key={index}><td>{row.name}</td><td>{row.type}</td><td>{row.operation}</td><td>{row.value}</td><td><Button variant="secondary" onClick={this.handleDeleteProperty.bind(this, index)}>删除</Button></td></tr>
 
 
                         )
@@ -127,7 +151,7 @@ class DefinitionProperties extends Component {
                     {typeof (this.props.properties_data) != 'undefined' ? this.props.properties_data.map((row, index) => {
 
 
-                      return (<option key={index}>{row}</option>
+                      return (row.u_type==this.props.u_type?<option key={index}>{row.u_column_name}[{row.u_column_type}]</option>:''
 
 
                       )

@@ -47,6 +47,7 @@ class PropertiesTable extends Component {
                                               <thead>
                                                 <tr>
                                                   <th>属性</th>
+                                                  <th>类型</th>
                                                   <th>操作</th>
                                                   <th>值</th>
 
@@ -58,7 +59,7 @@ class PropertiesTable extends Component {
                                                 this.props.item.properties.map((row, index) => {
 
 
-                                                  return (<tr key={index}><td>{row.name}</td><td>{row.operation}</td><td>{row.value}</td></tr>
+                                                  return (<tr key={index}><td>{row.name}</td><td>{row.type}</td><td>{row.operation}</td><td>{row.value}</td></tr>
 
 
                                                   )

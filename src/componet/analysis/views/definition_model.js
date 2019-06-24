@@ -123,19 +123,19 @@ class DefinitionModel extends Component {
           for (let i = 0; i < item.properties.length > 0; i++) {
             switch (item.properties[i].operation) {
               case '等于':
-                temp_propertes = temp_propertes + item.properties[i].name + ":\'" + item.properties[i].value + "\'";
+                temp_propertes = temp_propertes + item.properties[i].name + (item.properties[i].type=='文本属性'?":\'":":") + item.properties[i].value + (item.properties[i].type=='文本属性'?"\'":"");
                 break;
               case '大于':
-                _where_array.push(item.name + "." + item.properties[i].name + ">\'" + item.properties[i].value + "\'")
+                _where_array.push(item.name + "." + item.properties[i].name + (item.properties[i].type=='文本属性'?">\'":">") + item.properties[i].value + (item.properties[i].type=='文本属性'?"\'":""))
                 break;
               case '小于':
-                _where_array.push(item.name + "." + item.properties[i].name + "<\'" + item.properties[i].value + "\'")
+                _where_array.push(item.name + "." + item.properties[i].name + (item.properties[i].type=='文本属性'?"<\'":"<") + item.properties[i].value + (item.properties[i].type=='文本属性'?"\'":""));
                 break;
               case '包含':
                 _where_array.push(item.name + "." + item.properties[i].name + " contains \'" + item.properties[i].value + "\'")
                 break;
               case '不等于':
-                _where_array.push(item.name + "." + item.properties[i].name + " != \'" + item.properties[i].value + "\'")
+                _where_array.push(item.name + "." + item.properties[i].name + (item.properties[i].type=='文本属性'?" != \'":" != ") + item.properties[i].value + (item.properties[i].type=='文本属性'?"\'":""))
                 break;
               default:
   
@@ -174,19 +174,19 @@ class DefinitionModel extends Component {
           for (let i = 0; i < item.properties.length > 0; i++) {
             switch (item.properties[i].operation) {
               case '等于':
-                temp_propertes = temp_propertes + item.properties[i].name + ":\'" + item.properties[i].value + "\'";
+                temp_propertes = temp_propertes + item.properties[i].name + (item.properties[i].type=='文本属性'?":\'":":") + item.properties[i].value + (item.properties[i].type=='文本属性'?"\'":"");
                 break;
               case '大于':
-                _where_array.push(item.name + "." + item.properties[i].name + ">\'" + item.properties[i].value + "\'")
+                _where_array.push(item.name + "." + item.properties[i].name + (item.properties[i].type=='文本属性'?">\'":">") + item.properties[i].value + (item.properties[i].type=='文本属性'?"\'":""))
                 break;
               case '小于':
-                _where_array.push(item.name + "." + item.properties[i].name + "<\'" + item.properties[i].value + "\'")
+                _where_array.push(item.name + "." + item.properties[i].name + (item.properties[i].type=='文本属性'?"<\'":"<") + item.properties[i].value + (item.properties[i].type=='文本属性'?"\'":""));
                 break;
               case '包含':
                 _where_array.push(item.name + "." + item.properties[i].name + " contains \'" + item.properties[i].value + "\'")
                 break;
               case '不等于':
-                _where_array.push(item.name + "." + item.properties[i].name + " != \'" + item.properties[i].value + "\'")
+                _where_array.push(item.name + "." + item.properties[i].name + (item.properties[i].type=='文本属性'?" != \'":" != ") + item.properties[i].value + (item.properties[i].type=='文本属性'?"\'":""))
                 break;
               default:
 

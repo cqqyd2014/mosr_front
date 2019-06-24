@@ -63,7 +63,7 @@ class PageWrapper extends Component {
   componentDidMount = () => {
 
     //this.initChange();
-    this.child.refeshdata("match p=((n)-[]-())  return p limit 20")
+    this.child.refeshdata("match p=((n)-[]-())  return p limit 30")
     /*
     axios.get(back_server.restful_api_base_url()+'neo4jsampledata/')
     .then((response)=> {

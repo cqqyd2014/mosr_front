@@ -83,7 +83,7 @@ class NodeSelector extends Component {
                                             <div>
                                                     
                                         <LabelsTypesSelector handelLabelsTypesBack={this.handelLabelsTypesBack} item={{ ...this.props.item }} types_data={this.props.node_lables_data} />
-                                        <DefinitionProperties handelPropertiesBack={this.handelPropertiesBack} item={{ ...this.props.item }} properties_data={this.props.properties_data} />
+                                        <DefinitionProperties u_type='node' handelPropertiesBack={this.handelPropertiesBack} item={{ ...this.props.item }} properties_data={this.props.properties_data} />
                                                    
 
 

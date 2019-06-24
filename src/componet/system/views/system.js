@@ -193,16 +193,11 @@ class System extends Component {
 
   }
 
-  rowsToArray = (rows) => {
-    let arr = [];
-    for (let index in rows) {
-      arr.push(rows[index].nc_value)
-    }
-    return arr;
-  }
+
 
 
   componentDidMount = () => {
+    this.getLabelsTypesProperties();
     socket.on('connect', () => {
       console.log("已连接ws!")
     });
@@ -218,6 +213,8 @@ class System extends Component {
     socket.on('neo4j_rebuild_end', data => {
       console.log(data)
       this.props.onRebuildDataEndAction(this.props.rebuild_message, data)
+      //重建系统中的labels，types和properties
+      this.getLabelsTypesProperties()
       
     });
     socket.on('disconnect', function () {
@@ -232,7 +229,7 @@ class System extends Component {
     //node_labels
     this.props.onNodeLablesUpdateStart();
 
-    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog/?nc_type=node_labels')
+    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog_nodelabels/')
       .then((response) => {
 
 
@@ -242,7 +239,10 @@ class System extends Component {
           this.getNeo4jNodeLabels();
         }
         else {
-          let labels = this.rowsToArray(response.data);
+          let labels =[];
+          for (let index in response.data){
+            labels.push(response.data[index].label)
+          }
 
           this.props.onNodeLablesUpdateEnd(labels);
 
@@ -261,7 +261,7 @@ class System extends Component {
 
     this.props.onEdgeTypesUpdateStart();
 
-    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog/?nc_type=edge_types')
+    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog_edgetypes/')
       .then((response) => {
 
         //console.log(response.data)
@@ -270,7 +270,10 @@ class System extends Component {
           this.getNeo4jEdgeTypes();
         }
         else {
-          let types = this.rowsToArray(response.data);
+          let types = []
+          for (let index in response.data){
+            types.push(response.data[index].edge_type)
+          }
           this.props.onEdgeTypesUpdateEnd(types);
 
 
@@ -291,7 +294,7 @@ class System extends Component {
 
     this.props.onPropertiesUpdateStart();
 
-    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog/?nc_type=properties')
+    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog_properties/')
       .then((response) => {
 
         //console.log(response.data)
@@ -300,8 +303,19 @@ class System extends Component {
           this.getNeo4jProperties();
         }
         else {
-          let properties = this.rowsToArray(response.data);
+          let properties = []
+          for (let index in response.data){
+            let item_db=response.data[index]
+            let item={}
+            item['u_type']=item_db.u_type;
+            item['u_label_type']=item_db.u_label_type;
+            item['u_column_name']=item_db.u_column_name;
+            
+            item['u_column_type']=((Array.of('编码','显示名称','起点','终点')).indexOf(item_db.u_column_type)>-1)?'文本属性':item_db.u_column_type
+            properties.push(item)
+          }
           this.props.onPropertiesUpdateEnd(properties);
+          //console.log(properties);
 
 
 
