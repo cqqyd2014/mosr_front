@@ -4,6 +4,14 @@ import XLSX from 'xlsx';
 
 
 
+
+function _blankAndoComma(par){
+    par=par.replace(' ', '')
+    par=par.replace(',','_')
+    return par
+}
+
+
 function uribase64encode(par){
     let uri_par=window.encodeURIComponent(par);
 		//console.log(uri_cypher);
@@ -78,6 +86,6 @@ function exportExcel(data, fileName){
     /* generate XLSX file and send to client */
     XLSX.writeFile(wb,fileName)
 }
-  export {processDetail,exportExcel,utf16ToUtf8,uribase64encode}
+  export {processDetail,exportExcel,utf16ToUtf8,uribase64encode,_blankAndoComma}
 
 

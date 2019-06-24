@@ -1,4 +1,24 @@
 import * as ActionTypes from './actionTypes';
+
+
+export const rebuildDataStartAction=(message)=>({
+  type:ActionTypes.SYSTEM_REBUILD_DATABASE_START,
+  payload:{rebuilding:true,message:message}
+}
+
+);
+export const rebuildDataEndAction=(old_message,message)=>({
+  type:ActionTypes.SYSTEM_REBUILD_DATABASE_END,
+  payload:{rebuilding:false,message:message,old_message:old_message}
+}
+
+);
+export const rebuildDataProcessAction=(old_message,message)=>({
+  type:ActionTypes.SYSTEM_REBUILD_DATABASE_PROCESS,
+  payload:{message:message,old_message:old_message}
+}
+
+);
 export const nodeLablesUpdateStartAction = () => ({
 
  

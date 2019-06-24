@@ -122,9 +122,7 @@ class DefinitionDatabaseConnection extends Component {
             <Col><Form.Label>数据库类型</Form.Label>
               <Form.Control as="select" value={this.state.db_type} onChange={this.handelDbTypeChange}>
                 <option>MS SQLSERVER</option>
-                <option>ORACLE</option>
-                <option>MYSQL</option>
-                <option>POSTGRESQL</option>
+                
 
               </Form.Control></Col>
             <Col>

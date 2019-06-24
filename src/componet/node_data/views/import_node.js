@@ -12,7 +12,7 @@ import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import InputGroup from 'react-bootstrap/InputGroup'
 
-
+import {_blankAndoComma} from '../../../func/common'
 
 
 import back_server from '../../../func/back_server';
@@ -117,9 +117,10 @@ class ImportNode extends Component {
   }
 
   handleNewLabelChange = (event) => {
-    let target = event.target
+    let _value = event.target.value
+    _value=_blankAndoComma(_value)
 
-    this.setState({ 'new_label_value': target.value })
+    this.setState({ 'new_label_value': _value })
   }
   handelNewLabelAdd = (event) => {
     if (this.state.new_label_value === '') {

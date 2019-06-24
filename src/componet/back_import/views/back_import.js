@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 
-import Modal from 'react-bootstrap/Modal'
+
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
@@ -12,11 +12,14 @@ import Alert from 'react-bootstrap/Alert'
 import Table from 'react-bootstrap/Table'
 
 import * as XLSX from 'xlsx';
-
+import io from 'socket.io-client';
 
 import { Cytoscapejs } from '../../cytoscapejs';
 import * as HeadActions from '../../head/redux/actions'
 import {exportExcel} from '../../../func/common';
+
+
+const socket = io(back_server.ws_api_base_url());
 
 class BackImport extends Component {
   constructor(props) {
@@ -88,6 +91,7 @@ handelReBuildDatabaseClick=()=>{
   }
   this.setState({'import_message':'开始重建数据库'})
   this.setState({'import_type':'success'})
+  socket.emit('neo4j_rebuild',this.state.manage_import_data,this.state.import_data);
 
 }
 handelRemoveManageClick=(index,event)=>{
@@ -209,25 +213,7 @@ handleImportClose=()=>{
 {this.state.import_message !== '' ? <Alert variant={this.state.import_type}>
 {this.state.import_message}
 </Alert> : ''}
-            <Modal show={this.state.import_data_show} onHide={this.handleImportClose}>
-                <Modal.Header closeButton>
-                  <Modal.Title>数据库重建中，等待系统返回结果</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <Form.Group >
-                    <Form.Label>选择m模板文件</Form.Label>
-                    <input name='xls_file' type='file' accept='.xlsx, .xls' onChange={this.onImportExcel} ref={this.fileInput} />
-                  </Form.Group>
-                  
-                  
-                </Modal.Body>
-                <Modal.Footer>
-
-                  <Button variant="primary" onClick={this.handleNodeClose}>
-                    关闭
-            </Button>
-                </Modal.Footer>
-              </Modal>
+            
               </div>
             </div>
             )}

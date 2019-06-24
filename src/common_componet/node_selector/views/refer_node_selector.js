@@ -3,28 +3,14 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 
 
-import Modal from 'react-bootstrap/Modal'
+
 
 import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Accordion from 'react-bootstrap/Accordion'
-
-import {DefinitionProperties} from '../../definition_properties';
-
-
-import {LabelsTypesSelector} from '../../labels_types_selector';
-
-
-import $ from 'jquery';
 
 
 
 
-import { MdLabel, MdClass } from "react-icons/md";
-import { IconContext } from "react-icons";
+
 
 
 

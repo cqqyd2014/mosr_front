@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
-import { MdPeople, MdTimeline, MdClass, MdAssignment, MdLabel } from "react-icons/md";
+import { MdPeople, MdTimeline } from "react-icons/md";
 import DefinitionNode from './definition_node';
 import DefinitionEdge from './definition_edge';
 

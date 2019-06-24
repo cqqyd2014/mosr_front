@@ -117,7 +117,7 @@ class MainFrame extends Component {
     }
     
     render() {
-      
+
       
       return (
         <div>
@@ -126,6 +126,7 @@ class MainFrame extends Component {
 
         <div className="wrapper">
           <System/>
+          {this.props.rebuilding==null||this.props.rebuilding==false?
         <Router>
           <Aside/>
           <div className="page-wrapper"  style={{display:'flex',flexDirection:'column'}}>
@@ -158,6 +159,7 @@ class MainFrame extends Component {
           
         
         </Router>
+        :''}
         </div>
           
         </div>
@@ -176,7 +178,8 @@ class MainFrame extends Component {
   
   const mapStateToProps = (state) => {
     return {
-      full:  state.CytoscapejsReducer.full
+      full:  state.CytoscapejsReducer.full,
+      rebuilding: state.SystemReducer.rebuilding
     };
   }
   

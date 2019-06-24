@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 
 
-
+import {_blankAndoComma} from '../../../func/common'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
@@ -56,9 +56,10 @@ class ImportEdge extends Component {
 
   }
   handleEdgeTypeChange = (event) => {
-    let target = event.target
+    let target = event.target.value
+    let _value=_blankAndoComma(_value)
 
-    this.setState({ 'edge_type': target.value })
+    this.setState({ 'edge_type':  _value})
   }
   onItemsChange = (index, event) => {
 
