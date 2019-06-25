@@ -275,10 +275,12 @@ class NodeData extends Component {
             <div className="col-lg-12" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
               <Form onSubmit={this.onSubmit} id="node_form">
 
-                
-                    <h3>
-                      节点数据一般为自然人或者法人机构。自然人最少字段应该包括身份证号码和姓名，法人最少应包含统一社会信用代码和单位名称。
-    </h3>
+              <Alert  variant='dark'>
+              节点数据一般为自然人或者法人机构。自然人最少字段应该包括身份证号码和姓名，法人最少应包含统一社会信用代码和单位名称。节点标签可以为一组。关系数据需要指定起点和终点，关系类型为单一类型。
+  </Alert>
+                    
+                      
+ 
                     <DefinitionDatabaseConnection onDbConnected={this.onDbConnected} />
                     {this.state.db_connected ? <div>
                       <SelectPreviewTable onGetCols={this.onGetCols} onSelectTable={this.onSelectTable} onRef={this.onPreView} db_type={this.state.db_type} db_address={this.state.db_address} db_port={this.state.db_port} db_name={this.state.db_name} db_username={this.state.db_username} db_password={this.state.db_password} />
