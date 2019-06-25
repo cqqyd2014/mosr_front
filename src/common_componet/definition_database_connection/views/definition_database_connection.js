@@ -63,16 +63,17 @@ class DefinitionDatabaseConnection extends Component {
     this.setState({ 'db_password': event.target.value });
   }
   handelDbPortChange = (event) => {
-    this.setState('db_port', event.target.value);
+    this.setState({'db_port': event.target.value});
   }
 
   handelDbAddressChange = (event) => {
+    console.log(event.target.value);
 
-    this.setState('db_address', event.target.value);
+    this.setState({'db_address':event.target.value});
   }
 
   handelDbTypeChange = (event) => {
-    this.setState('db_type', event.target.value);
+    this.setState({'db_type': event.target.value});
 
   }
 
