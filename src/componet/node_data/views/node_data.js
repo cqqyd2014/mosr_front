@@ -258,6 +258,8 @@ class NodeData extends Component {
   node_edge_change = (value, event) => {
     this.setState({ 'node_edge': value })
     this.setState({'items_check_ok':false})
+    this.setState({ 'label_items': [] })
+    this.setState({ 'edge_type': '' })
     this.reInitCols()
   }
   onEdgeTypeChange=(type)=>{
