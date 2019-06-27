@@ -3,20 +3,13 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
-
-
-import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 
 import Table from 'react-bootstrap/Table'
-
-import * as XLSX from 'xlsx';
 import io from 'socket.io-client';
-
-import { Cytoscapejs } from '../../cytoscapejs';
 import * as HeadActions from '../../head/redux/actions'
-import {exportExcel} from '../../../func/common';
+
 
 
 const socket = io(back_server.ws_api_base_url());
@@ -72,19 +65,19 @@ handelReBuildDatabaseClick=()=>{
   let edge_flag=0
   for (let index in this.state.manage_import_data){
     
-    if (this.state.manage_import_data[index]&&this.state.import_data[index].u_node_edge=='node'){
+    if (this.state.manage_import_data[index]&&this.state.import_data[index].u_node_edge==='node'){
       node_flag++
     }
-    if (this.state.manage_import_data[index]&&this.state.import_data[index].u_node_edge=='edge'){
+    if (this.state.manage_import_data[index]&&this.state.import_data[index].u_node_edge==='edge'){
       edge_flag++
     }
   }
-  if (node_flag==0){
+  if (node_flag===0){
     this.setState({'import_message':'需要至少导入一个节点'})
     this.setState({'import_type':'danger'})
     return
   }
-  if (edge_flag==0){
+  if (edge_flag===0){
     this.setState({'import_message':'需要至少导入一个关系'})
     this.setState({'import_type':'danger'})
     return

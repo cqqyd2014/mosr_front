@@ -23,7 +23,7 @@ import $ from 'jquery';
 
 import { IconContext } from "react-icons";
 
-import { MdClass, } from "react-icons/md";
+
 
 
 
@@ -144,7 +144,7 @@ class DefinitionEdge extends Component {
                   <Card.Body>
                     <LabelsTypesSelector handelLabelsTypesBack={this.handelLabelsTypesBack} item={{ ...this.props.item }} types_data={this.props.edge_types_data} />
 
-                    <DefinitionProperties handelPropertiesBack={this.handelPropertiesBack} item={{ ...this.props.item }} properties_data={this.props.properties_data} />
+                    <DefinitionProperties u_type='edge'  handelPropertiesBack={this.handelPropertiesBack} item={{ ...this.props.item }} properties_data={this.props.properties_data} />
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
