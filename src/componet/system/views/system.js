@@ -6,7 +6,7 @@ import axios from 'axios';
 import * as Actions from '../redux/actions';
 import io from 'socket.io-client';
 import Modal from 'react-bootstrap/Modal'
-
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -22,7 +22,7 @@ class System extends Component {
     this.fileInput = React.createRef();
     this.state = {
 
-
+      import_back_system:''
 
     };
 
@@ -118,8 +118,7 @@ class System extends Component {
       console.log("disconnect")
     });
     socket.on('system_report', data => {
-      console.log("report")
-      console.log(data);
+      this.setState({'import_back_system':'cpu_percent:'+data.cpu_percent+' mem_total:'+data.mem_total+' mem.used:'+data.mem_used+" mem.free:"+data.mem_free})
     });
 
     
@@ -244,13 +243,9 @@ class System extends Component {
         <Modal.Body>
           <div>
             <Spinner animation="grow" variant="primary" />
-            <Spinner animation="grow" variant="secondary" />
-            <Spinner animation="grow" variant="success" />
-            <Spinner animation="grow" variant="danger" />
-            <Spinner animation="grow" variant="warning" />
-            <Spinner animation="grow" variant="info" />
-            <Spinner animation="grow" variant="light" />
-            <Spinner animation="grow" variant="dark" />
+            <Alert  variant='primary'>
+    {this.state.import_back_system}
+  </Alert>
           </div>
 
           <ListGroup>

@@ -12,7 +12,8 @@ import * as HeadActions from '../../head/redux/actions'
 
 
 
-const socket = io(back_server.ws_api_base_url());
+//const socket = io(back_server.ws_api_base_url());
+
 
 class BackImport extends Component {
   constructor(props) {
@@ -85,6 +86,7 @@ handelReBuildDatabaseClick=()=>{
   }
   this.setState({'import_message':'开始重建数据库'})
   this.setState({'import_type':'success'})
+  const socket = io(back_server.ws_api_base_url());
   socket.emit('neo4j_rebuild',this.state.manage_import_data,this.state.import_data);
 
 }
