@@ -148,23 +148,23 @@ class Aside extends Component {
 
                         
                         <li >
-                          <a className="sidenav-item-link" href="/node_data">
+                          <a className="sidenav-item-link" href="/#/node_data">
                             <span className="nav-text">从数据库下载数据</span>
                           </a>
                         </li>
                         <li >
-                          <a className="sidenav-item-link" href="/back_import">
+                          <a className="sidenav-item-link" href="/#/back_import">
                             <span className="nav-text">重建分析库</span>
                           </a>
                         </li>
                         <li >
-                          <a className="sidenav-item-link" href="/manage_node">
+                          <a className="sidenav-item-link" href="/#/manage_node">
                             <span className="nav-text">管理现有节点</span>
                           </a>
                         </li>
                         
                         <li >
-                          <a className="sidenav-item-link" href="/manage_edge">
+                          <a className="sidenav-item-link" href="/#/manage_edge">
                             <span className="nav-text">管理现有关系</span>
                           </a>
                         </li>
@@ -196,13 +196,13 @@ class Aside extends Component {
                         
                         
                         <li >
-                          <a className="sidenav-item-link" href="/analysis">
+                          <a className="sidenav-item-link" href="/#/analysis">
                             <span className="nav-text">关系模型设计器</span>
                             
                           </a>
                         </li>
                         <li >
-                          <a className="sidenav-item-link" href="/my_template">
+                          <a className="sidenav-item-link" href="/#/my_template">
                             <span className="nav-text">我的关系模板</span>
                             
                           </a>
@@ -227,13 +227,13 @@ class Aside extends Component {
                         
                         
                         <li >
-                          <a className="sidenav-item-link" href="/cluster_analysis">
+                          <a className="sidenav-item-link" href="/#/cluster_analysis">
                             <span className="nav-text">聚类模型设计器</span>
                             
                           </a>
                         </li>
                         <li >
-                          <a className="sidenav-item-link" href="/my_cluster_template">
+                          <a className="sidenav-item-link" href="/#/my_cluster_template">
                             <span className="nav-text">我的聚类模板</span>
                             
                           </a>
@@ -277,7 +277,7 @@ class Aside extends Component {
                         
                         
                         <li >
-                          <a className="sidenav-item-link" href="/method">
+                          <a className="sidenav-item-link" href="/#/method">
                             <span className="nav-text">设计理念</span>
                             
                           </a>
@@ -289,7 +289,7 @@ class Aside extends Component {
                         
                         
                         <li >
-                          <a className="sidenav-item-link" href="/example">
+                          <a className="sidenav-item-link" href="/#/example">
                             <span className="nav-text">案例入门</span>
                             
                           </a>
@@ -305,7 +305,7 @@ class Aside extends Component {
                           关于我们
                         </li>
                         <li >
-                          <a className="sidenav-item-link" href="/about">
+                          <a className="sidenav-item-link" href="/#/about">
                             <span className="nav-text">关于我们</span>
                             
                           </a>
