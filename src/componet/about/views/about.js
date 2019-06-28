@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-
+import Alert from 'react-bootstrap/Alert'
 
 
 
@@ -96,14 +96,20 @@ class About extends Component {
 
               {this.props.full === true ? '' : (<div className="card card-default" style={{ flex: '1 1 auto' }}>
                 <div className="card-header  justify-content-between">
-                  <h2>重庆市审计局金融处</h2>
+                  <h2>关于我们</h2>
                 </div>
                 <div className="card-body">
-                  <blockquote className="blockquote">
-                    <p className="mb-0">随着人工智能的到来，新型金融机构及其业务的层出不穷，互联网新金融的兴起和大数据、云计算的影响，金融审计呈现新的趋势——业务穿透审计、资金流跟踪审计、重大金融风险预警审计……对金融审计人提出了更高的要求。2018年初，根据“风险防控跟踪审计”的需要，我们思考如何实现海量数据的智能化设计——数据可视化、建模智能化。希望实现“以业务为导向，以智能化为方向，以大数据为依托”的一套全新的分析系统。历时一年，考察了各种大数据技术，最终确定了以图数据库为核心的方案，力图实现社会关系网络的智能化知识发现。</p>
-                    <p className="mb-0">感谢全处同志为该项目所作的贡献。感谢周红东、徐晓静两届金融处领导对本项目的指引。感谢计算机处有关同志对我们的支持。感谢局各级领导对金融处的关心和厚爱。</p>
-                    <p className="mb-0">如有任何疑问，请与金融处王利联系，电话13368431187，邮箱wangli2000_cn@126.com。</p>
-                  </blockquote>
+                <Alert variant="success">
+  <Alert.Heading>重庆市审计局金融处</Alert.Heading>
+  <p>
+  随着人工智能的到来，新型金融机构及其业务的层出不穷，互联网新金融的兴起和大数据、云计算的影响，金融审计呈现新的趋势——业务穿透审计、资金流跟踪审计、重大金融风险预警审计……对金融审计人提出了更高的要求。2018年初，根据“风险防控跟踪审计”的需要，我们思考如何实现海量数据的智能化设计——数据可视化、建模智能化。希望实现“以业务为导向，以智能化为方向，以大数据为依托”的一套全新的分析系统。历时一年，考察了各种大数据技术，最终确定了以图数据库为核心的方案，力图实现社会关系网络的智能化知识发现。
+  </p>
+  <hr />
+  <p className="mb-0">
+  感谢全处同志为该项目所作的贡献。感谢周红东、徐晓静两届金融处领导对本项目的指引。感谢局各级领导对金融处的关心和厚爱。感谢我的妻子和孩子一直以来的支持。如有任何疑问，请与金融处王利联系，邮箱wangli2000_cn@126.com。
+  </p>
+</Alert>
+                 
                   
                   
                     <IconContext.Provider value={{ color: "gray", size: "2em" }}>

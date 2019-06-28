@@ -5,7 +5,7 @@ import back_server from '../../../func/back_server';
 import axios from 'axios';
 
 import ListGroup from 'react-bootstrap/ListGroup'
-
+import Alert from 'react-bootstrap/Alert'
 import Card from 'react-bootstrap/Card'
 
 
@@ -115,36 +115,40 @@ handelQueryClick=(index,event)=>{
                 <h2>设计理念</h2>
               </div>
               <div className="card-body">
-                
-                <Card>
-  
-  <Card.Body>
-    <Card.Title>研发社群知识发现系统的背景</Card.Title>
-    <Card.Text>
-      审计工作与计算机的融合已经进入一个新的智能化时代。同时审计工作也从关注吃饭的“经费”转变到更多的关注被审计单位的业务，关注权力运行，关注重大项目投资，关注腐败等领域。而在这样的时代要求下，我们的应用存在一下问题。
-    </Card.Text>
-    <ListGroup>
-  <ListGroup.Item>1、审计工作中案件线索的突破很多情况下需要关注被审计单位业务背后隐藏的利益联系，特别是社会关系中存在的复杂联系很多时候是重要线索。</ListGroup.Item>
-  <ListGroup.Item>2、人人学SQL语句对审计人员提出太多的要求，审计应该更多的关注业务。对于计算机技术，应该从智能化，可视化方向发展，提高数据分析效率。特别是数据建模，应该类似LEGO积木一样的简单易学。</ListGroup.Item>
-  <ListGroup.Item>3、原有SQL数据库操作已经不能满足多维度，复杂环境下的数据分析。</ListGroup.Item>
+              <Alert variant="danger">
+  <Alert.Heading>研发社群知识发现系统的背景</Alert.Heading>
+  <p>
+  审计工作与计算机的融合已经进入一个新的智能化时代。同时审计工作也从关注吃饭的“经费”转变到更多的关注被审计单位的业务，关注权力运行，关注重大项目投资，关注腐败等领域。而在这样的时代要求下，我们的应用存在一下问题。
+  </p>
+  <hr />
+  <p className="mb-0">
+  1、审计工作中案件线索的突破很多情况下需要关注被审计单位业务背后隐藏的利益联系，特别是社会关系中存在的复杂联系很多时候是重要线索。
+  </p>
+  <p className="mb-0">
+  2、人人学SQL语句对审计人员提出太多的要求，审计应该更多的关注业务。对于计算机技术，应该从智能化，可视化方向发展，提高数据分析效率。特别是数据建模，应该类似LEGO积木一样的简单易学。
+  </p>
+  <p className="mb-0">
+  3、原有SQL数据库操作已经不能满足多维度，复杂环境下的数据分析。
+  </p>
+</Alert>
+            
+<Alert variant="success">
+  <Alert.Heading>社群知识发现系统的解决的问题</Alert.Heading>
+  <p>
+  我们从审计人员的思维方式出发，研发系统，力求实现智能、可视和快速建模。
+  </p>
+  <hr />
+  <p className="mb-0">
+  1、搭建积木式的建模，实现审计思维与计算机模型的快速转换。
+  </p>
+  <p className="mb-0">
+  2、智能化探索未知的社群关系，突破审计人员的未知。
+  </p>
+  <p className="mb-0">
+  3、数据结果的可视化，易用。
+  </p>
+</Alert>
 
-</ListGroup>
-    
-  </Card.Body>
-  <Card.Body>
-    <Card.Title>社群知识发现系统的解决的问题</Card.Title>
-    <Card.Text>
-      我们从审计人员的思维方式出发，研发系统，力求实现智能、可视和快速建模
-    </Card.Text>
-    <ListGroup>
-  <ListGroup.Item>1、搭建积木式的建模，实现审计思维与计算机模型的快速转换</ListGroup.Item>
-  <ListGroup.Item>2、智能化探索未知的社群关系，突破审计人员的未知。</ListGroup.Item>
-  <ListGroup.Item>3、数据结果的可视化，易用。</ListGroup.Item>
-
-</ListGroup>
-    
-  </Card.Body>
-</Card>
                 
                 
                 

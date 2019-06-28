@@ -35,14 +35,13 @@ class BackImport extends Component {
 
 
   componentDidMount = () => {
-    console.log("did mount");
+   
     
     
 
     axios.get(back_server.restful_api_base_url() + 'import_data/')
       .then((response) => {
         //let data=database.baseparameter(response);
-        console.log("import_data")
         this.setState({'import_data': response.data })
         let manage_import_data=[]
         for (let i in response.data){
