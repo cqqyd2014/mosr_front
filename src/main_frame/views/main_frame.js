@@ -24,7 +24,7 @@ import Head from '../../componet/head/views/head'
 import Copyright from './copyright'
 
 
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {HashRouter as Router, Route} from "react-router-dom";
 
 class MainFrame extends Component {
     constructor(props) {
