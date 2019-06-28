@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Base64 } from 'js-base64';
+
 import { Modal, Image, Button, ButtonToolbar, Form } from "react-bootstrap";
 import back_server from '../../../func/back_server';
 import axios from 'axios';

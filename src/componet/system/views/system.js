@@ -87,117 +87,14 @@ class System extends Component {
   }
 
 
-  getNeo4jEdgeTypes = () => {
-    axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match ()-[r]-() return distinct type(r)')
-      .then((response) => {
 
-        //console.log(response.data)
-        let type_items = []
-        for (let index in response.data) {
-          let item = response.data[index]
-          for (var key in item) {
-            //console.log(item[key]);
-            type_items.push(item[key]);
-          }
-          //console.log(item[0]);
-
-        }
-        //console.log(labels)
-        //this.setState({'types_items':type_items});
-        this.saveNeo4jCatalog('edge_types', type_items);
-        this.props.onEdgeTypesUpdateEnd(type_items);
-
-
-
-      })
-      .catch(function (error) {
-        console.log(error);
-        //this.props.onNodeMessageChange("出错"+error,"danger");
-      });
-
-  }
-
-  getNeo4jNodeLabels = () => {
-    axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match (n) return distinct labels(n)')
-      .then((response) => {
-        //this.props.onNodeMessageChange("成功获取数据","success");
-
-        //console.log(response.data)
-        let labels = []
-        for (let index in response.data) {
-          let item = response.data[index]
-          for (var key in item) {
-            //console.log(item[key]);
-            for (let index2 in item[key]) {
-              let item2 = item[key][index2]
-              //console.log(item2);
-              if (labels.indexOf(item2) === -1) {
-                //console.log(labels)
-                labels.push(item2);
-              }
-            }
-          }
-          //console.log(item[0]);
-
-        }
-        //console.log(labels)
-        //this.setState({ 'labels_items': labels });
-        this.saveNeo4jCatalog('node_labels', labels);
-        this.props.onNodeLablesUpdateEnd(labels);
-
-
-
-
-
-      })
-      .catch(function (error) {
-        console.log(error);
-        //this.props.onNodeMessageChange("出错"+error,"danger");
-      });
-
-  }
-
-  getNeo4jProperties = () => {
-
-    axios.get(back_server.restful_api_base_url() + 'neo4jJson/?neo4jgraph_cypher=match (n) return distinct keys(n)')
-      .then((response) => {
-
-        //console.log(response.data)
-        let properties = []
-        for (let index in response.data) {
-          let item = response.data[index]
-          for (var key in item) {
-            //console.log(item[key]);
-            for (let index2 in item[key]) {
-              let item2 = item[key][index2]
-              //console.log(item2);
-              if (properties.indexOf(item2) === -1) {
-                //console.log(labels)
-                properties.push(item2);
-              }
-            }
-          }
-          //console.log(item[0]);
-
-        }
-        this.saveNeo4jCatalog('properties', properties);
-        this.props.onPropertiesUpdateEnd(properties);
-        //this.setState({'types_items':type_items});
-        //this.props.onNodeLablesUpdateEnd(labels, type_items, properties);
-
-      })
-      .catch(function (error) {
-        console.log(error);
-        //this.props.onNodeMessageChange("出错"+error,"danger");
-      });
-
-  }
 
 
 
 
   componentDidMount = () => {
     this.getLabelsTypesProperties();
+    
     socket.on('connect', () => {
       console.log("已连接ws!")
     });
@@ -220,6 +117,12 @@ class System extends Component {
     socket.on('disconnect', function () {
       console.log("disconnect")
     });
+    socket.on('system_report', data => {
+      console.log("report")
+      console.log(data);
+    });
+
+    
 
 
   }
@@ -233,16 +136,11 @@ class System extends Component {
       .then((response) => {
 
 
-        if (response.data.length === 0) {
-          //需要从neo4j中更新
-
-          this.getNeo4jNodeLabels();
-        }
-        else {
+        
           let labels =[];
           for (let index in response.data){
             labels.push(response.data[index].label)
-          }
+          
 
           this.props.onNodeLablesUpdateEnd(labels);
 
@@ -265,11 +163,7 @@ class System extends Component {
       .then((response) => {
 
         //console.log(response.data)
-        if (response.data.length === 0) {
-          //需要从neo4j中更新
-          this.getNeo4jEdgeTypes();
-        }
-        else {
+        
           let types = []
           for (let index in response.data){
             types.push(response.data[index].edge_type)
@@ -278,7 +172,7 @@ class System extends Component {
 
 
 
-        }
+        
 
 
         //this.setState({'types_items':type_items});
@@ -298,11 +192,7 @@ class System extends Component {
       .then((response) => {
 
         //console.log(response.data)
-        if (response.data.length === 0) {
-          //需要从neo4j中更新
-          this.getNeo4jProperties();
-        }
-        else {
+        
           let properties = []
           for (let index in response.data){
             let item_db=response.data[index]
@@ -313,7 +203,7 @@ class System extends Component {
             
             item['u_column_type']=((Array.of('编码','显示名称','起点','终点')).indexOf(item_db.u_column_type)>-1)?'文本属性':item_db.u_column_type
             properties.push(item)
-          }
+          
           this.props.onPropertiesUpdateEnd(properties);
           //console.log(properties);
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ReactCytoscape } from 'react-cytoscape';
-import { Modal, Row, Col, Image, Button, ButtonToolbar, FormGroup, Form } from "react-bootstrap";
+import { Modal, Image, Button, ButtonToolbar, Form } from "react-bootstrap";
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -11,12 +11,9 @@ import $ from 'jquery';
 import { MdLaunch, MdFileDownload, MdImage } from "react-icons/md";
 import { IconContext } from "react-icons";
 import { processDetail, exportExcel } from '../../../func/common';
-import coseBilkent from 'cytoscape-cose-bilkent';
-import XLSX from 'xlsx';
+
 //ReactCytoscape.use( coseBilkent );
 
-let neo4JGraphHandle = 'init';
-let old_neo4jgraph_cypher = '';
 class Neo4JGraph extends Component {
 	constructor(props) {
 		super(props);
@@ -95,8 +92,7 @@ class Neo4JGraph extends Component {
 				//let data=database.baseparameter(response);
 				//console.log(response.data.elements)
 
-				let edges = { "edges": response.data.elements.edges };
-				let nodes = { "nodes": response.data.elements.nodes };
+
 
 				console.log('开始处理');
 
@@ -247,44 +243,7 @@ class Neo4JGraph extends Component {
 
 
 
-		{/*
-
-		axios.get(back_server.restful_api_base_url()+'NodeColors/')
-		.then((response)=> {
-
-		  //let data=database.baseparameter(response);
-		  //console.log(response.data)
-		  //console.log(this.getElements())
-		  
-		
-		 { selector: 'node[label = "Person"]', 
-                  css: {'background-color': '#6FB1FC', 'content': 'data(name)'}
-                },
-		
-			let node_colors=[];
-
-			response.data.map((_color,index)=>{
-				
-				let _css={'background-color': '#'+_color.n_color, content: 'data(label)'}
-				let node_color={selector:'node[labels="'+_color.n_lable+'"]',css:_css}
-				node_colors.push(node_color)
-						});
-			
-			
-			//console.log(node_colors);
-			//加入边
-
-				let _css={ 'curve-style': 'bezier','target-arrow-shape': 'triangle', content: 'data(label)'}
-				let node_color={selector:'edge',css:_css}
-				node_colors.push(node_color)
-				console.log(node_colors);
-		  	this.setState({'node_colors':node_colors});
-	  
-		})
-		.catch(function (error) {
-		  console.log(error);
-		});
-	*/}
+	
 	}
 
 	handleDownloadChange = () => {
@@ -301,10 +260,10 @@ class Neo4JGraph extends Component {
 			let target_name = '';
 			let type = data.label;
 			for (let node of nodes) {
-				if (node.data.id == source) {
+				if (node.data.id === source) {
 					source_name = node.data.name;
 				}
-				if (node.data.id == target) {
+				if (node.data.id === target) {
 					target_name = node.data.name;
 				}
 			}
@@ -318,91 +277,7 @@ class Neo4JGraph extends Component {
 
 
 	render() {
-		let options = {
-			name: 'cose',
-
-			// Called on `layoutready`
-			ready: function () { },
-
-			// Called on `layoutstop`
-			stop: function () { },
-
-			// Whether to animate while running the layout
-			// true : Animate continuously as the layout is running
-			// false : Just show the end result
-			// 'end' : Animate with the end result, from the initial positions to the end positions
-			animate: true,
-
-			// Easing of the animation for animate:'end'
-			animationEasing: undefined,
-
-			// The duration of the animation for animate:'end'
-			animationDuration: undefined,
-
-			// A function that determines whether the node should be animated
-			// All nodes animated by default on animate enabled
-			// Non-animated nodes are positioned immediately when the layout starts
-			animateFilter: function (node, i) { return true; },
-
-
-			// The layout animates only after this many milliseconds for animate:true
-			// (prevents flashing on fast runs)
-			animationThreshold: 250,
-
-			// Number of iterations between consecutive screen positions update
-			refresh: 20,
-
-			// Whether to fit the network view after when done
-			fit: true,
-
-			// Padding on fit
-			padding: 30,
-
-			// Constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-			boundingBox: undefined,
-
-			// Excludes the label when calculating node bounding boxes for the layout algorithm
-			nodeDimensionsIncludeLabels: false,
-
-			// Randomize the initial positions of the nodes (true) or use existing positions (false)
-			randomize: false,
-
-			// Extra spacing between components in non-compound graphs
-			componentSpacing: 40,
-
-			// Node repulsion (non overlapping) multiplier
-			nodeRepulsion: function (node) { return 2048; },
-
-			// Node repulsion (overlapping) multiplier
-			nodeOverlap: 4,
-
-			// Ideal edge (non nested) length
-			idealEdgeLength: function (edge) { return 32; },
-
-			// Divisor to compute edge forces
-			edgeElasticity: function (edge) { return 32; },
-
-			// Nesting factor (multiplier) to compute ideal edge length for nested edges
-			nestingFactor: 1.2,
-
-			// Gravity force (constant)
-			gravity: 1,
-
-			// Maximum number of iterations to perform
-			numIter: 1000,
-
-			// Initial temperature (maximum node displacement)
-			initialTemp: 1000,
-
-			// Cooling factor (how the temperature is reduced between consecutive iterations
-			coolingFactor: 0.99,
-
-			// Lower temperature threshold (below this point the layout will end)
-			minTemp: 1.0,
-
-			// Pass a reference to weaver to use threads for calculations
-			weaver: false
-		};
+		
 
 		return (
 			<div style={{ display: 'flex', flexDirection: 'column' }}>

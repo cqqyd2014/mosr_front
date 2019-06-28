@@ -67,7 +67,7 @@ class DefinitionDatabaseConnection extends Component {
   }
 
   handelDbAddressChange = (event) => {
-    console.log(event.target.value);
+    //console.log(event.target.value);
 
     this.setState({'db_address':event.target.value});
   }

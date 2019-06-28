@@ -10,27 +10,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
-
-
-
-
-
-
-import $ from 'jquery';
-
-
-
-
 import { MdAssignment } from "react-icons/md";
-
-
-
-
-
-
-
-
-
 
 class DefinitionProperties extends Component {
   constructor(props) {
@@ -49,7 +29,7 @@ class DefinitionProperties extends Component {
   componentDidMount = () => {
     for (let index in this.props.properties_data){
       let item=this.props.properties_data[index]
-      if (item.u_type==this.props.u_type){
+      if (item.u_type===this.props.u_type){
         this.setState({ 'properties_value': item.u_column_name+'['+item.u_column_type+']'});
         break;
       }
@@ -151,7 +131,7 @@ class DefinitionProperties extends Component {
                     {typeof (this.props.properties_data) != 'undefined' ? this.props.properties_data.map((row, index) => {
 
 
-                      return (row.u_type==this.props.u_type?<option key={index}>{row.u_column_name}[{row.u_column_type}]</option>:''
+                      return (row.u_type===this.props.u_type?<option key={index}>{row.u_column_name}[{row.u_column_type}]</option>:''
 
 
                       )

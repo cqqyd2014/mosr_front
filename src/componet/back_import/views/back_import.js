@@ -34,13 +34,14 @@ class BackImport extends Component {
 
 
   componentDidMount = () => {
-    //console.log("did mount");
+    console.log("did mount");
     
     
 
     axios.get(back_server.restful_api_base_url() + 'import_data/')
       .then((response) => {
         //let data=database.baseparameter(response);
+        console.log("import_data")
         this.setState({'import_data': response.data })
         let manage_import_data=[]
         for (let i in response.data){
@@ -169,7 +170,7 @@ handleImportClose=()=>{
                 {
                   this.state.import_data.map((row, index) => {
                     return (<tr key={index} >
-                      <td>{row.u_node_edge=='node'?'节点':'关系'}</td>
+                      <td>{row.u_node_edge==='node'?'节点':'关系'}</td>
                       <td>{row.u_label_items}</td>
                       <td>{row.u_edge_type}</td>
                       <td>{row.u_rowcount}</td>
@@ -178,9 +179,9 @@ handleImportClose=()=>{
                       <td>{row.u_start_import_datetime}</td>
                       <td>{row.u_end_import_datetime}</td>
                       <td>{row.u_status}</td>
-                      <td>{this.state.manage_import_data[index]&&this.state.import_data[index].u_end_download_datetime!='null'?<Button variant="secondary" onClick={this.handelRemoveManageClick.bind(this, index)}>移出重建列表</Button>
+                      <td>{this.state.manage_import_data[index]&&this.state.import_data[index].u_end_download_datetime!=='null'?<Button variant="secondary" onClick={this.handelRemoveManageClick.bind(this, index)}>移出重建列表</Button>
                       :''}
-                      {!this.state.manage_import_data[index]&&this.state.import_data[index].u_end_download_datetime!='null'?<Button variant="secondary" onClick={this.handelAddManangeClick.bind(this, index)}>加入重建列表</Button>:''}
+                      {!this.state.manage_import_data[index]&&this.state.import_data[index].u_end_download_datetime!=='null'?<Button variant="secondary" onClick={this.handelAddManangeClick.bind(this, index)}>加入重建列表</Button>:''}
                       
                       <Button variant="secondary" onClick={this.handelDeleteImportClick.bind(this, index)}>删除</Button>
                       </td>
@@ -194,7 +195,7 @@ handleImportClose=()=>{
             {
                   this.state.manage_import_data.map((row, index) => {
                     return (<span key={index}>{row?
-                      (this.state.import_data[index].u_node_edge=='node'?'[节点：'+this.state.import_data[index].u_label_items+']':'[关系：'+this.state.import_data[index].u_edge_type)+']':''}</span>
+                      (this.state.import_data[index].u_node_edge==='node'?'[节点：'+this.state.import_data[index].u_label_items+']':'[关系：'+this.state.import_data[index].u_edge_type)+']':''}</span>
                     )
                   })
                 }
