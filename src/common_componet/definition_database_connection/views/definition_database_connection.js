@@ -74,6 +74,24 @@ class DefinitionDatabaseConnection extends Component {
 
   handelDbTypeChange = (event) => {
     this.setState({'db_type': event.target.value});
+    if (event.target.value==='ORACLE'){
+      this.setState({'db_address': 'localhost'});
+      this.setState({'db_port': '1521'});
+      this.setState({'db_name': 'orcl'});
+      this.setState({'db_username': 'system'});
+      this.setState({'db_password': 'Wang1980'});
+      
+
+    }
+    if (event.target.value==='MS SQLSERVER'){
+      this.setState({'db_address': 'localhost'});
+      this.setState({'db_port': '1433'});
+      this.setState({'db_name': 'master'});
+      this.setState({'db_username': 'sa'});
+      this.setState({'db_password': 'Wang1980'});
+      
+    }
+
 
   }
 
@@ -123,7 +141,8 @@ class DefinitionDatabaseConnection extends Component {
             <Col><Form.Label>数据库类型</Form.Label>
               <Form.Control as="select" value={this.state.db_type} onChange={this.handelDbTypeChange}>
                 <option>MS SQLSERVER</option>
-                
+                <option>ORACLE</option>
+
 
               </Form.Control></Col>
             <Col>

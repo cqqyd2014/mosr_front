@@ -102,13 +102,13 @@ class System extends Component {
       this.setState({'importing':true})
       this.setState({'import_back_platform':data.platform});
       this.setState({'import_back_cpu_use_percent':data.cpu_percent});
-      this.setState({'import_back_disk_total':Math.round(data.disk_total/1024/1024)})
-      this.setState({'import_back_mem_total':Math.round(data.mem_total/1024/1024)})
+      this.setState({'import_back_disk_total':Math.round(data.disk_total/1024/1024/1024)})
+      this.setState({'import_back_mem_total':Math.round(data.mem_total/1024/1024/1024)})
       this.setState({'import_back_disk_use_percent':Math.round((data.disk_total-data.disk_free)/data.disk_total*100)})
       this.setState({'import_back_men_use_percent':Math.round((data.mem_total-data.mem_free)/data.mem_total*100)})
       
-      console.log(data.cpu_percent)
-      this.setState({ 'import_back_system': '系统平台:'+data.platform+' cpu占用百分比:' + data.cpu_percent + '% 内存总量:' + data.mem_total / 1024 / 1024 + " 可用内存:" + data.mem_free / 1024 / 1024 + ' 磁盘空间:' + data.disk_total/1024/1024 + ' 磁盘可用:' + data.disk_free/1024/1024 })
+      //console.log(data.cpu_percent)
+      //this.setState({ 'import_back_system': '系统平台:'+data.platform+' cpu占用百分比:' + data.cpu_percent + '% 内存总量:' + data.mem_total / 1024 / 1024 + " 可用内存:" + data.mem_free / 1024 / 1024 + ' 磁盘空间:' + data.disk_total/1024/1024 + ' 磁盘可用:' + data.disk_free/1024/1024 })
     });
 
 
@@ -243,7 +243,7 @@ class System extends Component {
             
           </div>
           {this.state.importing?<div>
-<div>系统平台:{this.state.import_back_platform},内存:{this.state.import_back_mem_total}M,磁盘:{this.state.import_back_disk_total}</div>
+<div>系统平台:{this.state.import_back_platform},内存:{this.state.import_back_mem_total}G,磁盘:{this.state.import_back_disk_total}G</div>
 <div>cpu占用百分比:{this.state.import_back_cpu_use_percent}%
   <ProgressBar striped variant={this.percentToColor(this.state.import_back_cpu_use_percent)} now={this.state.import_back_cpu_use_percent} />
   内存占用百分比:{this.state.import_back_men_use_percent}%

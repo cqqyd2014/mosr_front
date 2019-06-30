@@ -132,7 +132,7 @@ handelQueryClick=(index,event)=>{
   </p>
 </Alert>
             
-<Alert variant="success">
+<Alert variant="info">
   <Alert.Heading>社群知识发现系统的解决的问题</Alert.Heading>
   <p>
   我们从审计人员的思维方式出发，研发系统，力求实现智能、可视和快速建模。

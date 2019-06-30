@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-
+import Alert from 'react-bootstrap/Alert'
 
 
 
@@ -98,15 +98,21 @@ class PageWrapper extends Component {
             <div className="col-lg-12" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
 
               {this.props.full === true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
-                <div className="card-header  justify-content-between">
-                  <h2>欢迎使用社群知识发现系统 </h2>
-                </div>
-                <div className="card-body">
-                  <blockquote className="blockquote">
-                    <p className="mb-0">该系统采用图数据库技术，采用节点和关系组织数据，实现数据可视化和未知社会关系的发现。对于审计发现对象之间的隐含联系具有重要意义。</p>
-                  </blockquote>
-                  <div></div>
-                </div>
+                
+                
+                <Alert variant="info">
+  <Alert.Heading>新一代智能化数据分析系统</Alert.Heading>
+  <p>
+  该系统采用全新的大数据分析技术，突破二维数据表的单一数据模式,采用节点和关系组织数据，实现数据可视化和未知社会关系的发现。对于审计发现对象之间的隐含联系具有重要意义。
+  </p>
+  <hr />
+  <p className="mb-0">
+  重庆市审计局金融处 2019年7月
+  </p>
+</Alert>
+                  
+                  
+                
               </div>
               )}
               <Cytoscapejs style={{display:'flex',alignItems:'stretch',flex:'1 1 auto'}} onRef={this.onRef}/>
