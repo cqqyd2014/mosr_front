@@ -10,10 +10,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
-import PropertiesTable from './properties_table';
-import DefinitionNode from './definition_node';
 
-import DefinitionEdge from './definition_edge';
 
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 
@@ -30,19 +27,9 @@ class ClusterAnalysis extends Component {
     super(props);
     this.fileInput = React.createRef();
     this.state = {
-      type_items: [],
-      last_type: 'node',//为node或者edge
-      item_list: [
-        { 'name': '节点1', 'type': 'node', 'select_labels_types': [], 'properties': [], 'bg': 'success', 'text': 'white','edgeRadioValue':'单一节点','ref_node':'' }
-      ],
-      limit_count: 50,
-      node_show: false,
-      click_item: 0,
-      edge_show: false,
-      save_show: false,
-      cyphter_sql: '',
-      save_title: '',
-      save_desc: '',
+      weight_edges:[],
+
+      show_edge_model:false
 
 
 
@@ -170,11 +157,15 @@ class ClusterAnalysis extends Component {
     this.setState({ 'item_list': item_list });
 
   }
-  handelNew = (event) => {
-    this.addItem();
-    this.addItem();
 
+
+  handelAddNewWeightEdges = (event) => {
+    let weight_edges=this.state.weight_edges;
+    let new_weight_edge={'edge_name':'','weight_type':1,'weight_value':0,'weight_section_values':[],'weight_enum_values':[]}//weight_type:1为直接设定权值2为分段设定权值（数字）3为枚举权值
+    weight_edges.push(new_weight_edge)
+    this.setState({'weight_edges':weight_edges})
   }
+
   handelDelete = (event) => {
     if (this.state.item_list.length === 1) {
 
@@ -387,89 +378,40 @@ class ClusterAnalysis extends Component {
                 </div>
                 <div className="card-body">
                   <blockquote className="blockquote">
-                    <p className="mb-0">模型应当以节点开始，并以节点结束，期间以关系为关联。在节点和关系中，应该以标签或者属性作为限制性条件。请注意属于预览的数量，不应太大，一般情况下限制为。定义之后可以尝试效果</p>
+                    <p className="mb-0">聚类模型用于分析社会关系的连通性,具有连通性的个体之间必定有关系，对于分析个体的群组性有重要意义。比如密切联系的关联企业，可能为同一控制的资金系；具有强关联的群体，必定有其它更深层次的关联。根据系统中的不同关系可以设定关联性的权值，以便作归一化的分析。</p>
                   </blockquote>
-                  <div>查询数量限制为<Form.Control as="select" value={this.state.index} onChange={this.handelLimitChange}>
-                    <option>50</option>
-                    <option>100</option>
-                    <option>200</option>
-                    <option>500</option>
-                  </Form.Control></div>
-                  <div>定义模型</div>
-                  <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                    <IconContext.Provider value={{ color: "gray", size: "4em" }}>
-                      {
-
-                        this.state.item_list.map((row, index) => {
-
-                          return (<Card key={index} style={{ width: '18rem' }} border={row.bg} >
-
-                            <Card.Body >
-                              <Card.Title >{row.name}{row.type === 'node' ? <MdPeople /> : <MdTimeline />}</Card.Title >
-                              <div>
-                                {row.type === 'node' ?
-                                  (
-                                    
+                  
+                  <div>定义关系权值</div>
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th>关系名称</th>
+                        <th>关系数量</th>
+                        <th>权值</th>
+                        <th>管理</th>
 
 
-<div>
-
-<div>类型：{this.state.item_list[index].edgeRadioValue}</div>
-                                    {this.state.item_list[index].edgeRadioValue === '单一节点' ? 
-                                    <div>
-                                      <div>标签：</div>
-                                      
-                                      <ListGroup  style={{ padding: '0px',  }}>{this.state.item_list[index].select_labels_types.map((row2, index2) => { return (<ListGroup.Item key={index2} style={{ padding: '0px',  }}>{row2}</ListGroup.Item>) })}</ListGroup>
-
-                                      <PropertiesTable item={{...this.state.item_list[index]}}/>
-                                          </div>
-                                       :(<div>关联节点: <IconContext.Provider value={{ color: "blue", size: "2em" }}><MdPeople /></IconContext.Provider>{this.state.item_list[index].ref_node}</div>)}
-
-                                     
-                                    
-
-                                  </div>
+                      </tr>
+                    </thead>
+                    <tbody>{
+                      this.state.weight_edges.map((row, index) => {
 
 
-
-                                  )
-                                  : (<div>
-                                    <div>关系类型：{this.state.item_list[index].edgeRadioValue}</div>
-                                    {this.state.item_list[index].edgeRadioValue === '单层关系' ? 
-                                    <div>
-                                      <div>标签：</div>
-                                      
-                                      <ListGroup  style={{ padding: '0px',  }}>{this.state.item_list[index].select_labels_types.map((row2, index2) => { return (<ListGroup.Item key={index2} style={{ padding: '0px',  }}>{row2}</ListGroup.Item>) })}</ListGroup>
-                                          <PropertiesTable item={{...this.state.item_list[index]}}/>
-                                          </div>
-                                       :'最小层次' + this.state.item_list[index]._min + '最大层次' + this.state.item_list[index]._max}
-
-                                     
-                                    
-
-                                  </div>
-                                  )
-                                }
-
-                              </div>
-
-                              {row.type === 'node' ? <Button variant="secondary" onClick={this.onNodeClick.bind(this, index)}>定义节点</Button>
-                                : <Button variant="secondary" onClick={this.onEdgeClick.bind(this, index)}>定义关系</Button>}
-
-                            </Card.Body>
-                          </Card>
+                        return (<tr key={index}><td>{row.name}</td><td>{row.operation}</td><td>{row.value}</td><td><Button variant="secondary" onClick={this.handleDeleteProperty.bind(this, index)}>删除</Button></td></tr>
 
 
-                          )
-                        })
-                      }
-                    </IconContext.Provider>
-                  </div>
+                        )
+                      })
+                    }
+                    </tbody>
+
+                  </Table>
+                  
                   <div style={{ display: 'flex' }}>
                     <ButtonGroup  >
 
-                      <Button variant="success" onClick={this.handelNew}>新增节点或者关系</Button>
-                      <Button variant="success" onClick={this.handelDelete}>删除最后一个节点或者关系</Button>
+                      <Button variant="success" onClick={this.handelAddNewWeightEdges}>设定新关系权值</Button>
+                      
                     </ButtonGroup></div>
                 </div>
               </div>
@@ -479,11 +421,9 @@ class ClusterAnalysis extends Component {
               </div>
               <Cytoscapejs style={{ display: 'flex', alignItems: 'stretch', flex: '1 1 auto' }} onRef={this.onRef} />
 
-              <DefinitionNode handelNodeDataBack={this.handelNodeDataBack} handleNodeClose={this.handleNodeClose} properties_data={this.props.properties_data} node_lables_data={this.props.node_lables_data} node_show={this.state.node_show} item_list={this.state.item_list} item={{ ...this.state.item_list[this.state.click_item] }} />
-              <DefinitionEdge handelEdgeDataBack={this.handelEdgeDataBack} handleEdgeClose={this.handleEdgeClose} properties_data={this.props.properties_data} edge_types_data={this.props.edge_types_data} edge_show={this.state.edge_show} item={{ ...this.state.item_list[this.state.click_item] }} />
 
 
-              <Modal show={this.state.save_show} onHide={this.handleSaveClose}>
+              <Modal show={this.state.show_edge_model} onHide={this.handleSaveClose}>
                 <Modal.Header closeButton>
                   <Modal.Title>保存查询模板</Modal.Title>
                 </Modal.Header>
