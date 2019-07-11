@@ -63,33 +63,33 @@ class DefinitionDatabaseConnection extends Component {
     this.setState({ 'db_password': event.target.value });
   }
   handelDbPortChange = (event) => {
-    this.setState({'db_port': event.target.value});
+    this.setState({ 'db_port': event.target.value });
   }
 
   handelDbAddressChange = (event) => {
     //console.log(event.target.value);
 
-    this.setState({'db_address':event.target.value});
+    this.setState({ 'db_address': event.target.value });
   }
 
   handelDbTypeChange = (event) => {
-    this.setState({'db_type': event.target.value});
-    if (event.target.value==='ORACLE'){
-      this.setState({'db_address': 'localhost'});
-      this.setState({'db_port': '1521'});
-      this.setState({'db_name': 'orcl'});
-      this.setState({'db_username': 'system'});
-      this.setState({'db_password': 'Wang1980'});
-      
+    this.setState({ 'db_type': event.target.value });
+    if (event.target.value === 'ORACLE') {
+      this.setState({ 'db_address': 'localhost' });
+      this.setState({ 'db_port': '1521' });
+      this.setState({ 'db_name': 'orcl' });
+      this.setState({ 'db_username': 'system' });
+      this.setState({ 'db_password': 'Wang1980' });
+
 
     }
-    if (event.target.value==='MS SQLSERVER'){
-      this.setState({'db_address': 'localhost'});
-      this.setState({'db_port': '1433'});
-      this.setState({'db_name': 'master'});
-      this.setState({'db_username': 'sa'});
-      this.setState({'db_password': 'Wang1980'});
-      
+    if (event.target.value === 'MS SQLSERVER') {
+      this.setState({ 'db_address': 'localhost' });
+      this.setState({ 'db_port': '1433' });
+      this.setState({ 'db_name': 'master' });
+      this.setState({ 'db_username': 'sa' });
+      this.setState({ 'db_password': 'Wang1980' });
+
     }
 
 
@@ -104,19 +104,19 @@ class DefinitionDatabaseConnection extends Component {
     }
     axios.post(back_server.restful_api_base_url() + 'test_connection/', { 'db_type': this.state.db_type, 'db_address': this.state.db_address, 'db_port': this.state.db_port, 'db_name': this.state.db_name, 'db_username': this.state.db_username, 'db_password': this.state.db_password }, config
     )
-      .then((response)=>{
+      .then((response) => {
         let response_data = response.data;
 
         this.setState({ 'connect_message_type': response_data.connect_message_type });
         this.setState({ 'connect_message_body': response_data.connect_message_body });
-        if (response_data.connect_message_type==='success'){
-          this.props.onDbConnected(true,this.state.db_type,this.state.db_address,this.state.db_port,this.state.db_name,this.state.db_username,this.state.db_password)
+        if (response_data.connect_message_type === 'success') {
+          this.props.onDbConnected(true, this.state.db_type, this.state.db_address, this.state.db_port, this.state.db_name, this.state.db_username, this.state.db_password)
         }
-        else{
-          this.props.onDbConnected(false,this.state.db_type,this.state.db_address,this.state.db_port,this.state.db_name,this.state.db_username,this.state.db_password)
+        else {
+          this.props.onDbConnected(false, this.state.db_type, this.state.db_address, this.state.db_port, this.state.db_name, this.state.db_username, this.state.db_password)
         }
       })
-      .catch((error)=> {
+      .catch((error) => {
         console.log(error);
       });
 

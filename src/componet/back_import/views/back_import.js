@@ -102,7 +102,59 @@ handelAddManangeClick=(index,event)=>{
   manage_import_data[index]=true
   this.setState({'manage_import_data':manage_import_data});
 }
+handelDownClick=(index,event)=>{
+  let import_data=this.state.import_data
+  if(index===import_data.length-1){
+    return
+  }
+  
+  
+  let item=import_data[index];
+  let item_after=import_data[index+1];
+  import_data[index+1]=item
+  import_data[index]=item_after
+
+  
+  this.setState({'import_data':import_data});
+  let manage_import_data=this.state.manage_import_data
+
+  let manage_item=manage_import_data[index];
+  let manage_item_after=manage_import_data[index+1];
+  manage_import_data[index+1]=manage_item
+  manage_import_data[index]=manage_item_after
+  this.setState({'manage_import_data':manage_import_data});
+
+
+}
+
+
+handelUpClick=(index,event)=>{
+  if(index===0){
+    return
+  }
+  
+  let import_data=this.state.import_data
+  let item=import_data[index];
+  let item_befor=import_data[index-1];
+  import_data[index-1]=item
+  import_data[index]=item_befor
+
+  
+  this.setState({'import_data':import_data});
+  let manage_import_data=this.state.manage_import_data
+
+  let manage_item=manage_import_data[index];
+  let manage_item_befor=manage_import_data[index-1];
+  manage_import_data[index-1]=manage_item
+  manage_import_data[index]=manage_item_befor
+  this.setState({'manage_import_data':manage_import_data});
+
+
+}
+
+
 handelDeleteImportClick=(index,event)=>{
+  
   let import_data=this.state.import_data
   let item=import_data[index];
   fetch(back_server.restful_api_base_url() + 'import_data/'+item.u_uuid, {
@@ -180,11 +232,13 @@ handleImportClose=()=>{
                       <td>{row.u_start_import_datetime}</td>
                       <td>{row.u_end_import_datetime}</td>
                       <td>{row.u_status}</td>
-                      <td>{this.state.manage_import_data[index]&&this.state.import_data[index].u_end_download_datetime!=='null'?<Button variant="secondary" onClick={this.handelRemoveManageClick.bind(this, index)}>移出重建列表</Button>
+                      <td>{this.state.manage_import_data[index]&&this.state.import_data[index].u_end_download_datetime!=='null'?<Button variant="secondary" onClick={this.handelRemoveManageClick.bind(this, index)}>移出重建</Button>
                       :''}
-                      {!this.state.manage_import_data[index]&&this.state.import_data[index].u_end_download_datetime!=='null'?<Button variant="secondary" onClick={this.handelAddManangeClick.bind(this, index)}>加入重建列表</Button>:''}
+                      {!this.state.manage_import_data[index]&&this.state.import_data[index].u_end_download_datetime!=='null'?<Button variant="secondary" onClick={this.handelAddManangeClick.bind(this, index)}>加入重建</Button>:''}
                       
                       <Button variant="secondary" onClick={this.handelDeleteImportClick.bind(this, index)}>删除</Button>
+                      <Button variant="secondary" onClick={this.handelUpClick.bind(this, index)}>↑</Button>
+<Button variant="secondary" onClick={this.handelDownClick.bind(this, index)}>↓</Button>
                       </td>
                     </tr>
                     )
@@ -202,12 +256,14 @@ handleImportClose=()=>{
                 }
               
               </span></div>
+              
             <Button variant="primary" onClick={this.handelReBuildDatabaseClick}>重建数据库</Button>
             
 
 {this.state.import_message !== '' ? <Alert variant={this.state.import_type}>
 {this.state.import_message}
 </Alert> : ''}
+
             
               </div>
             </div>

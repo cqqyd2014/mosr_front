@@ -5,7 +5,7 @@ import back_server from '../../../func/back_server';
 import axios from 'axios';
 
 import Modal from 'react-bootstrap/Modal'
-
+import DefinitionSum from './definition_sum'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -222,6 +222,7 @@ class Analysis extends Component {
                 </div>
               </div>
               )}
+              
               <div>
                 <Button variant="primary" onClick={this.handleRunClick}>单击查看分析结果</Button><Button variant="primary" onClick={this.handleSaveClick}>保存查询模板</Button>
               </div>
