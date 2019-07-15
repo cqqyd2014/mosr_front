@@ -5,7 +5,7 @@ import back_server from '../../../func/back_server';
 import axios from 'axios';
 
 import Modal from 'react-bootstrap/Modal'
-import DefinitionSum from './definition_sum'
+
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -30,11 +30,11 @@ class Analysis extends Component {
     this.fileInput = React.createRef();
     this.state = {
       type_items: [],
-
+      
 
       limit_count: 50,
       save_show: false,
-      
+      sum_node:'节点1',
       cyphter_sql: '',
       save_title: '',
       save_desc: '',
@@ -113,22 +113,6 @@ class Analysis extends Component {
  
 
   
-  
-  handelDelete = (event) => {
-    if (this.state.item_list.length === 1) {
-
-      this.props.onNodeMessageChange("只有一个节点，不能删除", "danger");
-
-      return;
-
-    }
-    let item_list = this.state.item_list;
-    item_list = item_list.slice(0, -1);
-    item_list = item_list.slice(0, -1);
-    this.setState({ 'item_list': item_list });
-    this.setState({ 'click_item': 0 });
-
-  }
 
 
 
@@ -190,10 +174,12 @@ class Analysis extends Component {
     this.setState({ 'save_desc': event.target.value });
   }
 
-
+  
 
 
   render() {
+    //console.log("测试1")
+    //console.log(this.props.properties_data)
 
     //let item_count = this.state.item_list.length;
     return (

@@ -5,13 +5,15 @@ import { IconContext } from "react-icons";
 import PropertiesTable from './properties_table';
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import { MdPeople, MdTimeline } from "react-icons/md";
 import DefinitionNode from './definition_node';
 import DefinitionEdge from './definition_edge';
-
-
+import DefinitionSum from './definition_sum'
+import back_server from '../../../func/back_server';
+import axios from 'axios';
 
 
 class DefinitionModel extends Component {
@@ -24,11 +26,19 @@ class DefinitionModel extends Component {
       ],
       node_show: false,
       click_item: 0,
+      
+      err_message:'',
+      
 
     };
 
   }
+  onDefinitionSum=(ref)=>{
+    this.definitionSum=ref;
+    //console.log(this.definitionModel);
 
+
+  }
 
 
   componentDidMount = () => {
@@ -36,6 +46,7 @@ class DefinitionModel extends Component {
 
   }
   handleEdgeClose = () => {
+    
     this.setState({ 'edge_show': false });
   }
 
@@ -48,6 +59,8 @@ class DefinitionModel extends Component {
     //let item = items[index];
     this.setState({ 'edge_show': true });
     this.setState({ 'click_item': index });
+    this.setState({'sum_enable':false})
+    this.definitionSum.sum_init()
 
   }
   onNodeClick = (index, event) => {
@@ -58,6 +71,8 @@ class DefinitionModel extends Component {
     //let item = items[index];
     this.setState({ 'node_show': true });
     this.setState({ 'click_item': index });
+    this.setState({'sum_enable':false})
+    this.definitionSum.sum_init()
     //console.log(item)
     //let neo4jgraph_cypher='match p=()-[r:'+item+']-() return p  limit 50'
     //this.child.refeshdata(neo4jgraph_cypher);
@@ -85,10 +100,11 @@ class DefinitionModel extends Component {
       //当前是关系，新增节点
       let new_node = { 'name': '节点' + parseInt((this.state.item_list.length + 2) / 2), 'type': 'node', 'select_labels_types': [], 'properties': [], 'bg': 'success', 'text': 'white' ,'edgeRadioValue':'单一节点','ref_node':''};
       item_list.push(new_node);
+      this.setState({"count_node":new_node.name})
     }
     else {
       //当前是节点，新增关系
-      let new_type = { 'name': '关系' + parseInt((this.state.item_list.length + 2) / 2), 'type': 'dege', 'select_labels_types': [], 'properties': [], 'bg': 'danger', 'text': 'white', '_min': 1, '_max': 1, 'edgeRadioValue': '单层关系' };
+      let new_type = { 'name': '关系' + parseInt((this.state.item_list.length + 2) / 2), 'type': 'dege', 'select_labels_types': [], 'properties': [], 'bg': 'danger', 'text': 'white', '_min': 1, '_max': 1, 'edgeRadioValue': '单层关系','direction':'无向关系' };
       item_list.push(new_type);
 
     }
@@ -97,14 +113,34 @@ class DefinitionModel extends Component {
     this.setState({ 'item_list': item_list });
 
   }
+
+
   handelNew = (event) => {
     this.addItem();
     this.addItem();
+    this.definitionSum.sum_init()
+    this.setState({'sum_enable':false})
+    
+
+
+
+  }
+  handelDelete=(event)=>{
+    let item_list = this.state.item_list;
+    if (item_list.length===1){
+      return
+    }
+    item_list.pop()
+    item_list.pop()
+    this.setState({'item_list':item_list})
+    //this.setState({'count_node':item_list[item_list.length-2]})
+    this.definitionSum.sum_init()
+    this.setState({'sum_enable':false})
 
   }
 
-
   getCypherSQL = () => {
+    
     //构建path  match p=()-[r]-() return p
     let _where_array = [];
     let cypher_string = '';
@@ -157,7 +193,13 @@ class DefinitionModel extends Component {
 
       }
       else {
-        cypher_string = cypher_string + '-[' + item.name;
+        if (item.direction==='向左'){
+          cypher_string = cypher_string + '<-[' + item.name;
+        }
+        else{
+          cypher_string = cypher_string + '-[' + item.name;
+        }
+        
         //console.log(item.edgeRadioValue);
         if (item.edgeRadioValue === '单层关系') {
 
@@ -194,12 +236,24 @@ class DefinitionModel extends Component {
 
 
           }
-          cypher_string = cypher_string + "{" + temp_propertes + "}]-";
+          if (item.direction==='向右'){
+            cypher_string = cypher_string + "{" + temp_propertes + "}]->";
+          }
+          else{
+            cypher_string = cypher_string + "{" + temp_propertes + "}]-";
+          }
+          
         }
         else {
           //*3..5
           cypher_string = cypher_string + "*" + item._min + ".." + item._max;
-          cypher_string = cypher_string + "]-";
+          if (item.direction==='向右'){
+            cypher_string = cypher_string + "]->";
+          }
+          else{
+            cypher_string = cypher_string + "]-";
+          }
+          
         }
         
 
@@ -212,11 +266,42 @@ class DefinitionModel extends Component {
     if (_where_array.length > 0) {
       _where = ' where ' + _where_array.join(" and ");
     }
-    cypher_string = 'match p=' + cypher_string + _where + ' return p ';
+//是否聚合
+let cypher_base=cypher_string
+let defCount=this.definitionSum.getComponetValue()
+if (!defCount.count_enable){
+  cypher_string = 'match p=' + cypher_string + _where + ' return p ';
+}
+else{
+  
+
+  cypher_string = 'match ' + cypher_string + _where + ' with '+defCount.group_node+'.`'+defCount.group_node_id_properties+'` as _id,'+defCount.properties.properties_count_type+'('+(defCount.count_node_type==='node'?defCount.count_node:defCount.count_close_to_edge)+'.`'+(defCount.count_node_type==='node'&&defCount.properties.properties_count_type==='count'?defCount.count_node_id_properties:defCount.properties.name)+'`) as _count where _count';
+  switch (defCount.properties.operation){
+    case '等于':
+      cypher_string+='='
+        break;
+     case '大于':
+      cypher_string+='>'
+        break;
+        case '小于':
+          cypher_string+='<'
+            break;
+     default:
+        //默认代码块
+  }
+  cypher_base=cypher_base.replace(defCount.group_node,'分组节点')
+  cypher_base=cypher_base.replace(defCount.count_node,'统计节点')
+  cypher_string+=defCount.properties.value+' match p='+cypher_base+' where 分组节点.`'+defCount.group_node_id_properties+'` in _id return p'
+}
+
+
+    
     console.log(cypher_string);
     this.setState({ 'cyphter_sql': cypher_string });
     return cypher_string;
   }
+
+
 
 
   render() {
@@ -301,11 +386,14 @@ class DefinitionModel extends Component {
           <ButtonGroup  >
 
             <Button variant="success" onClick={this.handelNew}>新增节点或者关系</Button>
-            <Button variant="success" onClick={this.handelDelete}>删除最后一个节点或者关系</Button>
+            <Button variant="success" onClick={this.handelDelete}>删除最后一组节点和关系</Button>
           </ButtonGroup></div>
         <DefinitionNode handelNodeDataBack={this.handelNodeDataBack} handleNodeClose={this.handleNodeClose} properties_data={this.props.properties_data} node_lables_data={this.props.node_lables_data} node_show={this.state.node_show} item_list={this.state.item_list} item={{ ...this.state.item_list[this.state.click_item] }} />
         <DefinitionEdge handelEdgeDataBack={this.handelEdgeDataBack} handleEdgeClose={this.handleEdgeClose} properties_data={this.props.properties_data} edge_types_data={this.props.edge_types_data} edge_show={this.state.edge_show} item={{ ...this.state.item_list[this.state.click_item] }} />
-
+        <DefinitionSum onCountChange={this.onCountChange} onRef={this.onDefinitionSum}  properties_data={this.props.properties_data}  item_list={this.state.item_list}  sum_show={this.state.sum_show} sum_enable={this.state.sum_enable}  onSetCountShow={this.onSetCountShow} onSetCountEnable={this.onSetCountEnable}/>
+        {this.state.err_message.length!==0?<Alert variant='danger'>
+    {this.state.err_message}
+  </Alert>:''}
       </div>
 
 

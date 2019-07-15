@@ -131,10 +131,11 @@ class System extends Component {
           labels.push(response.data[index].label)
 
 
-          this.props.onNodeLablesUpdateEnd(labels);
+          
 
 
         }
+        this.props.onNodeLablesUpdateEnd(labels);
 
 
 
@@ -193,12 +194,13 @@ class System extends Component {
           item['u_column_type'] = ((Array.of('编码', '显示名称', '起点', '终点')).indexOf(item_db.u_column_type) > -1) ? '文本属性' : item_db.u_column_type
           properties.push(item)
 
-          this.props.onPropertiesUpdateEnd(properties);
-          //console.log(properties);
+          
 
 
 
         }
+        this.props.onPropertiesUpdateEnd(properties);
+          //console.log(properties);
 
 
 
@@ -222,6 +224,8 @@ class System extends Component {
   }
 
   render() {
+    //console.log("测试2")
+    //console.log(this.props.properties_data)
 
 
     return (<div>

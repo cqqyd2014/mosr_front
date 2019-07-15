@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 
 
-
+import PropertiesList from './properties_list'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
@@ -16,9 +16,7 @@ class DefinitionProperties extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        properties_value:'',
-        properties_text_value: '',
-        properties_operation: '等于',
+        
 
     };
 
@@ -27,13 +25,7 @@ class DefinitionProperties extends Component {
 
 
   componentDidMount = () => {
-    for (let index in this.props.properties_data){
-      let item=this.props.properties_data[index]
-      if (item.u_type===this.props.u_type){
-        this.setState({ 'properties_value': item.u_column_name+'['+item.u_column_type+']'});
-        break;
-      }
-    }
+    
 
     
     
@@ -43,16 +35,17 @@ class DefinitionProperties extends Component {
 
 
   }
-  handlePropertiesChange = (event) => {
+  onPropertiesValueChange = (value) => {
 
-    this.setState({ 'properties_value':event.target.value});
+    this.setState({ 'properties_value': value });
 
   }
-  handlePropertiesOperChange = (event) => {
-    this.setState({ 'properties_operation': event.target.value });
+  onPropertiesOperChange = (value) => {
+    this.setState({ 'properties_operation': value });
   }
-  handlePropertiesTextChange = (event) => {
-    this.setState({ 'properties_text_value': event.target.value });
+  onPropertiesTextChange = (value) => {
+    this.setState({ 'properties_text_value': value });
+    
   }
   handleNodeClose = () => {
     this.props.handleNodeClose();
@@ -67,25 +60,34 @@ class DefinitionProperties extends Component {
     
     this.props.handelPropertiesBack(properties);
   }
+  onPropertiesColumnTypeChange=(value)=>{
+    this.setState({'properties_column_type':value})
+  }
 
   handleAddProperty = (event) => {
+    
 
 
-    let _value=this.state.properties_value
-    let a=_value.indexOf("[")
-    let _name=_value.substring(0,a)
-    let _type=_value.substring(a+1,(_value.length-1))
+    let properties_list_value=this.properties_list.getComponetValue()
+    console.log(properties_list_value)
+    if(properties_list_value.value===''){
+      return
+    }
 
 
 
     let item_properties = this.props.item.properties
     
-    item_properties.push({ 'name': _name,'type':_type, 'operation': this.state.properties_operation, 'value': this.state.properties_text_value });
+    item_properties.push(properties_list_value);
     
     this.props.handelPropertiesBack(item_properties);
 
   }
 
+  refPropertiesList=(ref)=>{
+    this.properties_list=ref
+
+  }
 
   render() {
 
@@ -127,29 +129,7 @@ class DefinitionProperties extends Component {
 
                   </Table>
 
-                  <Row><Col>属性名称</Col><Col> <Form.Control as="select" value={this.state.properties_value} onChange={this.handlePropertiesChange}>
-                    {typeof (this.props.properties_data) != 'undefined' ? this.props.properties_data.map((row, index) => {
-
-
-                      return (row.u_type===this.props.u_type?<option key={index}>{row.u_column_name}[{row.u_column_type}]</option>:''
-
-
-                      )
-                    }) : ''
-                    }
-
-                  </Form.Control></Col></Row>
-                  <Row><Col>操作</Col><Col><Form.Control as="select" value={this.state.properties_oper} onChange={this.handlePropertiesOperChange}>
-                   <option >等于</option>
-                   <option >大于</option>
-                   <option >小于</option>
-                   <option >包含</option>
-                   <option >不等于</option>
-
-                  </Form.Control></Col></Row>
-                  <Row><Col>属性值</Col>
-                  <Col><Form.Control type="text" value={this.state.properties_text_value} onChange={this.handlePropertiesTextChange}/></Col>
-                  </Row>
+                  <PropertiesList onRef={this.refPropertiesList}  u_type={this.props.u_type} properties_data={this.props.properties_data} sum_flag={false}/>
 
                   <Button variant="primary" onClick={this.handleAddProperty}>
                     添加新属性

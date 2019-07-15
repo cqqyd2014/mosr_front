@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 
-
+import Alert from 'react-bootstrap/Alert'
 import Modal from 'react-bootstrap/Modal'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -98,6 +98,13 @@ class DefinitionEdge extends Component {
     clickItem.select_types = select_types;
     this.props.handelEdgeDataBack(clickItem);
   }
+
+  handleDirectionChange=(direction,event)=>{
+    let clickItem = this.props.item;
+    clickItem.direction=direction
+    this.props.handelEdgeDataBack(clickItem);
+  }
+
   edgeRadioChange = (edgeRadioValue, event) => {
     //this.setState({ 'edgeRadioValue': edgeRadioValue });
 
@@ -131,7 +138,48 @@ class DefinitionEdge extends Component {
             <Modal.Title>定义关系</Modal.Title>
           </Modal.Header>
           <Modal.Body >
-            <p>关系的类型有两种，一种为单层关系，可以指定关系类型，一种为多层关系，层数不确定，需指定最大最小层数。</p>
+          <Alert  variant='info'>
+          1、关系的方向有三种，一种是“无向”关系，即不指定方向的关系，如婚姻关系，另有两种关系为，向左和向右，比如转账的关系，从转出方流向转入放。
+  </Alert>
+
+  <Form.Group >
+    <Row>
+    <Col >
+      <Form.Label >
+        定义关系方向
+      </Form.Label>
+      </Col>
+      <Col >
+        <Form.Check
+          type="radio"
+          label="无向关系"
+          name="formHorizontalRadios"
+          checked={this.props.item.direction==='无向关系'}
+                       onChange={this.handleDirectionChange.bind(this, '无向关系')}
+        />
+        </Col>
+        <Col>
+        <Form.Check
+          type="radio"
+          label="向左"
+          checked={this.props.item.direction==='向左'}
+                       onChange={this.handleDirectionChange.bind(this, '向左')}
+        />
+        </Col>
+        <Col>
+        <Form.Check
+          type="radio"
+          label="向右"
+          checked={this.props.item.direction==='向右'}
+                       onChange={this.handleDirectionChange.bind(this, '向右')}
+        />
+      </Col>
+      </Row>
+    </Form.Group>
+          <Alert  variant='info'>
+          2、关系的类型有两种，一种为单层关系，可以指定关系类型，一种为多层关系，层数不确定，需指定最大最小层数。
+  </Alert>
+            
 
 
 

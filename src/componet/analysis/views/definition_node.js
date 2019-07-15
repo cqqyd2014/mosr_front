@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 import Modal from 'react-bootstrap/Modal'
-
+import Alert from 'react-bootstrap/Alert'
 
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
@@ -143,7 +143,10 @@ class DefinitionNode extends Component {
                         <Modal.Title>定义节点</Modal.Title>
                     </Modal.Header>
                     <Modal.Body >
-                    <p>单一节点为普通节点，可以定义标签及属性，关联节点为“虚拟节点”，用于指向已经存在的节点</p>
+                    <Alert  variant='info'>
+                    单一节点为普通节点，可以定义标签及属性，关联节点为“虚拟节点”，用于指向已经存在的节点。
+  </Alert>
+                   
                     
 
 
