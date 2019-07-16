@@ -6,7 +6,7 @@ import Alert from 'react-bootstrap/Alert'
 
 
 
-import * as NeoGraphActions from '../../neo4jgraph/redux/actions'
+
 import * as HeadActions from '../../head/redux/actions'
 
 
@@ -158,7 +158,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  neo4jgraphChange: NeoGraphActions.neo4jCypherChangeAction,
+
   onNodeMessageChange: HeadActions.headMessageChangeAction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(About);

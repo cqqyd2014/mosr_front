@@ -6,7 +6,7 @@ import PageWrapper from './page-wrapper'
 import SystemData from './pages/systemdata'
 import {NodeData} from '../../componet/node_data'
 import {ManageNode} from '../../componet/manage_node'
-import {Edgedata} from '../../componet/edge_data'
+
 import {ManageEdge} from '../../componet/manage_edge'
 import {Analysis} from '../../componet/analysis'
 import {MyTemplate} from '../../componet/my_template'
@@ -136,7 +136,7 @@ class MainFrame extends Component {
             <Route path="/systestatus" component={SystemStatus} />
             <Route path="/node_data" component={NodeData} />
             <Route path="/manage_node" component={ManageNode} />
-            <Route path="/edge_data" component={Edgedata} />
+
             <Route path="/manage_edge" component={ManageEdge} />
             <Route path="/analysis" component={Analysis} />
             <Route path="/my_template" component={MyTemplate} />

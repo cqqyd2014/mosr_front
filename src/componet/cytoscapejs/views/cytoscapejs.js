@@ -14,8 +14,8 @@ import { processDetail, exportExcel,uribase64encode} from '../../../func/common'
 import coseBilkent from 'cytoscape-cose-bilkent';
 
 import cytoscape from 'cytoscape';
-import cxtmenu from 'cytoscape-cxtmenu';
-cytoscape.use( cxtmenu );
+
+
 cytoscape.use(coseBilkent);
 //ReactCytoscape.use( coseBilkent );
 
@@ -421,7 +421,7 @@ const mapStateToProps = (state) => {
 	}
 	*/
 	return {
-		neo4jgraph_cypher: state.neo4jGraphReducer.neo4jgraph_cypher
+		
 	};
 
 }

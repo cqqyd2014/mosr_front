@@ -4,12 +4,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 
-import ListGroup from 'react-bootstrap/ListGroup'
+
 import Alert from 'react-bootstrap/Alert'
 import Card from 'react-bootstrap/Card'
 
 
-import * as NeoGraphActions from '../../neo4jgraph/redux/actions'
 import * as HeadActions from '../../head/redux/actions'
 
 
@@ -187,7 +186,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  neo4jgraphChange: NeoGraphActions.neo4jCypherChangeAction,
+
   onNodeMessageChange:HeadActions.headMessageChangeAction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MyTempalte);
