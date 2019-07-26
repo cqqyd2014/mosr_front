@@ -67,6 +67,9 @@ function utf16ToUtf8(utf16Str) {
 
 
 function  processDetail(pd_catalog, pd_command){
+    console.log("command_____________")
+
+    console.log(pd_command)
     
     var config = { headers: {  
         'Content-Type': 'application/json',

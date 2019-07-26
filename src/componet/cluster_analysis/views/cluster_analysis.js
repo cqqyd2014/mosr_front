@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
-import ListGroup from 'react-bootstrap/ListGroup'
+import Row from 'react-bootstrap/Row'
 import Modal from 'react-bootstrap/Modal'
-
+import EdgeWeight from './edge_weight'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
+import Col from 'react-bootstrap/Col'
 import Table from 'react-bootstrap/Table'
-
+import Alert from 'react-bootstrap/Alert'
 
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 
@@ -27,9 +27,12 @@ class ClusterAnalysis extends Component {
     super(props);
     this.fileInput = React.createRef();
     this.state = {
-      weight_edges:[],
+      weight_edges: [],
 
-      show_edge_model:false
+      show_edge_model: false,
+      node_lables:'',
+      min_weight:0,
+
 
 
 
@@ -42,327 +45,153 @@ class ClusterAnalysis extends Component {
     };
 
   }
-  /*
-  handelSubmit=(event)=>{
-    event.preventDefault();
- 
+//CALL apoc.periodic.iterate("MATCH (p1)-[:婚姻]-(p2) where id(p1) < id(p2) RETURN p1,p2","MERGE (p1)-[r:KNOWS]-(p2) ON CREATE SET r.weight = 1 ON MATCH SET r.weight = r.weight + 1", {batchSize:5000, parallel:false,iterateList:true})
+
+
+  weightType1Command=(edge_type,weight)=>{
+    let coms=[]
+    coms.push('MATCH (p1)-[:'+edge_type+']-(p2) where id(p1) < id(p2) RETURN p1,p2')
+    coms.push('MERGE (p1)-[r:KNOWS]-(p2) ON CREATE SET r.weight = '+weight+' ON MATCH SET r.weight = r.weight + '+weight)
+    return coms
   }
-  handleComUSCCChange=(event)=>{
-    //console.log(event.target.value);
-    this.props.onComUSCCChange(event.target.value);
+
+  callApocPeriodicIterate=(list_commands)=>{
+    let command='CALL apoc.periodic.iterate('
+    let coms=[]
+    for (let index in list_commands){
+      coms.push('\"'+list_commands[index]+'\"')
+    }
+    coms.push('{batchSize:5000, parallel:false,iterateList:true}')
+    command+=coms.join(",")
+
+    command+=')'
+    console.log(command)
+    return command
   }
-  handleComNameChange=(event)=>{
-    this.props.onComNameChange(event.target.value);
-  }
-  handleTextChange=(event)=>{
-    let o=event.target;
-    let target_value={[o.name]:o.value}
-    //let target_value={[o.name]:'f'}
-    let old=this.state.form_value;
-    let new_value=Object.assign({},old,target_value)
-    console.log(new_value);
-    this.setState({form_value:new_value});
-  }
-  getTextState=(id)=>{
-    let form_value=this.state.form_value;
-    let value=form_value[id];
-    return value;
- 
-  }
-  handleInvestAmountChange=(event)=>{
-    let amount=event.target.value;
-    this.setState({
-      invest_amount:amount,
-      invest_amount_big:math.rmbToBig(amount),
-      invest_amount_thousand:math.moneyToThousand(amount)
-    });
+
+  handleRunClick=()=>{
+    let weight_edges=this.state.weight_edges
+    let commands=[]
+    commands.push({'_name':'清理关系数据','_command':'match ()-[r:KNOWS]-() delete r'})
+    for (let index in weight_edges){
+      let weight_edge=weight_edges[index]
+      switch(weight_edge.weight_type){
+        case 1:
+          let command=this.callApocPeriodicIterate(this.weightType1Command(weight_edge.edge_name,weight_edge.weight_value))
+          commands.push({'_name':'处理关系'+weight_edge.edge_name,'_command':command})
+          break;
+       case 2:
+          
+          break;
+        case 3:
+          
+          break;
+       default:
+          
+      }
+
+    }
     
-  }
-  */
-
-
-  componentDidMount = () => {
+    console.log(commands)
+    this.child.modifydata(commands,this.after_command);
 
   }
 
 
 
 
-  onNodeClick = (index, event) => {
-    //console.log(this.props.properties_data)
-    //console.log(index);
-    //console.log(this.state.label_items);
-    //let items = (this.state.item_list);
-    //let item = items[index];
-    this.setState({ 'node_show': true });
-    this.setState({ 'click_item': index });
-    //console.log(item)
-    //let neo4jgraph_cypher='match p=()-[r:'+item+']-() return p  limit 50'
-    //this.child.refeshdata(neo4jgraph_cypher);
+  after_command=()=>{
+    //console.log("end")
+    //数据准备好，开始分析
+    let sql="CALL algo.unionFind.stream('"+this.state.node_lables+"','KNOWS', {weightProperty:'weight', defaultValue:0.0, threshold:100.0,concurrency:1}) YIELD nodeId,setId RETURN nodeId,algo.asNode(nodeId).显示名称 AS node_name, setId order by setId limit 1000"
+    this.child.getAlgoUnionFindData(sql);
 
   }
+
   onRef = (ref) => {
     this.child = ref
   }
-  handelLimitChange = (event) => {
-    let target = event.target
-    this.setState({ 'limit_count': target.value });
-
-  }
+  componentDidMount = () => {
 
 
-  handelEdgeDataBack = (item) => {
+    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog_nodelabels/')
+      .then((response) => {
 
-    this.ModelDataBack(item);
-  }
-
-
-  ModelDataBack = (item) => {
-
-    let item_list = this.state.item_list;
-
-
-    item_list[this.state.click_item] = item;
-
-    this.setState({ 'item_list': item_list });
-
-
-  }
-
-  handelNodeDataBack = (item) => {
-
-    this.ModelDataBack(item);
-
-  }
-  onEdgeClick = (index, event) => {
-    //let items = (this.state.item_list);
-    //let item = items[index];
-    this.setState({ 'edge_show': true });
-    this.setState({ 'click_item': index });
-
-  }
-  addItem = () => {
-    let item_list = this.state.item_list;
-    if (this.state.item_list.length % 2 === 0) {
-      //当前是关系，新增节点
-      let new_node = { 'name': '节点' + parseInt((this.state.item_list.length + 2) / 2), 'type': 'node', 'select_labels_types': [], 'properties': [], 'bg': 'success', 'text': 'white' ,'edgeRadioValue':'单一节点','ref_node':''};
-      item_list.push(new_node);
-    }
-    else {
-      //当前是节点，新增关系
-      let new_type = { 'name': '关系' + parseInt((this.state.item_list.length + 2) / 2), 'type': 'dege', 'select_labels_types': [], 'properties': [], 'bg': 'danger', 'text': 'white', '_min': 1, '_max': 1, 'edgeRadioValue': '单层关系' };
-      item_list.push(new_type);
-
-    }
-    this.setState({ 'item_list': item_list });
-
-  }
-
-
-  handelAddNewWeightEdges = (event) => {
-    let weight_edges=this.state.weight_edges;
-    let new_weight_edge={'edge_name':'','weight_type':1,'weight_value':0,'weight_section_values':[],'weight_enum_values':[]}//weight_type:1为直接设定权值2为分段设定权值（数字）3为枚举权值
-    weight_edges.push(new_weight_edge)
-    this.setState({'weight_edges':weight_edges})
-  }
-
-  handelDelete = (event) => {
-    if (this.state.item_list.length === 1) {
-
-      this.props.onNodeMessageChange("只有一个节点，不能删除", "danger");
-
-      return;
-
-    }
-    let item_list = this.state.item_list;
-    item_list = item_list.slice(0, -1);
-    item_list = item_list.slice(0, -1);
-    this.setState({ 'item_list': item_list });
-    this.setState({ 'click_item': 0 });
-
-  }
-
-
-
-
-
-  getCypherSQL = () => {
-    //构建path  match p=()-[r]-() return p
-    let _where_array = [];
-    let cypher_string = '';
-    for (let i = 0; i < this.state.item_list.length; i++) {
-      let item = this.state.item_list[i];
-      if (item.type === 'node') {
-        cypher_string = cypher_string + '(' + item.name;
-        //处理标签
-        //console.log(item.select_labels);
-        if (item.edgeRadioValue === '单一节点') {
-          for (let i = 0; i < item.select_labels_types.length > 0; i++) {
-            cypher_string = cypher_string + ":" + item.select_labels_types[i];
-          }
-          //{ name: 'Tom Hanks', born: 1956 }所有的等于条件在这里，其他条件在where里面
-          let temp_propertes = ""
-          for (let i = 0; i < item.properties.length > 0; i++) {
-            switch (item.properties[i].operation) {
-              case '等于':
-                temp_propertes = temp_propertes + item.properties[i].name + ":\'" + item.properties[i].value + "\'";
-                break;
-              case '大于':
-                _where_array.push(item.name + "." + item.properties[i].name + ">\'" + item.properties[i].value + "\'")
-                break;
-              case '小于':
-                _where_array.push(item.name + "." + item.properties[i].name + "<\'" + item.properties[i].value + "\'")
-                break;
-              case '包含':
-                _where_array.push(item.name + "." + item.properties[i].name + " contains \'" + item.properties[i].value + "\'")
-                break;
-              case '不等于':
-                _where_array.push(item.name + "." + item.properties[i].name + " != \'" + item.properties[i].value + "\'")
-                break;
-              default:
-  
-            }
-  
-  
-          }
-  
-          cypher_string = cypher_string + "{" + temp_propertes + "})";
-
-        }
-        else{
-          cypher_string = cypher_string + ")";
-          _where_array.push(item.name +'='+item.ref_node)
-
-        }
-
-        
-
-      }
-      else {
-        cypher_string = cypher_string + '-[' + item.name;
-        //console.log(item.edgeRadioValue);
-        if (item.edgeRadioValue === '单层关系') {
-
-          for (let j = 0; j < item.select_labels_types.length; j++) {
-
-            if (j === 0) {
-              cypher_string = cypher_string + ":" + item.select_labels_types[0];
-            }
-            else {
-              cypher_string = cypher_string + "|" + item.select_labels_types[j];
-            }
-          }
-          let temp_propertes = ""
-          for (let i = 0; i < item.properties.length > 0; i++) {
-            switch (item.properties[i].operation) {
-              case '等于':
-                temp_propertes = temp_propertes + item.properties[i].name + ":\'" + item.properties[i].value + "\'";
-                break;
-              case '大于':
-                _where_array.push(item.name + "." + item.properties[i].name + ">\'" + item.properties[i].value + "\'")
-                break;
-              case '小于':
-                _where_array.push(item.name + "." + item.properties[i].name + "<\'" + item.properties[i].value + "\'")
-                break;
-              case '包含':
-                _where_array.push(item.name + "." + item.properties[i].name + " contains \'" + item.properties[i].value + "\'")
-                break;
-              case '不等于':
-                _where_array.push(item.name + "." + item.properties[i].name + " != \'" + item.properties[i].value + "\'")
-                break;
-              default:
-
-            }
-
-
-          }
-          cypher_string = cypher_string + "{" + temp_propertes + "}]-";
-        }
-        else {
-          //*3..5
-          cypher_string = cypher_string + "*" + item._min + ".." + item._max;
-          cypher_string = cypher_string + "]-";
-        }
+        //console.log(response.data[0].label)
+        this.setState({'node_lables':response.data[0].label})
+       
         
 
 
-      }
-    }
-    //处理所有where
-    let _where = ''
-    //console.log(_where_array);
-    if (_where_array.length > 0) {
-      _where = ' where ' + _where_array.join(" and ");
-    }
-    cypher_string = 'match p=' + cypher_string + _where + ' return p limit ' + this.state.limit_count;
-    console.log(cypher_string);
-    this.setState({ 'cyphter_sql': cypher_string });
-    return cypher_string;
-  }
 
-  handleRunClick = (event) => {
-
-    //console.log(cypher_string);
-    let cypher_string = this.getCypherSQL();
-    //let cypher_string=this.state.cyphter_sql;
-    //console.log("start query");
-    //console.log(cypher_string)
-    this.child.refeshdata(cypher_string);
-
-  }
-
-
-  handleSaveClick = (event) => {
-    this.setState({ 'save_show': true });
-  }
-  handleSaveClose = (evnet) => {
-    this.setState({ 'save_show': false });
-  }
-  handleSaveAndClose = (event) => {
-    this.getCypherSQL();
-
-    var config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    }
-    axios.post(back_server.restful_api_base_url() + 'SaveTemplate/', { qt_title: this.state.save_title, qt_desc: this.state.save_desc, qt_object: JSON.stringify(this.state.item_list), qt_cypher: JSON.stringify(this.state.cyphter_sql) }, config
-    )
-      .then(function (response) {
-        console.log(response);
       })
       .catch(function (error) {
         console.log(error);
+        //this.props.onNodeMessageChange("出错"+error,"danger");
+      });
+    let weight_edges = [];
+    //根据现有的关系生成初始的定义
+    axios.get(back_server.restful_api_base_url() + 'neo4j_catlog_edgetypes/')
+      .then((response) => {
+
+        //console.log(response.data)
+
+        //let types = []
+        for (let index in response.data) {
+          let item = response.data[index].edge_type
+          //weight_type:1为固定权值2为分段设定权值（数字）3为枚举权值
+          let new_weight_edge = { 'edge_name': item, 'weight_type': 1, 'weight_value': 1, 'weight_section_values': [], 'weight_enum_values': [] }
+          weight_edges.push(new_weight_edge)
+          
+
+        }
+        this.setState({ 'weight_edges': weight_edges })
+
+
+
+
+
+
+
+
+
+
+
+
+        //this.setState({'types_items':type_items});
+
+
+      })
+      .catch(function (error) {
+        console.log(error);
+        //this.props.onNodeMessageChange("出错"+error,"danger");
       });
 
-    this.setState({ 'save_show': false });
 
   }
 
 
 
+  handleDefinitionWeight = () => {
 
-
-
-  handelTitleChange = (event) => {
-    this.setState({ 'save_title': event.target.value });
-  }
-  handelDescChange = (event) => {
-    this.setState({ 'save_desc': event.target.value });
   }
 
+  handleDeleteWeight = () => {
 
-  handleEdgeClose = () => {
-    this.setState({ 'edge_show': false });
+  }
+  handleNodeLablesChange=(event)=>{
+    
+    this.setState({'node_lables':event.target.value})
   }
 
-
-  handleNodeClose = () => {
-    this.setState({ 'node_show': false });
+  handleMinWeightChange=(event)=>{
+    this.setState({'min_weight':event.target.value})
   }
 
   render() {
+    
+
+
 
     //let item_count = this.state.item_list.length;
     return (
@@ -373,14 +202,19 @@ class ClusterAnalysis extends Component {
             <div className="col-lg-12" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
 
               {this.props.full === true ? '' : (<div className="card card-default" style={{ flex: '1 1 auto' }}>
-                <div className="card-header  justify-content-between">
-                  <h2>聚类模型设计器</h2>
-                </div>
+                <Alert variant="info">
+                  <Alert.Heading>聚类模型设计器</Alert.Heading>
+                  <p>
+                    聚类模型用于分析社会关系的连通性,具有连通性的个体之间必定有关系，对于分析个体的群组性有重要意义。比如密切联系的关联企业，可能为同一控制的资金系；具有强关联的群体，必定有其它更深层次的关联。根据系统中的不同关系可以设定关联性的权值，以便作归一化的分析。
+  </p>
+
+                </Alert>
+
+
+
                 <div className="card-body">
-                  <blockquote className="blockquote">
-                    <p className="mb-0">聚类模型用于分析社会关系的连通性,具有连通性的个体之间必定有关系，对于分析个体的群组性有重要意义。比如密切联系的关联企业，可能为同一控制的资金系；具有强关联的群体，必定有其它更深层次的关联。根据系统中的不同关系可以设定关联性的权值，以便作归一化的分析。</p>
-                  </blockquote>
-                  
+
+
                   <div>定义关系权值</div>
                   <Table responsive>
                     <thead>
@@ -397,7 +231,7 @@ class ClusterAnalysis extends Component {
                       this.state.weight_edges.map((row, index) => {
 
 
-                        return (<tr key={index}><td>{row.name}</td><td>{row.operation}</td><td>{row.value}</td><td><Button variant="secondary" onClick={this.handleDeleteProperty.bind(this, index)}>删除</Button></td></tr>
+                        return (<tr key={index}><td>{row.edge_name}</td><td>{row.weight_type===1?'固定值':(row.weight_type===2?'分段设定权值(数字属性)':'枚举值')}</td><td>{row.weight_type===1?row.weight_value:(row.weight_type===2?row.weight_section_values:row.weight_enum_values)}</td><td><Button variant="secondary" onClick={this.handleDefinitionWeight.bind(this, index)}>定义</Button></td></tr>
 
 
                         )
@@ -406,16 +240,38 @@ class ClusterAnalysis extends Component {
                     </tbody>
 
                   </Table>
-                  
-                  <div style={{ display: 'flex' }}>
-                    <ButtonGroup  >
 
-                      <Button variant="success" onClick={this.handelAddNewWeightEdges}>设定新关系权值</Button>
-                      
-                    </ButtonGroup></div>
+
                 </div>
               </div>
+              
               )}
+              <Row>
+                <Col>
+              <Form.Group>
+              <Form.Label>选择节点的标签</Form.Label>
+              <Form.Control as="select" value={this.state.node_lables} onChange={this.handleNodeLablesChange}>{
+                      typeof(this.props.node_lables_data)!=='undefined'?this.props.node_lables_data.map((row, index) => {
+
+
+                        return (<option key={index}>{row}</option>
+
+
+                        )
+                      })
+                    :''}
+    </Form.Control>
+              
+            </Form.Group>
+            </Col>
+            <Col>
+            <Form.Group >
+              <Form.Label>设置最小纳入统计的权重</Form.Label>
+              <Form.Control type="text" value ={this.state.min_weight} onChange={this.handleMinWeightChange}/>
+            </Form.Group>
+           
+            </Col>
+            </Row>
               <div>
                 <Button variant="primary" onClick={this.handleRunClick}>单击查看分析结果</Button><Button variant="primary" onClick={this.handleSaveClick}>保存查询模板</Button>
               </div>

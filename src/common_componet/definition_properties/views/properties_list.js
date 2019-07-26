@@ -7,10 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Table from 'react-bootstrap/Table'
-import { MdAssignment } from "react-icons/md";
+
 
 class PropertiesList extends Component {
     constructor(props) {
@@ -136,18 +133,7 @@ class PropertiesList extends Component {
                 }
 
             </Form.Control></Col></Row>
-            <Row><Col>操作</Col><Col>
-            <Form.Control as="select" value={this.state.properties_oper} onChange={this.handlePropertiesOperChange}>
-
-                <option >等于</option>
-                <option >大于</option>
-                <option >小于</option>
-                {this.state.properties_column_type==='文本属性'&&!this.props.sum_flag?<option >包含</option>:''}
-                
-                {!this.props.sum_flag?<option >不等于</option>:''}
-
-            </Form.Control>
-            </Col></Row>
+            
 
 {this.props.sum_flag?
 
@@ -160,6 +146,18 @@ class PropertiesList extends Component {
 
 }
             
+            <Row><Col>操作</Col><Col>
+            <Form.Control as="select" value={this.state.properties_oper} onChange={this.handlePropertiesOperChange}>
+
+                <option >等于</option>
+                <option >大于</option>
+                <option >小于</option>
+                {this.state.properties_column_type==='文本属性'&&!this.props.sum_flag?<option >包含</option>:''}
+                
+                {!this.props.sum_flag?<option >不等于</option>:''}
+
+            </Form.Control>
+            </Col></Row>
             
 
 

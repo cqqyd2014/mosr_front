@@ -385,7 +385,7 @@ else{
         <div style={{ display: 'flex' }}>
           <ButtonGroup  >
 
-            <Button variant="success" onClick={this.handelNew}>新增节点或者关系</Button>
+            <Button variant="success" onClick={this.handelNew}>新增节点和关系</Button>
             <Button variant="success" onClick={this.handelDelete}>删除最后一组节点和关系</Button>
           </ButtonGroup></div>
         <DefinitionNode handelNodeDataBack={this.handelNodeDataBack} handleNodeClose={this.handleNodeClose} properties_data={this.props.properties_data} node_lables_data={this.props.node_lables_data} node_show={this.state.node_show} item_list={this.state.item_list} item={{ ...this.state.item_list[this.state.click_item] }} />

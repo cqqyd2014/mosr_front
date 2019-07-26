@@ -125,7 +125,7 @@ class Head extends Component {
             <ul className="nav navbar-nav">
               {/*<!-- Github Link Button -->*/}
               <li className="github-link mr-3">
-                <a className="btn btn-outline-secondary btn-sm" href="#" onClick={this.handleRefeshProcessDetail}>
+                <a className="btn btn-outline-secondary btn-sm"  onClick={this.handleRefeshProcessDetail}>
                   <span className="d-none d-md-inline-block mr-2">查看运行日志</span>
                   <i className="mdi mdi-github-circle"></i>
                 </a>

@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 
+import Alert from 'react-bootstrap/Alert'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -169,13 +170,17 @@ onImportExcel = file => {
           <div className="col-lg-12" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
 
             {this.props.full === true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
-              <div className="card-header  justify-content-between">
-                <h2>我的查询模板</h2>
-              </div>
+              
+            <Alert variant="info">
+  <Alert.Heading>我的查询模板</Alert.Heading>
+  <p>
+  保存的查询模板,以便随时查看。
+  </p>
+  
+</Alert>
+              
+              
               <div className="card-body">
-                <blockquote className="blockquote">
-                  <p className="mb-0">保存的查询模板</p>
-                </blockquote>
                 <Table responsive>
               <thead>
                 <tr>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 
 
-
+import Alert from 'react-bootstrap/Alert'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
@@ -38,6 +38,7 @@ class SelectPreviewTable extends Component {
       preview_tabel_cols_types:[],
       preview_tabel_cells:[],
       select_table:'',
+      error_message:'',
 
     };
 
@@ -94,6 +95,14 @@ class SelectPreviewTable extends Component {
         let response_data = response.data;
         let col_names=[]
         let col_types=[]
+        //console.log(response_data)
+        if (response_data.length===0){
+          this.setState({ 'error_message': '当前表不能获取字段，字段中可能存在特殊字符，请修改后再导入' });
+          this.setState({'preview_tabel_cells':[]})
+          this.setState({ 'preview_tabel_cols': [] });
+        this.setState({ 'preview_tabel_cols_types': [] });
+          return
+        }
         for (let i in response_data){
           let item=response_data[i]
           col_names.push(item[0])
@@ -130,6 +139,14 @@ class SelectPreviewTable extends Component {
         
         
         this.setState({ 'tables': response_data });
+        //设置第一个为选定的表
+        if (response_data.length>0){
+          this.setState({'select_table':response_data[0]});
+          this.getCols(response_data[0]);
+          this.props.onSelectTable(response_data[0]);
+        }
+        
+
         
       })
       .catch((error)=> {
@@ -223,7 +240,9 @@ class SelectPreviewTable extends Component {
 
           </Row>
 
-
+{this.state.error_message.length !== 0 ? <Alert variant='danger'>
+{this.state.error_message}
+</Alert> : ''}
 
         </Card.Body>
       </Card>

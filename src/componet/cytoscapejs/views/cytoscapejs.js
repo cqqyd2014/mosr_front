@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-import { Modal, Image, Button, ButtonToolbar, Form } from "react-bootstrap";
+import {Alert, Modal, Image, Button, ButtonToolbar, Form } from "react-bootstrap";
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import * as Actions from '../redux/actions';
 import * as HeadActions from '../../head/redux/actions'
-
+import io from 'socket.io-client';
 import $ from 'jquery';
 import { MdLaunch, MdFileDownload, MdImage } from "react-icons/md";
 import { IconContext } from "react-icons";
@@ -20,6 +20,8 @@ cytoscape.use(coseBilkent);
 //ReactCytoscape.use( coseBilkent );
 
 
+const socket = io(back_server.ws_api_base_url());
+
 
 class Cytoscapejs extends Component {
 	constructor(props) {
@@ -29,6 +31,7 @@ class Cytoscapejs extends Component {
 			node_colors: [],
 			message: '',
 			download_show: false,
+			info_message:'',
 
 
 		};
@@ -86,14 +89,62 @@ class Cytoscapejs extends Component {
 
 	}
 
+
+	getAlgoUnionFindData=(sql)=>{
+		console.log(sql)
+		this.getAlgoData({'type':'algo.unionFind','sql':sql})
+	}
+	//发送算法任务
+	getAlgoData=(data)=>{
+		this.getDataUuid({'back_type':'neo4j_algo','par':data})
+	}
+
+	//向后台发送执行任务
+	getDataUuid=(data)=>{
+		console.log("发送emit"+data.back_type)
+		socket.emit(data.back_type,data.par);
+
+
+
+	}
+
+	modifydata=(commands,after_command)=>{
+		//processDetail("systest", '开始更新数据，请稍后')
+		
+		this.props.onNodeMessageChange("开始更新数据，请稍后", "warning");
+
+		//
+
+
+
+		  socket.on('neo4j_command', data => {
+			//console.log(data)
+			this.props.onNodeMessageChange(data, "warning");
+			//processDetail("systest", data.message_info)
+			//this.setState({'info_message':data})
+	  
+		  });
+		  
+		  socket.on('command_end', data => {
+			console.log(data)
+			if (after_command!=null){
+				after_command()
+			}
+			
+			
+	  
+		  });
+
+
+		  socket.emit('neo4j_commands',commands);
+
+	}
+
 	refeshdata = (neo4jgraph_cypher) => {
 		processDetail("systest", neo4jgraph_cypher)
 		this.props.onNodeMessageChange("开始获取数据", "warning");
 		console.log(neo4jgraph_cypher);
-		/*
-		window.btoa(window.encodeURIComponent('嘻嘻哈哈哈哈啦啦啦啦'));
-window.decodeURIComponent(window.atob('JUU1JTk4JUJCJUU1JTk4JUJCJUU1JTkzJTg4JUU1JTkzJTg4JUU1JTkzJTg4JUU1JTkzJTg4JUU1JTk1JUE2JUU1JTk1JUE2JUU1JTk1JUE2JUU1JTk1JUE2'));
-*/
+
 		let enbase_cypher=uribase64encode(neo4jgraph_cypher)
 
 
@@ -114,7 +165,7 @@ window.decodeURIComponent(window.atob('JUU1JTk4JUJCJUU1JTk4JUJCJUU1JTkzJTg4JUU1J
 
 				for (var item in response.data.elements.colors) {
 
-					let _css = { 'background-color': '#' + response.data.elements.colors[item], content: 'data(name)', 'text-valign': 'center', 'font-size': '10px' };
+					let _css = { 'background-color': '#' + response.data.elements.colors[item], content: 'data(name)', 'text-valign': 'bottom center', 'font-size': '10px' };
 					let node_color = { selector: 'node[label="' + item + '"]', css: _css };
 					node_colors.push(node_color);
 
@@ -316,11 +367,12 @@ window.decodeURIComponent(window.atob('JUU1JTk4JUJCJUU1JTk4JUJCJUU1JTkzJTg4JUU1J
 
 					<ButtonToolbar style={{ display: 'flex', flexDirection: 'row-reverse' }} >
 
-
 						<MdLaunch onClick={this.handleFullChange} />
 						<MdLaunch onClick={this.handleUnFullChange} style={{ transform: 'rotate(180deg)' }} />
 						<MdImage onClick={this.handelImageClick} />
 						<MdFileDownload onClick={this.handleDownloadChange} />
+						{this.state.info_message.length>0?<Alert variant="info">{this.state.info_message}</Alert>:''}
+						
 
 
 

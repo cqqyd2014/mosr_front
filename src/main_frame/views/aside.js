@@ -215,12 +215,12 @@ class Aside extends Component {
                   </li>
                   
                   <li  className="has-sub" >
-                    <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#charts"
-                      aria-expanded="false" aria-controls="charts">
+                    <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#groups"
+                      aria-expanded="false" aria-controls="groups">
                       <MdBubbleChart/>
                       <span className="nav-text">社群聚类发现</span> <b className="caret"></b>
                     </a>
-                    <ul  className="collapse"  id="charts"
+                    <ul  className="collapse"  id="groups"
                       data-parent="#sidebar-menu">
                       <div className="sub-menu">
                         

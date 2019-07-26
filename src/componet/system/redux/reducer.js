@@ -34,6 +34,7 @@ export default (state = {}, action) => {
       case ActionTypes.SYSTEM_NODE_LABELS_UPDATE_END: {
        
         let node_lables_data=action.payload.node_lables_data;
+        //console.log(node_lables_data)
        
         let new_state=Object.assign({},state,{'update_labels':'更新完成','node_lables_data':node_lables_data});
       return new_state;
@@ -46,6 +47,8 @@ export default (state = {}, action) => {
       case ActionTypes.SYSTEM_EDGE_TYPES_UPDATE_END: {
        
         let edge_types_data=action.payload.edge_types_data;
+        
+        //console.log(edge_types_data)
        
         let new_state=Object.assign({},state,{'update_types':'更新完成','edge_types_data':edge_types_data});
       return new_state;

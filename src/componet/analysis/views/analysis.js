@@ -4,14 +4,14 @@ import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 
+import Alert from 'react-bootstrap/Alert'
 import Modal from 'react-bootstrap/Modal'
-
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 
 
-import { processDetail, exportExcel,uribase64encode} from '../../../func/common';
+import { uribase64encode} from '../../../func/common';
 
 import DefinitionModel from './definition_model';
 
@@ -20,7 +20,6 @@ import DefinitionModel from './definition_model';
 import { Cytoscapejs } from '../../cytoscapejs';
 
 
-import { MdPeople, MdTimeline, MdClass, MdAssignment, MdLabel } from "react-icons/md";
 
 
 
@@ -118,9 +117,13 @@ class Analysis extends Component {
 
 
   handleRunClick = (event) => {
+    let cypher_string= this.definitionModel.getCypherSQL()
 
     //console.log(cypher_string);
-    let cypher_string = this.definitionModel.getCypherSQL()+" limit "+ this.state.limit_count;
+    if (this.state.limit_count!=='无限制'){
+      cypher_string=cypher_string+" limit "+ this.state.limit_count;
+    }
+     
     //let cypher_string=this.state.cyphter_sql;
     //console.log("start query");
     //console.log(cypher_string)
@@ -190,18 +193,25 @@ class Analysis extends Component {
             <div className="col-lg-12" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
 
               {this.props.full === true ? '' : (<div className="card card-default" style={{ flex: '1 1 auto' }}>
-                <div className="card-header  justify-content-between">
-                  <h2>分析模型设计器</h2>
-                </div>
+                
+              <Alert variant="info">
+  <Alert.Heading>分析模型设计器</Alert.Heading>
+  <p>
+  模型应当以节点开始，并以节点结束，期间以关系为关联。在节点和关系中，应该以标签或者属性作为限制性条件。请注意属于预览的数量，不应太大，一般情况下限制为。定义之后可以尝试效果。
+  </p>
+  
+</Alert>
+                
+               
                 <div className="card-body">
-                  <blockquote className="blockquote">
-                    <p className="mb-0">模型应当以节点开始，并以节点结束，期间以关系为关联。在节点和关系中，应该以标签或者属性作为限制性条件。请注意属于预览的数量，不应太大，一般情况下限制为。定义之后可以尝试效果</p>
-                  </blockquote>
+                  
                   <div>查询数量限制为<Form.Control as="select" value={this.state.index} onChange={this.handelLimitChange}>
                     <option>50</option>
                     <option>100</option>
                     <option>200</option>
                     <option>500</option>
+                    <option>1000</option>
+                    <option>无限制</option>
                   </Form.Control></div>
                   <DefinitionModel onRef={this.onDefinitionModel} title="定义模型" properties_data={this.props.properties_data} node_lables_data={this.props.node_lables_data} edge_types_data={this.props.edge_types_data}/>
                   

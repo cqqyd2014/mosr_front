@@ -158,6 +158,7 @@ class System extends Component {
         for (let index in response.data) {
           types.push(response.data[index].edge_type)
         }
+        //console.log(response.data)
         this.props.onEdgeTypesUpdateEnd(types);
 
 
@@ -189,10 +190,21 @@ class System extends Component {
           let item = {}
           item['u_type'] = item_db.u_type;
           item['u_label_type'] = item_db.u_label_type;
-          item['u_column_name'] = item_db.u_column_name;
-
-          item['u_column_type'] = ((Array.of('编码', '显示名称', '起点', '终点')).indexOf(item_db.u_column_type) > -1) ? '文本属性' : item_db.u_column_type
-          properties.push(item)
+          
+          if (((Array.of('编码', '显示名称', '起点', '终点')).indexOf(item_db.u_column_type) > -1)){
+            //特殊属性
+            item['u_column_type'] ='文本属性'
+            item['u_column_name'] = item_db.u_column_type;
+          }
+          else{
+            item['u_column_name'] = item_db.u_column_name;
+            item['u_column_type'] =item_db.u_column_type
+          }
+          if(JSON.stringify(properties).indexOf(JSON.stringify(item))==-1){
+            properties.push(item)
+ }
+          
+          
 
           
 
@@ -200,7 +212,7 @@ class System extends Component {
 
         }
         this.props.onPropertiesUpdateEnd(properties);
-          //console.log(properties);
+        //console.log(response.data);
 
 
 

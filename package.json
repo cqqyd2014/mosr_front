@@ -9,6 +9,7 @@
     "bootstrap": "^4.3.1",
     "cytoscape": "^3.6.2",
     "cytoscape-cose-bilkent": "^4.0.0",
+    "cytoscape-fcose": "^1.0.0",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
     "js-base64": "^2.5.1",

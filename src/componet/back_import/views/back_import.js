@@ -196,13 +196,18 @@ handleImportClose=()=>{
           <div className="col-lg-12" style={{display:'flex',flexDirection:'column',alignItems:'stretch',flex:'1 1 auto'}}>
 
             {this.props.full === true ? '' : (<div className="card card-default" style={{flex:'1 1 auto'}}>
-              <div className="card-header  justify-content-between">
-                <h2>导入数据重建分析数据库</h2>
-              </div>
+              
+            <Alert variant="info">
+  <Alert.Heading>导入数据重建分析数据库</Alert.Heading>
+  <p>
+  在这里可以管理已经下载的数据，并选择数据生成分析数据库。生成数据库的过程，数据库会暂时停机。
+  </p>
+  
+</Alert>
+              
+              
               <div className="card-body">
-                <blockquote className="blockquote">
-                  <p className="mb-0">在这里可以管理已经下载的数据，并选择数据生成分析数据库。生成数据库的过程，数据库会暂时停机</p>
-                </blockquote>
+              
                 <Table responsive>
               <thead>
                 <tr>

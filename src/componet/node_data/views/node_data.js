@@ -277,9 +277,11 @@ class NodeData extends Component {
             <div className="col-lg-12" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: '1 1 auto' }}>
               <Form onSubmit={this.onSubmit} id="node_form">
 
-              <Alert  variant='dark'>
+              <Alert  variant='info'>
+              <Alert.Heading>从远程数据库下载数据</Alert.Heading>
+  <p>
               节点数据一般为自然人或者法人机构。自然人最少字段应该包括身份证号码和姓名，法人最少应包含统一社会信用代码和单位名称。节点标签可以为一组。关系数据需要指定起点和终点，关系类型为单一类型。
-  </Alert>
+  </p></Alert>
                     
                       
  

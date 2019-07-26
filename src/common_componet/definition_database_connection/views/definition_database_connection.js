@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import Table from 'react-bootstrap/Table'
+
 import Alert from 'react-bootstrap/Alert'
 
 import back_server from '../../../func/back_server';
