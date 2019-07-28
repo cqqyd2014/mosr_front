@@ -12,14 +12,12 @@ import Col from 'react-bootstrap/Col'
 import Table from 'react-bootstrap/Table'
 import Alert from 'react-bootstrap/Alert'
 
-import ButtonGroup from 'react-bootstrap/ButtonGroup'
+
 
 
 import { Cytoscapejs } from '../../cytoscapejs';
 
 
-import { MdPeople, MdTimeline, MdClass, MdAssignment, MdLabel } from "react-icons/md";
-import { IconContext } from "react-icons";
 
 
 class ClusterAnalysis extends Component {
