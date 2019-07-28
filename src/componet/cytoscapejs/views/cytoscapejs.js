@@ -247,7 +247,7 @@ class Cytoscapejs extends Component {
 				//let nodes = { "nodes": response.data.elements.nodes };
 
 				//console.log(response.data.elements);
-				console.log(response.data.elements)
+				//console.log(response.data.elements)
 				this.setState({ 'neo4jdata': response.data.elements });
 				//类node_class1
 				let node_colors = [];
