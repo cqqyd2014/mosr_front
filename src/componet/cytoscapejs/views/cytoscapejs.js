@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Alert, Modal, Image, Button, ButtonToolbar, Form } from "react-bootstrap";
+import { Table, Alert, Modal, Image, Button, ButtonToolbar, Form } from "react-bootstrap";
 import back_server from '../../../func/back_server';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ import io from 'socket.io-client';
 import $ from 'jquery';
 import { MdLaunch, MdFileDownload, MdImage } from "react-icons/md";
 import { IconContext } from "react-icons";
-import { processDetail, exportExcel,uribase64encode} from '../../../func/common';
+import { processDetail, exportExcel, uribase64encode } from '../../../func/common';
 import coseBilkent from 'cytoscape-cose-bilkent';
 
 import cytoscape from 'cytoscape';
@@ -31,7 +31,15 @@ class Cytoscapejs extends Component {
 			node_colors: [],
 			message: '',
 			download_show: false,
-			info_message:'',
+			info_message: '',
+			algo_unionFind: false,
+			algo_unionFind_uuid: '',
+			algo_union_find_node_sum: 0,
+			algo_union_find_set_sum: 0,
+			algo_union_find_limit_node_sum: 0,
+			algo_union_find_limit_set_sum: 0,
+			unionFindData: [],
+
 
 
 		};
@@ -90,62 +98,143 @@ class Cytoscapejs extends Component {
 	}
 
 
-	getAlgoUnionFindData=(sql)=>{
+	getAlgoUnionFindData = (sql) => {
 		console.log(sql)
-		this.getAlgoData({'type':'algo.unionFind','sql':sql})
+		this.props.onNodeMessageChange("开始unionFind社群分析", "warning");
+
+		this.getAlgoData({ 'type': 'algo.unionFind', 'sql': sql })
 	}
 	//发送算法任务
-	getAlgoData=(data)=>{
-		this.getDataUuid({'back_type':'neo4j_algo','par':data})
+	getAlgoData = (data) => {
+		this.getDataUuid({ 'back_type': 'neo4j_algo', 'par': data })
 	}
 
 	//向后台发送执行任务
-	getDataUuid=(data)=>{
-		console.log("发送emit"+data.back_type)
-		socket.emit(data.back_type,data.par);
+	getDataUuid = (data) => {
+		//console.log("发送emit" + data.back_type)
+
+
+
+		socket.emit(data.back_type, data.par);
+
+
+
+	}
+	handelViewSetClick=(index,event)=>{
+		//match p=(n)-[]-(m) where id(m) in [0,1] and id(n) in [0,1] return p
+		let names=this.state.unionFindData[index].names
+		let in_list=[]
+		for(let index in names){
+			in_list.push(names[index][0])
+		}
+		let sql='match p=(n)-[]-(m) where id(m) in ['+in_list.join(',')+'] and id(n) in ['+in_list.join(',')+'] return p'
+		this.refeshdata(sql)
 
 
 
 	}
 
-	modifydata=(commands,after_command)=>{
+
+
+	showAlgoUnionFindData2 = () => {
+		this.showAlgoUnionFindData(this.state.algo_unionFind_uuid)
+
+	}
+
+	showAlgoUnionFindData = (uuid) => {
+		this.setState({ 'unionFindData': [] })
+		axios.get(back_server.restful_api_base_url() + 'union_find_node_sum/', {
+			params: {
+				u_uuid: uuid,
+				min_set_count: this.props.min_set_count,
+				max_set_count: this.props.max_set_count
+			}
+		}).then((response) => {
+
+			this.setState({ 'algo_union_find_limit_node_sum': response.data.sum_rs })
+
+
+		})
+			.catch(function (error) {
+				console.log(error);
+				//this.props.onNodeMessageChange("出错"+error,"danger");
+			});
+		axios.get(back_server.restful_api_base_url() + 'union_find_set_sum/', {
+			params: {
+				u_uuid: uuid,
+				min_set_count: this.props.min_set_count,
+				max_set_count: this.props.max_set_count
+			}
+		}).then((response) => {
+
+			this.setState({ 'algo_union_find_limit_set_sum': response.data.set_sum })
+
+
+		})
+			.catch(function (error) {
+				console.log(error);
+				//this.props.onNodeMessageChange("出错"+error,"danger");
+			});
+			axios.get(back_server.restful_api_base_url() + 'union_find_data/', {
+				params: {
+					u_uuid: uuid,
+					min_set_count: this.props.min_set_count,
+					max_set_count: this.props.max_set_count
+				}
+			}).then((response) => {
+				//console.log(response.data)
+	
+				this.setState({ 'unionFindData': response.data })
+	
+	
+			})
+				.catch(function (error) {
+					console.log(error);
+					//this.props.onNodeMessageChange("出错"+error,"danger");
+				});
+
+
+
+			
+
+			
+
+	}
+
+
+	modifydata = (commands, after_command) => {
+		this.cy_init()
+		this.setState({ 'algo_unionFind': false })
 		//processDetail("systest", '开始更新数据，请稍后')
-		
+
 		this.props.onNodeMessageChange("开始更新数据，请稍后", "warning");
 
-		//
+		this.after_command = after_command
 
 
 
-		  socket.on('neo4j_command', data => {
-			//console.log(data)
-			this.props.onNodeMessageChange(data, "warning");
-			//processDetail("systest", data.message_info)
-			//this.setState({'info_message':data})
-	  
-		  });
-		  
-		  socket.on('command_end', data => {
-			console.log(data)
-			if (after_command!=null){
-				after_command()
-			}
-			
-			
-	  
-		  });
 
 
-		  socket.emit('neo4j_commands',commands);
+
+		socket.emit('neo4j_commands', commands);
+
+	}
+	cy_init = () => {
+		
+		this.setState({ 'node_colors': [] })
+		this.setState({ 'neo4jdata': [] })
+
+
 
 	}
 
 	refeshdata = (neo4jgraph_cypher) => {
+		this.cy_init()
 		processDetail("systest", neo4jgraph_cypher)
 		this.props.onNodeMessageChange("开始获取数据", "warning");
 		console.log(neo4jgraph_cypher);
 
-		let enbase_cypher=uribase64encode(neo4jgraph_cypher)
+		let enbase_cypher = uribase64encode(neo4jgraph_cypher)
 
 
 		axios.get(back_server.restful_api_base_url() + 'neo4jdata/?neo4jgraph_cypher=' + enbase_cypher)
@@ -177,9 +266,11 @@ class Cytoscapejs extends Component {
 				//加入边
 				for (var item2 in response.data.elements.edge_colors) {
 					//console.log(response.data.elements.edge_colors[item]);
-					let _css = { 'target-arrow-color': '#' + response.data.elements.edge_colors[item2]
-					, 'line-style': 'solid', 'font-size': '10px', 'width': 1, 'curve-style': 'bezier'
-					, 'target-arrow-shape': 'triangle', 'line-color': '#' + response.data.elements.edge_colors[item2], content: 'data(label)' }
+					let _css = {
+						'target-arrow-color': '#' + response.data.elements.edge_colors[item2]
+						, 'line-style': 'solid', 'font-size': '10px', 'width': 1, 'curve-style': 'bezier'
+						, 'target-arrow-shape': 'triangle', 'line-color': '#' + response.data.elements.edge_colors[item2], content: 'data(label)'
+					}
 					let node_color = { selector: 'edge[label="' + item2 + '"]', css: _css }
 					node_colors.push(node_color)
 
@@ -210,13 +301,81 @@ class Cytoscapejs extends Component {
 
 	}
 
+
+
+
 	componentDidMount = () => {
 		this.props.onRef(this);
 
 		$('#cy').parent().css('flex', '1 1 auto');
 		//$('#cy').parent().parent().css('background-color', 'gray');
 		$('#cy').parent().css('display', 'flex');
-		
+		socket.on('neo4j_command', data => {
+			//console.log(data)
+			this.props.onNodeMessageChange(data, "warning");
+			//processDetail("systest", data.message_info)
+			//this.setState({'info_message':data})
+
+		});
+
+		socket.on('command_end', data => {
+			console.log(data)
+			if (this.after_command != null) {
+				this.after_command()
+			}
+
+
+
+		});
+		socket.on('algo.unionFind.uuid', data => {
+			this.setState({ 'algo_unionFind_uuid': data })
+			this.setState({ 'algo_unionFind': true })
+			this.showAlgoUnionFindData(data)
+			//获取节点数量和组数量
+
+
+			axios.get(back_server.restful_api_base_url() + 'union_find_node_sum/', {
+				params: {
+					u_uuid: data
+				}
+			}).then((response) => {
+				//console.log(response.data)
+
+				this.setState({ 'algo_union_find_node_sum': response.data.sum_rs })
+
+
+			})
+				.catch(function (error) {
+					console.log(error);
+					//this.props.onNodeMessageChange("出错"+error,"danger");
+				});
+			axios.get(back_server.restful_api_base_url() + 'union_find_set_sum/', {
+				params: {
+					u_uuid: data
+				}
+			}).then((response) => {
+
+				this.setState({ 'algo_union_find_set_sum': response.data.set_sum })
+
+
+			})
+				.catch(function (error) {
+					console.log(error);
+					//this.props.onNodeMessageChange("出错"+error,"danger");
+				});
+
+
+
+			this.props.onNodeMessageChange("unionFind社群分析结束", "info");
+
+
+
+		});
+
+
+
+
+
 
 
 	}
@@ -334,7 +493,7 @@ class Cytoscapejs extends Component {
 
 				layout: { name: 'cose-bilkent', defaultOptions }
 			});
-			
+
 		let neo4j = this;
 		this.cy.on("click", "node", function (evt) {
 			var node = evt.target;
@@ -355,12 +514,63 @@ class Cytoscapejs extends Component {
 	}
 
 	render() {
-		
+
 
 
 
 		return (
-			<div style={{ display: 'flex', flexDirection: 'column'}}>
+			<div style={{ display: 'flex', flexDirection: 'column' }}>
+				{this.state.algo_unionFind ?
+					<div style={{ display: 'flex', flexDirection: 'column' }}>
+						<Alert variant="info">
+							<Alert.Heading>unionFind算法社群分析</Alert.Heading>
+							<p>
+								本次分析共获取节点{this.state.algo_union_find_node_sum}个,分组{this.state.algo_union_find_set_sum}个。根据限制条件，节点数量范围为，最小{this.props.min_set_count}，最大{this.props.max_set_count}，当前显示节点{this.state.algo_union_find_limit_node_sum}个，分组{this.state.algo_union_find_limit_set_sum}个。
+
+  </p><Button variant="secondary" onClick={this.showAlgoUnionFindData2}>
+								调整最大、最小范围之后重新提取分析结果
+            						</Button>
+
+						</Alert>
+						<Table responsive>
+							<thead>
+								<tr>
+									<td>
+										序号
+						  </td>
+									<td>
+										组号
+						  </td>
+									<td>
+										成员
+						  </td>
+						  <td>
+							  操作
+						  </td>
+
+								</tr>
+							</thead>
+							<tbody>
+								{
+									this.state.unionFindData.map((row, r_index) => {
+										return (
+											<tr key={r_index}>
+												<td>{r_index}</td>
+												<td>{row.setId}</td>
+												<td>{row.names.join(",")}</td>
+												<td><Button variant="secondary" onClick={this.handelViewSetClick.bind(this, r_index)}>
+								查看组内关系
+            						</Button></td>
+
+
+											</tr>)
+									}
+									)
+								}
+                      </tbody>
+						</Table>
+
+					</div> : ''}
 
 
 				<IconContext.Provider value={{ color: "#6699CC", size: "2em" }}>
@@ -371,8 +581,8 @@ class Cytoscapejs extends Component {
 						<MdLaunch onClick={this.handleUnFullChange} style={{ transform: 'rotate(180deg)' }} />
 						<MdImage onClick={this.handelImageClick} />
 						<MdFileDownload onClick={this.handleDownloadChange} />
-						{this.state.info_message.length>0?<Alert variant="info">{this.state.info_message}</Alert>:''}
-						
+						{this.state.info_message.length > 0 ? <Alert variant="info">{this.state.info_message}</Alert> : ''}
+
 
 
 
@@ -441,12 +651,12 @@ cy.on("tapend", "node", function (a) { //监听鼠标左键释放})
 							layout={{ name: 'dagre' ,animate:true}} />
 	*/}
 
-					
-						
-					
-					
+
+
+
+
 				</IconContext.Provider>
-				<div  id="cy" style={{display:'flex',alignItems:'stretch',height:'1000px',flex:'1 1 auto'}}/>
+				<div id="cy" style={{ display: 'flex', alignItems: 'stretch', height: '1000px', flex: '1 1 auto' }} />
 			</div>
 
 		);
@@ -473,7 +683,7 @@ const mapStateToProps = (state) => {
 	}
 	*/
 	return {
-		
+
 	};
 
 }

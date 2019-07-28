@@ -31,7 +31,9 @@ class ClusterAnalysis extends Component {
 
       show_edge_model: false,
       node_lables:'',
-      min_weight:0,
+      min_weight:2,
+      max_set_count:500,
+      min_set_count:1,
 
 
 
@@ -65,7 +67,7 @@ class ClusterAnalysis extends Component {
     command+=coms.join(",")
 
     command+=')'
-    console.log(command)
+    //console.log(command)
     return command
   }
 
@@ -92,7 +94,7 @@ class ClusterAnalysis extends Component {
 
     }
     
-    console.log(commands)
+    //console.log(commands)
     this.child.modifydata(commands,this.after_command);
 
   }
@@ -103,7 +105,7 @@ class ClusterAnalysis extends Component {
   after_command=()=>{
     //console.log("end")
     //数据准备好，开始分析
-    let sql="CALL algo.unionFind.stream('"+this.state.node_lables+"','KNOWS', {weightProperty:'weight', defaultValue:0.0, threshold:100.0,concurrency:1}) YIELD nodeId,setId RETURN nodeId,algo.asNode(nodeId).显示名称 AS node_name, setId order by setId limit 1000"
+    let sql="CALL algo.unionFind.stream('"+this.state.node_lables+"','MATCH (p1:"+this.state.node_lables+")-[f:KNOWS]-(p2:"+this.state.node_lables+") where f.weight>="+this.state.min_weight+" RETURN id(p1) as source, id(p2) as target,f.weight as weight', {}) YIELD nodeId,setId RETURN nodeId,algo.asNode(nodeId).显示名称 AS node_name, setId order by setId "
     this.child.getAlgoUnionFindData(sql);
 
   }
@@ -186,6 +188,14 @@ class ClusterAnalysis extends Component {
 
   handleMinWeightChange=(event)=>{
     this.setState({'min_weight':event.target.value})
+  }
+
+  handleMaxSetCountChange=(event)=>{
+    this.setState({'max_set_count':event.target.value})
+
+  }
+  handleMinSetCountChange=(event)=>{
+    this.setState({'min_set_count':event.target.value})
   }
 
   render() {
@@ -271,11 +281,25 @@ class ClusterAnalysis extends Component {
             </Form.Group>
            
             </Col>
+            <Col>
+            <Form.Group >
+              <Form.Label>组的最大成员数</Form.Label>
+              <Form.Control type="text" value ={this.state.max_set_count} onChange={this.handleMaxSetCountChange}/>
+            </Form.Group>
+           
+            </Col>
+            <Col>
+            <Form.Group >
+              <Form.Label>组的最小成员数</Form.Label>
+              <Form.Control type="text" value ={this.state.min_set_count} onChange={this.handleMinSetCountChange}/>
+            </Form.Group>
+           
+            </Col>
             </Row>
               <div>
                 <Button variant="primary" onClick={this.handleRunClick}>单击查看分析结果</Button><Button variant="primary" onClick={this.handleSaveClick}>保存查询模板</Button>
               </div>
-              <Cytoscapejs style={{ display: 'flex', alignItems: 'stretch', flex: '1 1 auto' }} onRef={this.onRef} />
+              <Cytoscapejs min_set_count={this.state.min_set_count} max_set_count={this.state.max_set_count} style={{ display: 'flex', alignItems: 'stretch', flex: '1 1 auto' }} onRef={this.onRef} />
 
 
 

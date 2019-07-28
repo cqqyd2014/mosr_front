@@ -6,7 +6,6 @@ import axios from 'axios';
 
 
 import Alert from 'react-bootstrap/Alert'
-import Card from 'react-bootstrap/Card'
 
 
 import * as HeadActions from '../../head/redux/actions'
