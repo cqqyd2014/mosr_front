@@ -10,7 +10,7 @@ import io from 'socket.io-client';
 import $ from 'jquery';
 import { MdLaunch, MdFileDownload, MdImage } from "react-icons/md";
 import { IconContext } from "react-icons";
-import { processDetail, exportExcel, uribase64encode } from '../../../func/common';
+import { processDetail, exportExcel, uft8ToBase64 } from '../../../func/common';
 import coseBilkent from 'cytoscape-cose-bilkent';
 
 import cytoscape from 'cytoscape';
@@ -234,7 +234,7 @@ class Cytoscapejs extends Component {
 		this.props.onNodeMessageChange("开始获取数据", "warning");
 		console.log(neo4jgraph_cypher);
 
-		let enbase_cypher = uribase64encode(neo4jgraph_cypher)
+		let enbase_cypher = uft8ToBase64(neo4jgraph_cypher)
 
 
 		axios.get(back_server.restful_api_base_url() + 'neo4jdata/?neo4jgraph_cypher=' + enbase_cypher)

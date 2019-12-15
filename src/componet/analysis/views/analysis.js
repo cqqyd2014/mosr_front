@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button'
 
 
 
-import { uribase64encode} from '../../../func/common';
+import { uft8ToBase64} from '../../../func/common';
 
 import DefinitionModel from './definition_model';
 
@@ -147,7 +147,7 @@ class Analysis extends Component {
         'Access-Control-Allow-Origin': '*'
       }
     }
-    axios.post(back_server.restful_api_base_url() + 'SaveTemplate/', { qt_type:'edge',qt_title: this.state.save_title, qt_desc: this.state.save_desc, qt_object: uribase64encode(JSON.stringify(this.state.item_list)), qt_cypher: uribase64encode(this.state.cyphter_sql) }, config
+    axios.post(back_server.restful_api_base_url() + 'SaveTemplate/', { qt_type:'edge',qt_title: this.state.save_title, qt_desc: this.state.save_desc, qt_object: uft8ToBase64(JSON.stringify(this.state.item_list)), qt_cypher: uft8ToBase64(this.state.cyphter_sql) }, config
     )
       .then(function (response) {
         console.log(response);

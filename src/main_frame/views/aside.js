@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import {   Link } from "react-router-dom";
-import {MdAccountBalance,MdLiveHelp,MdBubbleChart, MdDashboard,MdTimeline } from "react-icons/md";
+import {MdAttachMoney,MdAccountBalance,MdLiveHelp,MdBubbleChart, MdDashboard,MdTimeline,MdVisibility} from "react-icons/md";
 import { IconContext } from "react-icons";
 
 
@@ -244,8 +244,61 @@ class Aside extends Component {
                       </div>
                     </ul>
                   </li>
-                  
+                  <li  className="has-sub" >
+                    <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#tyc"
+                      aria-expanded="false" aria-controls="tyc">
+                      <MdVisibility/>
+                      <span className="nav-text">互联网数据-天眼查</span> <b className="caret"></b>
+                    </a>
+                    <ul  className="collapse"  id="tyc"
+                      data-parent="#sidebar-menu">
+                      <div className="sub-menu">
+                        
+                        
+                        
+                        <li >
+                          <a className="sidenav-item-link" href="/#/tyc_batch_company">
+                            <span className="nav-text">批量查公司</span>
+                            
+                          </a>
+                        </li>
+                        <li >
+                          <a className="sidenav-item-link" href="/#/my_cluster_template">
+                            <span className="nav-text">数据导出</span>
+                            
+                          </a>
+                        </li>
+                        
 
+                        
+                      </div>
+                    </ul>
+                  </li>
+                  <li  className="has-sub" >
+                    <a className="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#bank"
+                      aria-expanded="false" aria-controls="bank">
+                      <MdAttachMoney/>
+                      <span className="nav-text">银行</span> <b className="caret"></b>
+                    </a>
+                    <ul  className="collapse"  id="bank"
+                      data-parent="#sidebar-menu">
+                      <div className="sub-menu">
+                        
+                        
+                        
+                        <li >
+                          <a className="sidenav-item-link" href="/#/bank_outer_detail_import">
+                            <span className="nav-text">外调查询各家银行数据导入</span>
+                            
+                          </a>
+                        </li>
+                        
+                        
+
+                        
+                      </div>
+                    </ul>
+                  </li>
                   
 
                   

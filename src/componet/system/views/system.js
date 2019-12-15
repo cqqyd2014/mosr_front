@@ -12,7 +12,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 
-const socket = io(back_server.ws_api_base_url());
+const socket = io(back_server.ws_api_base_url()+'/system');
 
 
 
@@ -95,7 +95,7 @@ class System extends Component {
       this.getLabelsTypesProperties()
 
     });
-    socket.on('disconnect', function () {
+    socket.on('    ', function () {
       console.log("disconnect")
     });
     socket.on('system_report', data => {

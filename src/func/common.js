@@ -15,14 +15,12 @@ function _blankAndoComma(par){
 }
 
 
-function uribase64encode(par){
-    let uri_par=window.encodeURIComponent(par);
-		//console.log(uri_cypher);
-		let enbase_par=window.btoa(uri_par);
-		
-        //console.log(enbase_par);
-        return enbase_par
-}
+function uft8ToBase64(utf8) {
+    return btoa(encodeURIComponent(utf8));
+    }
+function base64ToUtf8(base64) {
+    return decodeURIComponent(atob(base64));
+    }
 
 
 
@@ -90,6 +88,6 @@ function exportExcel(data, fileName){
     /* generate XLSX file and send to client */
     XLSX.writeFile(wb,fileName)
 }
-  export {processDetail,exportExcel,utf16ToUtf8,uribase64encode,_blankAndoComma}
+  export {processDetail,exportExcel,utf16ToUtf8,uft8ToBase64,_blankAndoComma,base64ToUtf8}
 
 

@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import back_server from '../../func/back_server';
 import axios from 'axios';
 
+import {uft8ToBase64} from '../../func/common';
+
 
 
 
@@ -54,11 +56,11 @@ class Copyright extends Component {
     }
     */
     componentDidMount=()=>{
+      //console.log(back_server.restful_api_base_url()+'system/pars/'+uft8ToBase64(JSON.stringify({'par_code':'version'})))
      
-      axios.get(back_server.restful_api_base_url()+'SystemPar/?par_code=version')
+      axios.get(back_server.restful_api_base_url()+'system/pars/'+uft8ToBase64(JSON.stringify({'par_code':'version'})))
     .then((response)=> {
-      //let data=database.baseparameter(response);
-
+      
       this.setState({'version':response.data.par_value});
   
     })

@@ -6,7 +6,7 @@ import PageWrapper from './page-wrapper'
 import SystemData from './pages/systemdata'
 import {NodeData} from '../../componet/node_data'
 import {ManageNode} from '../../componet/manage_node'
-
+import {TycBatchCompany} from '../../componet/tyc_batch_company'
 import {ManageEdge} from '../../componet/manage_edge'
 import {Analysis} from '../../componet/analysis'
 import {MyTemplate} from '../../componet/my_template'
@@ -16,7 +16,7 @@ import {Example} from '../../componet/example'
 import {Cytoscapejs} from '../../componet/cytoscapejs'
 import {ClusterAnalysis} from '../../componet/cluster_analysis'
 import {BackImport} from '../../componet/back_import'
-
+import {BankOuterDetailImport} from '../../componet/bank_outer_detail_import'
 import {About} from '../../componet/about'
 import SystemStatus from './pages/systemstatus'
 
@@ -146,6 +146,9 @@ class MainFrame extends Component {
             <Route path="/cy" component={Cytoscapejs} />
             <Route path="/cluster_analysis" component={ClusterAnalysis} />
             <Route path="/back_import" component={BackImport} />
+            <Route path="/tyc_batch_company" component={TycBatchCompany}/>
+            <Route path="/bank_outer_detail_import" component={BankOuterDetailImport}/>
+            
 
 
             
