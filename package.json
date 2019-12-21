@@ -1,53 +1,42 @@
 {
-  "homepage": "./",
-  "name": "map_of_social_relations_fornt",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.18.0",
-    "babel-jest": "24.7.1",
-    "bootstrap": "^4.3.1",
-    "cytoscape": "^3.6.2",
-    "cytoscape-cose-bilkent": "^4.0.0",
-    "cytoscape-fcose": "^1.0.0",
-    "express": "^4.17.1",
-    "jquery": "^3.4.1",
-    "js-base64": "^2.5.1",
-    "livereload": "^0.7.0",
-    "react": "^16.8.6",
-    "react-bootstrap": "^1.0.0-beta.8",
-    "react-dom": "^16.8.6",
-    "react-fileupload": "^2.4.0",
-    "react-icons": "^3.6.1",
-    "react-redux": "^7.0.3",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "3.0.0",
-    "reactstrap": "^8.0.0",
-    "redux": "^4.0.1",
-    "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0",
-    "typescript": "^3.7.2",
-    "xlsx": "^0.14.3"
-  },
+  "name": "mosr_front",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --hot --open",
+	"dev": "webpack-dev-server --config webpack.dev.config.js",
+    "build": "webpack"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cqqyd2014/mosr_front.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cqqyd2014/mosr_front/issues"
+  },
+  "homepage": "https://github.com/cqqyd2014/mosr_front#readme",
+  "devDependencies": {
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.4",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "html-webpack-plugin": "^3.2.0",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.3",
+    "webpack": "^4.41.3",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "@types/webpack-env": "^1.14.1",
+    "emitter": "0.0.5",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
   }
 }
