@@ -1,9 +1,12 @@
 import * as React from "react";
 import { useState,useEffect } from "react"
 
+import './App.css';
+import Button from 'antd/es/button';
+
 export interface HelloProps { compiler: string; framework: string; }
 
-export const Hello = (props: HelloProps) => {
+export const App = (props: HelloProps) => {
 	const [isOnline, setIsOnline] = useState(null);
 
   useEffect(() => {
@@ -19,7 +22,12 @@ export const Hello = (props: HelloProps) => {
   });
 
   if (isOnline === null) {
-    return <h1>Loading...</h1>;
+    return (
+	<div>
+	<h1>Loading...</h1>
+	<Button type="primary">Button</Button>
+	</div>
+);
   }
   return isOnline ? <h1>Online</h1> : <h1>Offline</h1>;
 }

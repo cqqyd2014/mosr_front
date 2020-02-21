@@ -24,7 +24,17 @@ plugins:[
     path: path.resolve(__dirname, 'dist')
   },
 module: {
-        rules: [
+        rules: [	
+	{
+            test: /\.less$/,
+            use: [{
+                loader: "style-loader" // creates style nodes from JS strings
+            }, {
+                loader: "css-loader" // translates CSS into CommonJS
+            }, {
+                loader: "less-loader" // compiles Less to CSS
+            }]
+        },
             {
                 test: /\.ts(x?)$/,
                 exclude: /node_modules/,
@@ -39,7 +49,12 @@ module: {
                 enforce: "pre",
                 test: /\.js$/,
                 loader: "source-map-loader"
-            }
+            },
+{
+        test: /\.css$/,
+        use: 'css-loader'
+        
+      }
         ]
     }
 };
