@@ -1,0 +1,1 @@
+export interface InterAction{type:string,payload:any}
