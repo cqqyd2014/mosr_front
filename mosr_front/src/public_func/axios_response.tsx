@@ -2,38 +2,35 @@
 import { Modal } from 'antd';
 
 
-const server_ip='http://localhost:5000';
+const server_ip = 'http://localhost:5000';
 const axios = require('axios');
-interface callback {
+interface interCallback {
 	(res: string): void
 }
 
-export interface requests {
+export interface interRequests {
 	url: string, info_title: string
 
 
 }
-export interface responses {
+export interface interResponses {
 	config: any,
 	data: any,
 	headers: { 'content-type': string, last_modified?: string }
 	status: number,
 	statusText: string
 }
-
-export const axios_response = (req: requests, callback: callback) => {
-	axios.get(server_ip+req.url)
-		.then(function(response: responses) {
-			let data: any = response.data;
-
-
-			callback(data)
-
+export const axios_response = (req: interRequests, callback: interCallback) => {
+	axios.get(server_ip + req.url)
+		.then(function(response: interResponses) {
+			// handle success
 			console.log(response);
+			let data: any = response.data;
+			callback(data);
 		})
-		.catch(function(error: { Error?:any,response: { data: { mosr_message?: string }, status: number, headers: any } }) {
+		.catch(function(error: { Error?: any, response: { data: { mosr_message?: string }, status: number, headers: any } }) {
 			// handle error
-			//console.log(server_ip+req.url);
+			console.log('error');
 			if (error.response) {
 				let error_response = error.response;
 				if (error_response.status == 404) {
@@ -47,27 +44,22 @@ export const axios_response = (req: requests, callback: callback) => {
 					}
 
 				}
-				else{
+				else {
 					Modal.error({
-							title: req.info_title,
-							content: '出错，状态码：'+error_response.status,
-						});
+						title: req.info_title,
+						content: '出错，状态码：' + error_response.status,
+					});
 				}
 			}
 			else{
-				//console.log(error.response)
 				Modal.error({
-							title: req.info_title,
-							content: '无法访问网络，请检查网络环境',
-						});
+					title: req.info_title,
+					content: '无法访问网络地址' + server_ip + req.url + '，请检查网络环境',
+				});
 			}
-			
-			callback('error')
 			
 		})
 		.then(function() {
 			// always executed
-
 		});
-
 }
