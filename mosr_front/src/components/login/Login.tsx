@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 
 import { Modal, Input, Row, Col, Carousel, Typography, Divider } from 'antd';
-
+import { UserOutlined } from '@ant-design/icons';
 import logo1_img from './img/logo1.png'
 import logo2_img from './img/logo2.png'
 import logo3_img from './img/logo3.png'
 import logo4_img from './img/logo4.png'
-import { axios_response } from '../../public_func/axios_response'
+import { axios_response,axios_jsonpost } from '../../public_func/_axios'
 import { globalContext } from '../../store/global_context'
 
 export interface LoginProps { compiler: string; framework: string; }
@@ -30,6 +30,7 @@ export const Login = () => {
 		<div>
 
 			<Modal
+
 				title="请登陆社群关系分析系统"
 				visible={login_visible}
 
@@ -58,14 +59,16 @@ export const Login = () => {
 
 							url: login_url_string,
 
-						}, (data: any) => {
+						}, (login_data: any) => {
+							
 
 							setLoginConfirmLoading(false);
 
-							if (data !== 'error') {
-								let get_permisssion_url_string = '/system/users/permission/' + data.u_uuid
+
+							if (login_data.status !== false) {
+								let get_permisssion_url_string = '/system/users/permission/' + login_data.u_uuid
 								
-								SetUserUuid(data.u_uuid)
+								SetUserUuid(login_data.u_uuid)
 								
 								axios_response(
 									{
@@ -74,10 +77,10 @@ export const Login = () => {
 										url: get_permisssion_url_string,
 
 									}, (permission_data) => {
-										console.log('获取')
+										
 
 										//更新登陆状态
-										_globalDispatch({ type: 'login_success' });
+										_globalDispatch({ 'type': 'login_success' ,'payload':{'permission':permission_data,'user_name':login_data.u_user_name,'nickname':login_data.u_nickname,'user_uuid':login_data.u_uuid,'user_last_login_datetime':login_data.u_last_login_datetime}});
 									}
 								)
 
@@ -101,9 +104,9 @@ export const Login = () => {
 				okText='登陆'
 				cancelText='感谢'
 			>
-				<Row justify="space-around" align="middle">
-					<Col span={24}>
-						<Carousel autoplay>
+				<Row type="flex" justify="center" align="middle">
+					<Col span={24} >
+						<Carousel autoplay >
 							<div>
 								<img src={logo4_img} alt='社群关系分析系统' />
 							</div>
@@ -134,7 +137,7 @@ export const Login = () => {
 					<Col span={12} >
 						<Row type="flex" justify="space-around" align="middle">
 							<Col span={6} >用户名：</Col>
-							<Col span={18}><Input value={login_user_name} onChange={(e) => setLoginUserName(e.target.value)} /></Col>
+							<Col span={18}><Input value={login_user_name} onChange={(e) => setLoginUserName(e.target.value)} prefix={<UserOutlined />}/></Col>
 						</Row>
 					</Col>
 					<Col span={12}>

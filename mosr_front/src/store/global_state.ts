@@ -5,6 +5,7 @@ export interface interInitState{
 	user_roles:[],
 	user_last_login_datetime:Date,
 	isLoggedIn:boolean,
+	permission:{}
 }
 
 export const initState:interInitState = {
@@ -15,4 +16,5 @@ export const initState:interInitState = {
 		user_last_login_datetime:new Date,
         
         isLoggedIn: false,
+		permission:{}
     }

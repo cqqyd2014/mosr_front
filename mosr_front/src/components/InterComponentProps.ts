@@ -1,0 +1,1 @@
+export interface InterComponentProps{'_breadcrumb':string[],_icon:string}
