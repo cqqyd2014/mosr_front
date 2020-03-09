@@ -30,7 +30,7 @@ export const MyHeader = () => {
 	//let get_permisssion_url_string = '/system/users/permission/' + user_uuid
 	let { _globalState, _globalDispatch } = useContext(globalContext);
 	return (
-		<Header style={{ background: '#fff', padding: 0 }} >
+		<Header className="site-layout-background" style={{ padding: 0 }} >
 		
 		
 		

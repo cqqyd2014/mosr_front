@@ -100,6 +100,25 @@ export const axios_jsonpost = (_post: InterRequests, callback: InterCallback) =>
 			// always executed
 		});
 }
+
+export const axios_delete=(req: InterRequests, callback: InterCallback) => {
+	axios.delete(server_ip + req.url,{data:req.data})
+		.then((response: InterResponses) => {
+			on_success(response,callback,req.url)
+
+		})
+		.catch(function(error: { Error?: any, response: { data: { message?: string }, status: number, headers: any } }) {
+			
+			on_error(error,req.info_title,callback,req.url)
+
+		})
+		.then(function() {
+			// always executed
+		});
+}
+
+
+
 export const axios_response = (req: InterRequests, callback: InterCallback) => {
 	axios.get(server_ip + req.url)
 		.then((response: InterResponses) => {

@@ -67,7 +67,7 @@ export const Login = () => {
 
 							if (login_data.status !== false) {
 								let get_permisssion_url_string = '/system/users/permission/' + login_data.u_uuid
-								
+								console.log(get_permisssion_url_string)
 								SetUserUuid(login_data.u_uuid)
 								
 								axios_response(
@@ -77,7 +77,7 @@ export const Login = () => {
 										url: get_permisssion_url_string,
 
 									}, (permission_data) => {
-										
+										console.log(permission_data)
 
 										//更新登陆状态
 										_globalDispatch({ 'type': 'login_success' ,'payload':{'permission':permission_data,'user_name':login_data.u_user_name,'nickname':login_data.u_nickname,'user_uuid':login_data.u_uuid,'user_last_login_datetime':login_data.u_last_login_datetime}});

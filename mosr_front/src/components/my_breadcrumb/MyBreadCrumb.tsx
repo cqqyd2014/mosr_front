@@ -17,7 +17,7 @@ export interface MyBredCrumbProps { _breadcrumb: string[],_icon:string}
 export const MyBreadCrumb = (props:MyBredCrumbProps) => {
 
 	return (
-		<span>
+		
 		
 		<Breadcrumb style={{ margin: '16px 0' }}>
 		
@@ -35,9 +35,10 @@ export const MyBreadCrumb = (props:MyBredCrumbProps) => {
 	)
 }
             </Breadcrumb>
-</span>
+
 		
 	);
+
 
 }
 

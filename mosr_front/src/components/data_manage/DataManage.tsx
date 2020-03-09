@@ -23,7 +23,7 @@ import { gen_db_url } from '../../public_func/database_common'
 
 
 export interface DataSourceProps extends InterComponentProps { }
-export const DatabaseLinks = (props: DataSourceProps) => {
+export const DataManage = (props: DataSourceProps) => {
 	const { Option } = Select;
 	const { confirm } = Modal;
 	const columns = [
@@ -235,7 +235,7 @@ export const DatabaseLinks = (props: DataSourceProps) => {
 	const [db_alias, setDbAlias] = useState('')
 	const [db_memo, setDbMemo] = useState('')
 	const [db_add_datetime, setDbAddDatetime] = useState(new Date)
-	const myBreadCrumb=MyBreadCrumb({'_breadcrumb':props._breadcrumb ,'_icon':props._icon})
+
 
 	//let get_permisssion_url_string = '/system/users/permission/' + user_uuid
 	let { _globalState, _globalDispatch } = useContext(globalContext);
@@ -469,7 +469,7 @@ export const DatabaseLinks = (props: DataSourceProps) => {
 				<Divider />
 				测试结果：{check_message}
 			</Modal>
-			<MyBreadCrumb _breadcrumb={props._breadcrumb} _icon={props._icon} />
+			
 			<Typography>
 				<Divider orientation="left" style={{ color: '#333', fontWeight: 'normal' }}>
 					数据源
